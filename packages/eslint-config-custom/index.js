@@ -7,6 +7,7 @@ module.exports = {
   rules: {
     "react/jsx-key": "off",
     "prettier/prettier": "error",
+    "no-empty-pattern": "warn"
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
