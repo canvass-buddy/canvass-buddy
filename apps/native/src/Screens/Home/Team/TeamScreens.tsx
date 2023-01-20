@@ -8,9 +8,12 @@ const TeamStack = createNativeStackNavigator<TeamStackParamList>();
 
 export function TeamScreens() {
   return (
-    <TeamStack.Navigator initialRouteName="TeamRoot" screenOptions={{headerShown:false}}>
-      <TeamStack.Screen name="TeamRoot" component={TeamRoot}/>
+    <TeamStack.Navigator
+      initialRouteName="TeamRoot"
+      screenOptions={{ headerShown: false }}
+    >
+      <TeamStack.Screen name="TeamRoot" component={TeamRoot} />
       <TeamStack.Screen name="ProjectCreate" component={ProjectCreate} />
     </TeamStack.Navigator>
-  )
+  );
 }

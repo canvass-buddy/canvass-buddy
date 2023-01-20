@@ -1,1 +1,1 @@
-export * from './TeamRoot';
+export * from "./TeamRoot";

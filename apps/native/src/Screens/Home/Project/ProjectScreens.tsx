@@ -8,10 +8,13 @@ const ProjectStack = createNativeStackNavigator<ProlejectStackParamList>();
 
 export function ProjectScreens() {
   return (
-    <ProjectStack.Navigator initialRouteName="ProjectRoot" screenOptions={{headerShown:false}}>
+    <ProjectStack.Navigator
+      initialRouteName="ProjectRoot"
+      screenOptions={{ headerShown: false }}
+    >
       <ProjectStack.Screen name="ProjectRoot" component={ProjectRoot} />
       <ProjectStack.Screen name="InviteUser" component={InviteUser} />
       <ProjectStack.Screen name="GroundView" component={GroundView} />
     </ProjectStack.Navigator>
-  )
+  );
 }

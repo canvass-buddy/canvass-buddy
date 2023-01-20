@@ -11,11 +11,15 @@ const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 export function HomeScreens() {
   return (
     <HomeStack.Navigator initialRouteName="HomeRoot">
-      <HomeStack.Screen name="HomeRoot" component={HomeRoot} options={{headerShown:false}} />
+      <HomeStack.Screen
+        name="HomeRoot"
+        component={HomeRoot}
+        options={{ headerShown: false }}
+      />
       <HomeStack.Screen name="Profile" component={Profile} />
       <HomeStack.Screen name="Project" component={Project} />
       <HomeStack.Screen name="Team" component={Team} />
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />
     </HomeStack.Navigator>
-  )
+  );
 }

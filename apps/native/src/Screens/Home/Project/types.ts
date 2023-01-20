@@ -1,6 +1,5 @@
-
 export type ProlejectStackParamList = {
-  InviteUser:undefined,
-  GroundView: undefined,
-  ProjectRoot: undefined,
-}
+  InviteUser: undefined;
+  GroundView: undefined;
+  ProjectRoot: undefined;
+};

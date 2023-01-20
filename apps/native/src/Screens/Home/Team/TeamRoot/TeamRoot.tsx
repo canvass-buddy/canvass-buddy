@@ -4,11 +4,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "ui";
 import { TeamStackParamList } from "../types";
 
-export function TeamRoot({ navigation }: NativeStackScreenProps<TeamStackParamList, 'TeamRoot'>) {
+export function TeamRoot({
+  navigation,
+}: NativeStackScreenProps<TeamStackParamList, "TeamRoot">) {
   return (
     <SafeAreaView>
       <Text>Team Root</Text>
-      <Button text="Project Create" onClick={() => navigation.push('ProjectCreate')} />
+      <Button
+        text="Project Create"
+        onClick={() => navigation.push("ProjectCreate")}
+      />
     </SafeAreaView>
-  )
+  );
 }
