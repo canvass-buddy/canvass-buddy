@@ -4,5 +4,5 @@ import { resolvers } from './models';
 
 export const schema = createSchema({
   typeDefs: loadFiles('**/*.graphql') as any,
-  resolvers: resolvers,
+  resolvers,
 });

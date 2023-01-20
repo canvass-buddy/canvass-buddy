@@ -1,1 +1,3 @@
-export const resolvers = [];
+import { UserResolvers } from './User';
+
+export const resolvers = [UserResolvers];
