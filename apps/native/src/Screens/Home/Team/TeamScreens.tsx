@@ -1,8 +1,8 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
-import { ProjectCreate } from "./ProjectCreate";
-import { TeamRoot } from "./TeamRoot";
-import { TeamStackParamList } from "./types";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { ProjectCreate } from './ProjectCreate';
+import { TeamRoot } from './TeamRoot';
+import { TeamStackParamList } from './types';
 
 const TeamStack = createNativeStackNavigator<TeamStackParamList>();
 

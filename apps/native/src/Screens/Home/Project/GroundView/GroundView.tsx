@@ -1,13 +1,16 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Text, View } from "react-native";
-import { ProlejectStackParamList } from "../types";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Layout, TopNavigation } from '@ui-kitten/components';
+import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ProlejectStackParamList } from '../types';
 
 export function GroundView({
   navigation,
-}: NativeStackScreenProps<ProlejectStackParamList, "GroundView">) {
+}: NativeStackScreenProps<ProlejectStackParamList, 'GroundView'>) {
   return (
-    <View>
-      <Text>Ground View</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <TopNavigation title="Ground View" />
+      <Layout style={{ flexGrow: 1 }} />
+    </SafeAreaView>
   );
 }

@@ -1,1 +1,1 @@
-export * from "./InviteUser";
+export * from './InviteUser';

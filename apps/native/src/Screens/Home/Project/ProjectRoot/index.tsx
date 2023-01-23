@@ -1,1 +1,1 @@
-export * from "./HomeRoot";
+export * from './HomeRoot';
