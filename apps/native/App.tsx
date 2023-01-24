@@ -1,13 +1,13 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { ApplicationProvider, Layout } from '@ui-kitten/components';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Screens } from './src/Screens';
+import './src/i18n';
+
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import * as eva from '@eva-design/eva';
 import { StacksProvider } from '@mobily/stacks';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { NavigationContainer } from '@react-navigation/native';
+import { ApplicationProvider, Layout } from '@ui-kitten/components';
 import Constants from 'expo-constants';
-
-console.log('url', Constants.manifest?.debuggerHost);
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Screens } from './src/Screens';
 
 const client = new ApolloClient({
   uri: `http://${Constants.manifest?.debuggerHost

@@ -1,0 +1,8 @@
+{
+  "auth":{
+    "login":"Login",
+    "signUp":"Sign Up",
+    "username":"Username",
+    "password":"Password"
+  }
+}
