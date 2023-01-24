@@ -10,6 +10,7 @@ This Turborepo includes the following packages/apps:
 
 - `native`: The main front end for Canvass Buddy, built with [react-native](https://reactnative.dev/) and [expo](https://docs.expo.dev/). This is the front end for Canvass buddy.
 - `web`: a [Next.js](https://nextjs.org/) app built with [react-native-web](https://necolas.github.io/react-native-web/). Intended for eventual marketing materials.
+- `api` a [GraphQl Yoga](https://the-guild.dev/graphql/yoga-server) server.
 - `ui`: a stub [react-native](https://reactnative.dev/) component library shared by both `web` and `native` applications.
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
