@@ -13,9 +13,14 @@ export type Scalars = {
   Float: number;
 };
 
+export type Home = {
+  __typename?: 'Home';
+  title: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
+  home: Home;
 };
 
 
@@ -88,6 +93,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Home: ResolverTypeWrapper<Home>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -95,15 +101,22 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Home: Home;
   Query: {};
   String: Scalars['String'];
 };
 
+export type HomeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Home'] = ResolversParentTypes['Home']> = {
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  home?: Resolver<ResolversTypes['Home'], ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Home?: HomeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

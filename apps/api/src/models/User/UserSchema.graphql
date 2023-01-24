@@ -1,4 +1,8 @@
 
 type Query {
-  hello: String!
+  home: Home!
+}
+
+type Home {
+  title: String!
 }
