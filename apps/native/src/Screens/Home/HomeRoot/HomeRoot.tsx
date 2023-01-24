@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { Stack } from '@mobily/stacks';
+import { FillView, Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Layout, TopNavigation, Spinner } from '@ui-kitten/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,7 +21,9 @@ export function HomeRoot({
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flex: 1, height: '100%' }}>
         {loading ? (
-          <Spinner />
+          <FillView alignX="center" alignY="center">
+            <Spinner />
+          </FillView>
         ) : (
           <Stack space={4} padding={4}>
             <TopNavigation title={data?.home.title} alignment="center" />
