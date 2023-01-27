@@ -1,6 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local", "$API_SECRET"],
+  "globalDependencies": [
+    "**/.env.*local", 
+    "$API_SECRET",
+    "$MINIO_ENDPOINT",
+    "$MINIO_PORT",
+    "$MINIO_ACCESS_KEY",
+    "$MINIO_SECRET_KEY",
+    "$MINIO_IMAGE_BUCKET"
+  ],
   "pipeline": {
     "build": {
       "outputs": ["dist/**", ".next/**"],
