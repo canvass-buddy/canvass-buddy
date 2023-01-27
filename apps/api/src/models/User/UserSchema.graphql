@@ -1,10 +1,12 @@
 
+scalar ProfileImage
+
 type Query {
   user: User
 }
 
 type Mutation {
-  signUp(email: String!, password: String!, name:String!): AuthPayload!
+  signUp(email: String!, password: String!, name:String!, profileImage: ProfileImage!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
 type AuthPayload {

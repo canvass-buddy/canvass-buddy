@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { Resolvers } from 'resolvers-types';
+import { uploadImage } from 'src/helpers/imageUpload';
 import { APP_SECRET } from '../../constants';
 
 const client = new PrismaClient();
@@ -9,12 +10,19 @@ const client = new PrismaClient();
 export const UserResolvers: Resolvers = {
   Mutation: {
     async signUp(_, args) {
+      const profileImage = args.profileImage as File;
+
       const password = await hash(args.password, 10);
       const user = await client.user.create({
         data: {
           name: args.name,
           email: args.email,
           password,
+          profile: {
+            create: {
+              image: await uploadImage(profileImage),
+            },
+          },
         },
       });
       const token = sign({ userId: user.id }, APP_SECRET);

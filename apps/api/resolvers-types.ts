@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from './src/Context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  ProfileImage: any;
 };
 
 export type AuthPayload = {
@@ -38,6 +39,7 @@ export type MutationSignUpArgs = {
   email: Scalars['String'];
   name: Scalars['String'];
   password: Scalars['String'];
+  profileImage: Scalars['ProfileImage'];
 };
 
 export type Query = {
@@ -125,6 +127,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
+  ProfileImage: ResolverTypeWrapper<Scalars['ProfileImage']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
@@ -136,6 +139,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
   Mutation: {};
+  ProfileImage: Scalars['ProfileImage'];
   Query: {};
   String: Scalars['String'];
   User: User;
@@ -149,8 +153,12 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;
+  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password' | 'profileImage'>>;
 };
+
+export interface ProfileImageScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ProfileImage'], any> {
+  name: 'ProfileImage';
+}
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -166,6 +174,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 export type Resolvers<ContextType = Context> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  ProfileImage?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
