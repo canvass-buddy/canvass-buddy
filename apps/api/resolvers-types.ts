@@ -13,7 +13,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Geo: any;
   ProfileImage: any;
+  Project: any;
 };
 
 export type AuthPayload = {
@@ -22,10 +24,24 @@ export type AuthPayload = {
   user: User;
 };
 
+export type CreateTeam = {
+  description: Scalars['String'];
+  image?: InputMaybe<Scalars['ProfileImage']>;
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+  title: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createTeam?: Maybe<Scalars['String']>;
   login: AuthPayload;
   signUp: AuthPayload;
+};
+
+
+export type MutationCreateTeamArgs = {
+  team: CreateTeam;
 };
 
 
@@ -44,7 +60,19 @@ export type MutationSignUpArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  teams: Array<Maybe<Team>>;
   user?: Maybe<User>;
+};
+
+export type Team = {
+  __typename?: 'Team';
+  description: Scalars['String'];
+  image: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+  project?: Maybe<Array<Scalars['Project']>>;
+  title: Scalars['String'];
+  users?: Maybe<Array<User>>;
 };
 
 export type User = {
@@ -52,6 +80,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  teams: Array<Team>;
 };
 
 
@@ -125,11 +154,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateTeam: CreateTeam;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Geo: ResolverTypeWrapper<Scalars['Geo']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   ProfileImage: ResolverTypeWrapper<Scalars['ProfileImage']>;
+  Project: ResolverTypeWrapper<Scalars['Project']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Team: ResolverTypeWrapper<Team>;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -137,11 +171,16 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean'];
+  CreateTeam: CreateTeam;
+  Float: Scalars['Float'];
+  Geo: Scalars['Geo'];
   ID: Scalars['ID'];
   Mutation: {};
   ProfileImage: Scalars['ProfileImage'];
+  Project: Scalars['Project'];
   Query: {};
   String: Scalars['String'];
+  Team: Team;
   User: User;
 };
 
@@ -151,7 +190,12 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Geo'], any> {
+  name: 'Geo';
+}
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createTeam?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password' | 'profileImage'>>;
 };
@@ -160,22 +204,42 @@ export interface ProfileImageScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'ProfileImage';
 }
 
+export interface ProjectScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Project'], any> {
+  name: 'Project';
+}
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  teams?: Resolver<Array<Maybe<ResolversTypes['Team']>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type TeamResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Team'] = ResolversParentTypes['Team']> = {
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  project?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = Context> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
+  Geo?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   ProfileImage?: GraphQLScalarType;
+  Project?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
+  Team?: TeamResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

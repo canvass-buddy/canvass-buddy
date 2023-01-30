@@ -1,0 +1,29 @@
+
+scalar Geo
+scalar Project
+
+type Mutation {
+  createTeam(team: CreateTeam!): String
+}
+
+type Query {
+  teams: [Team]!
+}
+
+input CreateTeam {
+  title: String!
+  description: String!
+  longitude: Float!
+  latitude: Float!
+  image: ProfileImage
+}
+
+type Team {
+  title: String!
+  description: String!
+  longitude: Float!
+  latitude: Float!
+  image: String!
+  users: [User!]
+  project: [Project!]
+}
