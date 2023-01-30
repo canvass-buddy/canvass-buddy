@@ -38,7 +38,7 @@ const createBucket = async (bucketName: string) => {
   await minioClient.setBucketPolicy(bucketName, JSON.stringify(policy));
 };
 
-export const uploadImage = async (
+export const uploadFile = async (
   file: File,
   bucketName: string
 ): Promise<string> => {
@@ -49,5 +49,5 @@ export const uploadImage = async (
 
   minioClient.putObject(bucketName, assetId, buffer);
 
-  return `${bucketName}/${assetId}`;
+  return `${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${assetId}`;
 };

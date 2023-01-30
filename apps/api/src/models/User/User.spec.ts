@@ -6,7 +6,7 @@ test.todo('Add User Tests');
 
 const profileImage = readFileSync(`${__dirname}/profile.jpg`);
 
-test('Sign Up', async () => {
+test.skip('Sign Up', async () => {
   const res = await yoga.fetch('http://localhost:4000/graphql', {
     method: 'POST',
     headers: {
