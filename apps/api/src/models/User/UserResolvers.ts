@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
-import { Resolvers } from 'resolvers-types';
-import { uploadImage } from 'src/helpers/imageUpload';
+import { Resolvers } from '@resolvers-types';
+import { uploadImage } from 'src/helpers/images';
 import { APP_SECRET } from '../../constants';
 
 const client = new PrismaClient();
@@ -20,7 +20,10 @@ export const UserResolvers: Resolvers = {
           password,
           profile: {
             create: {
-              image: await uploadImage(profileImage),
+              image: await uploadImage(
+                profileImage,
+                process.env.MINIO_PROFILE_BUCKET ?? ''
+              ),
             },
           },
         },
