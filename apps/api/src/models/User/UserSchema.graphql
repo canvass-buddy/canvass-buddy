@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-  signUp(email: String!, password: String!, name:String!, profileImage: ProfileImage!): AuthPayload!
+  signUp(email: String!, password: String!, name:String!, profileImage: ProfileImage): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 }
 type AuthPayload {
@@ -14,9 +14,13 @@ type AuthPayload {
   user: User!
 }
 
+type Profile {
+  image: String
+}
+
 type User {
   id: ID!
   name: String!
   email: String!
-  teams: [Team!]!
+  teams: [Team!]
 }

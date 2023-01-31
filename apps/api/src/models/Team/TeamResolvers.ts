@@ -1,4 +1,4 @@
-import { Resolvers } from '@resolvers-types';
+import { Resolvers, User } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
 import { uploadFile } from 'src/helpers';
 
@@ -18,6 +18,43 @@ export const TeamResolvers: Resolvers = {
       });
       return team.id;
     },
+    async addTeamMembers(_, args) {
+      await prismaClient.teamMember.createMany({
+        data: args.memberIds.map((userId) => ({
+          userId: userId as string,
+          teamId: args.teamId as string,
+        })),
+      });
+
+      return true;
+    },
+    async deleteTeam(_, args) {
+      await prismaClient.team.delete({
+        where: {
+          id: args.teamId,
+        },
+      });
+      return true;
+    },
+    async updateTeam(_, args) {
+      const team = await prismaClient.team.update({
+        where: {
+          id: args.team.id,
+        },
+
+        data: {
+          image: args.team.image
+            ? await uploadFile(args.team.image, 'team-images')
+            : undefined,
+          title: args.team.title,
+          description: args.team.description,
+          longitude: args.team.longitude,
+          latitude: args.team.latitude,
+        },
+      });
+
+      return team;
+    },
   },
   User: {
     async teams(parent) {
@@ -31,6 +68,19 @@ export const TeamResolvers: Resolvers = {
       });
 
       return teamMembers.map((team) => team.team);
+    },
+  },
+  Team: {
+    async users(parent) {
+      const members = await prismaClient.teamMember.findMany({
+        where: {
+          teamId: parent.id,
+        },
+        include: {
+          user: true,
+        },
+      });
+      return members.map((member) => member.user);
     },
   },
 };

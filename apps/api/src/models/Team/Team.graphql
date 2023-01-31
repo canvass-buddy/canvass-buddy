@@ -4,6 +4,9 @@ scalar Project
 
 type Mutation {
   createTeam(team: CreateTeam!): String
+  addTeamMembers(teamId: String!, memberIds: [String]!): Boolean!
+  updateTeam(team: UpdateTeam!): Team!
+  deleteTeam(teamId: String!): Boolean!
 }
 
 type Query {
@@ -18,7 +21,17 @@ input CreateTeam {
   image: ProfileImage
 }
 
+input UpdateTeam {
+  id: String!
+  title: String!
+  description: String!
+  longitude: Float!
+  latitude: Float!
+  image: ProfileImage
+}
+
 type Team {
+  id: String!
   title: String!
   description: String!
   longitude: Float!
