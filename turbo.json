@@ -7,7 +7,10 @@
     "$MINIO_PORT",
     "$MINIO_ACCESS_KEY",
     "$MINIO_SECRET_KEY",
-    "$MINIO_PROFILE_BUCKET"
+    "$MINIO_PROFILE_BUCKET",
+    "$TEST_USER_1_EMAIL",
+    "$TEST_USER_1_PASSWORD",
+    "$TEST_USER_1_NAME"
   ],
   "pipeline": {
     "build": {

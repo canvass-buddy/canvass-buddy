@@ -1,43 +1,74 @@
-import { readFileSync } from 'fs';
-import { yoga } from 'src/yoga';
-import { test } from 'vitest';
+import { User } from 'src/../resolvers-types';
+import { prismaClient } from 'src/clients';
+import { authedQuery, query } from 'src/testHelpers';
+import { beforeEach, expect, test } from 'vitest';
 
-test.todo('Add User Tests');
+const email = 'abcd1234@booboo.com';
 
-const profileImage = readFileSync(`${__dirname}/profile.jpg`);
-
-test.skip('Sign Up', async () => {
-  const res = await yoga.fetch('http://localhost:4000/graphql', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: /* GraphQL */ `
-        mutation SignUp(
-          $email: String!
-          $password: String!
-          $name: String!
-          $profileImage: ProfileImage!
-        ) {
-          signUp(
-            email: $email
-            password: $password
-            name: $name
-            profileImage: $profileImage
-          ) {
-            token
-          }
-        }
-      `,
-      variables: {
-        email: 'abcd1234@booboo.com',
-        password: 'MY_PASSWORD',
-        name: 'Hello',
-        profileImage,
+beforeEach(async () => {
+  await prismaClient.profile.deleteMany({
+    where: {
+      user: {
+        email,
       },
-    }),
+    },
   });
-  console.log('res', await res.json());
-  // prismaClient.profile.deleteMany({});
+  await prismaClient.user.deleteMany({
+    where: {
+      email,
+    },
+  });
+});
+
+test('Sign Up', async () => {
+  const res = await query<{ signUp: { token: string } }>({
+    query: /* GraphQL */ `
+      mutation SignUp($email: String!, $password: String!, $name: String!) {
+        signUp(email: $email, password: $password, name: $name) {
+          token
+        }
+      }
+    `,
+    variables: {
+      email,
+      password: 'MY_PASSWORD',
+      name: 'Hello',
+    },
+  });
+  expect(res.signUp.token).toBeTruthy();
+});
+
+test('Login', async () => {
+  const res = await query<{ login: { token: string } }>({
+    query: /* GraphQL */ `
+      mutation LogIn($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+          token
+        }
+      }
+    `,
+    variables: {
+      email: 'app+test@test.com',
+      password: 'MY_PASSWORD',
+    },
+  });
+  expect(res.login.token).toBeTruthy();
+});
+
+test('User', async () => {
+  const { user } = await authedQuery<{ user: User }>({
+    query: /* GraphQL */ `
+      query User {
+        user {
+          id
+          name
+          email
+        }
+      }
+    `,
+  });
+
+  expect(user.id).toBeTruthy();
+  expect(user.name).toBeTruthy();
+  expect(user.email).toBeTruthy();
 });

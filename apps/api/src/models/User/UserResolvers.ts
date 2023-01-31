@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Resolvers } from '@resolvers-types';
 import { uploadFile } from 'src/helpers';
 import { APP_SECRET } from '../../constants';
@@ -20,15 +20,17 @@ export const UserResolvers: Resolvers = {
           password,
           profile: {
             create: {
-              image: await uploadFile(
-                profileImage,
-                process.env.MINIO_PROFILE_BUCKET ?? ''
-              ),
+              image: args.profileImage
+                ? await uploadFile(
+                    profileImage,
+                    process.env.MINIO_PROFILE_BUCKET ?? ''
+                  )
+                : '',
             },
           },
         },
       });
-      const token = sign({ userId: user.id }, APP_SECRET);
+      const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
       return {
         token,
@@ -47,7 +49,7 @@ export const UserResolvers: Resolvers = {
       const isValid = compare(args.password, user?.password);
       if (!isValid) throw new Error('Invalid Password');
 
-      const token = sign({ userId: user.id }, APP_SECRET);
+      const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
       return {
         token,
