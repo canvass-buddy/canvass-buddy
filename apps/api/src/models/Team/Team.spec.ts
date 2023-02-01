@@ -1,6 +1,7 @@
 import { Team } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, genTestName } from 'src/testHelpers';
+import { fetchUserData } from 'src/testHelpers/user';
 
 const fetchTeams = async (): Promise<Team[]> => {
   const { user } = await authedQuery<{ user: { teams: Team[] } }>({
@@ -9,6 +10,13 @@ const fetchTeams = async (): Promise<Team[]> => {
         user {
           teams {
             id
+            title
+            description
+            longitude
+            latitude
+            users {
+              id
+            }
           }
         }
       }
@@ -28,6 +36,9 @@ const createTeam = async (): Promise<Team> => {
           description
           longitude
           latitude
+          users {
+            id
+          }
         }
       }
     `,
@@ -63,7 +74,16 @@ const addTeamMember = async (
   await authedQuery<{ team: Team }>({
     query: /* GraphQL */ `
       mutation AddMembers($teamId: String!, $memberIds: [String!]!) {
-        updateTeamMembers(teamId: $teamId, memberIds: $memberIds)
+        updateTeamMembers(teamId: $teamId, memberIds: $memberIds) {
+          id
+          title
+          description
+          longitude
+          latitude
+          users {
+            id
+          }
+        }
       }
     `,
     variables: {
@@ -100,5 +120,15 @@ test('Delete Team', async () => {
 
 test('Add member to team', async () => {
   const team = await createTeam();
-  await expect();
+  expect(team.users).toHaveLength(1);
+  const user1 = await fetchUserData('USER_1');
+  const user2 = await fetchUserData('USER_2');
+
+  await expect(
+    addTeamMember(team.id, [user1.id, user2.id])
+  ).resolves.not.toThrowError();
+
+  const teams = await fetchTeams();
+
+  expect(teams.find((t) => t.id === team.id)?.users).toHaveLength(2);
 });

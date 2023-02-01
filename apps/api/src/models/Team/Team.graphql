@@ -4,7 +4,7 @@ scalar Project
 
 type Mutation {
   createTeam(team: CreateTeam!): Team!
-  addTeamMembers(teamId: String!, memberIds: [String]!): Boolean!
+  updateTeamMembers(teamId: String!, memberIds: [String]!): Team!
   updateTeam(team: UpdateTeam!): Team!
   deleteTeam(teamId: String!): Boolean!
 }

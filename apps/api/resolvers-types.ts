@@ -34,18 +34,12 @@ export type CreateTeam = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addTeamMembers: Scalars['Boolean'];
   createTeam: Team;
   deleteTeam: Scalars['Boolean'];
   login: AuthPayload;
   signUp: AuthPayload;
   updateTeam: Team;
-};
-
-
-export type MutationAddTeamMembersArgs = {
-  memberIds: Array<InputMaybe<Scalars['String']>>;
-  teamId: Scalars['String'];
+  updateTeamMembers: Team;
 };
 
 
@@ -75,6 +69,12 @@ export type MutationSignUpArgs = {
 
 export type MutationUpdateTeamArgs = {
   team: UpdateTeam;
+};
+
+
+export type MutationUpdateTeamMembersArgs = {
+  memberIds: Array<InputMaybe<Scalars['String']>>;
+  teamId: Scalars['String'];
 };
 
 export type Profile = {
@@ -233,12 +233,12 @@ export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 }
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addTeamMembers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddTeamMembersArgs, 'memberIds' | 'teamId'>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
   deleteTeam?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTeamArgs, 'teamId'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;
   updateTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationUpdateTeamArgs, 'team'>>;
+  updateTeamMembers?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationUpdateTeamMembersArgs, 'memberIds' | 'teamId'>>;
 };
 
 export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {

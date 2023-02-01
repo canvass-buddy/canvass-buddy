@@ -24,7 +24,21 @@ export const TeamResolvers: Resolvers = {
       });
       return team;
     },
-    async addTeamMembers(_, args) {
+    async updateTeamMembers(_, args) {
+      const team = await prismaClient.team.findFirst({
+        where: {
+          id: args.teamId,
+        },
+      });
+
+      if (!team) throw new Error('Team does not exist');
+
+      await prismaClient.teamMember.deleteMany({
+        where: {
+          teamId: args.teamId,
+        },
+      });
+
       await prismaClient.teamMember.createMany({
         data: args.memberIds.map((userId) => ({
           userId: userId as string,
@@ -32,7 +46,7 @@ export const TeamResolvers: Resolvers = {
         })),
       });
 
-      return true;
+      return team;
     },
     async deleteTeam(_, args) {
       await prismaClient.team.delete({
