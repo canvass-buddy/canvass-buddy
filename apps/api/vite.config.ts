@@ -5,5 +5,9 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     globalSetup: ['./testSetup.ts'],
+    maxConcurrency: 1,
+    maxThreads: 1,
+    minThreads: 1,
+    threads: false,
   },
 });

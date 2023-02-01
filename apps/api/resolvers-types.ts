@@ -35,7 +35,7 @@ export type CreateTeam = {
 export type Mutation = {
   __typename?: 'Mutation';
   addTeamMembers: Scalars['Boolean'];
-  createTeam?: Maybe<Scalars['String']>;
+  createTeam: Team;
   deleteTeam: Scalars['Boolean'];
   login: AuthPayload;
   signUp: AuthPayload;
@@ -234,7 +234,7 @@ export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addTeamMembers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationAddTeamMembersArgs, 'memberIds' | 'teamId'>>;
-  createTeam?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
+  createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
   deleteTeam?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTeamArgs, 'teamId'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;

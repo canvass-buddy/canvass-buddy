@@ -3,7 +3,7 @@ scalar Geo
 scalar Project
 
 type Mutation {
-  createTeam(team: CreateTeam!): String
+  createTeam(team: CreateTeam!): Team!
   addTeamMembers(teamId: String!, memberIds: [String]!): Boolean!
   updateTeam(team: UpdateTeam!): Team!
   deleteTeam(teamId: String!): Boolean!

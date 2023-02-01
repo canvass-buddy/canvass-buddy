@@ -1,10 +1,10 @@
-import { Resolvers, User } from '@resolvers-types';
+import { Resolvers } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
 import { uploadFile } from 'src/helpers';
 
 export const TeamResolvers: Resolvers = {
   Mutation: {
-    async createTeam(_, args) {
+    async createTeam(_, args, context) {
       const team = await prismaClient.team.create({
         data: {
           title: args.team.title,
@@ -16,7 +16,13 @@ export const TeamResolvers: Resolvers = {
             : '',
         },
       });
-      return team.id;
+      await prismaClient.teamMember.create({
+        data: {
+          teamId: team.id,
+          userId: context.userId ?? '',
+        },
+      });
+      return team;
     },
     async addTeamMembers(_, args) {
       await prismaClient.teamMember.createMany({

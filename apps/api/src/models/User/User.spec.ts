@@ -1,6 +1,7 @@
 import { User } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
+import { TEST_USER_LIST } from 'src/testHelpers/user';
 import { beforeEach, expect, test } from 'vitest';
 
 const email = 'abcd1234@booboo.com';
@@ -48,8 +49,8 @@ test('Login', async () => {
       }
     `,
     variables: {
-      email: 'app+test@test.com',
-      password: 'MY_PASSWORD',
+      email: TEST_USER_LIST.USER_1.email,
+      password: TEST_USER_LIST.USER_1.password,
     },
   });
   expect(res.login.token).toBeTruthy();
