@@ -1,4 +1,4 @@
-import { Team } from '@resolvers-types';
+import { Team, UpdateTeam } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, genTestName } from 'src/testHelpers';
 import { fetchUserData } from 'src/testHelpers/user';
@@ -52,6 +52,20 @@ const createTeam = async (): Promise<Team> => {
     },
   });
   return team;
+};
+
+const updateTeam = async (team: UpdateTeam): Promise<Team> => {
+  const { team: teamRes } = await authedQuery<{ team: Team }>({
+    query: /* GraphQL */ `
+      mutation UpdateTeam($team: UpdateTeam!) {
+        team: updateTeam(team: $team) {
+          id
+        }
+      }
+    `,
+    variables: { team },
+  });
+  return teamRes;
 };
 
 const deleteTeam = async (teamId: string): Promise<void> => {
@@ -110,6 +124,21 @@ test('Get teams', async () => {
 test('Create Teams', async () => {
   await expect(createTeam()).resolves.toBeTruthy();
   await expect(fetchTeams()).resolves.toHaveLength(2);
+});
+
+test('Update Team', async () => {
+  const team = await createTeam();
+  const title = genTestName();
+  delete team.users;
+  await expect(
+    updateTeam({
+      ...team,
+      title,
+    })
+  ).resolves.toBeTruthy();
+  const teams = await fetchTeams();
+  expect(teams.find((f) => f.title === team.title)).toBeFalsy();
+  expect(teams.find((f) => f.title === title)).toBeTruthy();
 });
 
 test('Delete Team', async () => {
