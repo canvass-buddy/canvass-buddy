@@ -1,7 +1,6 @@
 import { Team } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, genTestName } from 'src/testHelpers';
-import { beforeEach, expect, test } from 'vitest';
 
 const fetchTeams = async (): Promise<Team[]> => {
   const { user } = await authedQuery<{ user: { teams: Team[] } }>({

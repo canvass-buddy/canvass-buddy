@@ -2,7 +2,6 @@ import { User } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
 import { TEST_USER_LIST } from 'src/testHelpers/user';
-import { beforeEach, expect, test } from 'vitest';
 
 const email = 'abcd1234@booboo.com';
 

@@ -1,9 +1,11 @@
 import { yoga } from 'src/yoga';
+import { TEST_USER_LIST } from './user';
 
 type Query = <T>(props: {
   query: string;
   variables?: { [key: string]: any };
   headers?: { [key: string]: any };
+  user?: keyof typeof TEST_USER_LIST;
 }) => Promise<T>;
 
 export const query: Query = async ({ query, variables, headers }) => {
@@ -27,7 +29,13 @@ export const query: Query = async ({ query, variables, headers }) => {
   return data.data;
 };
 
-export const authedQuery: Query = async ({ variables, query: queryString }) => {
+export const authedQuery: Query = async ({
+  variables,
+  query: queryString,
+  user = 'USER_1',
+}) => {
+  const email = TEST_USER_LIST[user].email;
+  const password = TEST_USER_LIST[user].password;
   const { login } = await query<{ login: { token: string } }>({
     query: /* GraphQL */ `
       mutation Login($email: String!, $password: String!) {
@@ -37,8 +45,8 @@ export const authedQuery: Query = async ({ variables, query: queryString }) => {
       }
     `,
     variables: {
-      email: process.env.TEST_USER_1_EMAIL,
-      password: process.env.TEST_USER_1_EMAIL,
+      email,
+      password,
     },
   });
   const res = await query({

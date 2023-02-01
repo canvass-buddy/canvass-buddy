@@ -1,15 +1,17 @@
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
-import { TEST_USER_LIST } from 'src/testHelpers/user';
+import { TestUserKey, TEST_USER_LIST } from 'src/testHelpers/user';
 
 const createEnv = async ({
   email,
   name,
   password,
+  user,
 }: {
   email?: string;
   name?: string;
   password?: string;
+  user: TestUserKey;
 }) => {
   await query<{ signUp: { token: string } }>({
     query: /* GraphQL */ `
@@ -24,6 +26,7 @@ const createEnv = async ({
       password,
       name,
     },
+    user,
   });
   await authedQuery({
     query: /* GraphQL */ `
@@ -41,24 +44,26 @@ const createEnv = async ({
         latitude: 0,
       },
     },
+    user,
   });
 };
 
 export const setup = async () => {
   await teardown();
   for (const key in TEST_USER_LIST) {
-    const user = TEST_USER_LIST[key as keyof typeof TEST_USER_LIST];
+    const user = TEST_USER_LIST[key as TestUserKey];
     await createEnv({
       email: user.email,
       name: user.name,
       password: user.password,
+      user: key as TestUserKey,
     });
   }
 };
 
 export const teardown = async () => {
   for (const key in TEST_USER_LIST) {
-    const userCreds = TEST_USER_LIST[key as keyof typeof TEST_USER_LIST];
+    const userCreds = TEST_USER_LIST[key as TestUserKey];
     const user = await prismaClient.user.findFirst({
       where: {
         email: userCreds.email,
@@ -90,3 +95,5 @@ export const teardown = async () => {
     });
   }
 };
+
+export default setup;

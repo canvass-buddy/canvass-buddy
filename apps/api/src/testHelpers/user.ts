@@ -10,3 +10,5 @@ export const TEST_USER_LIST = {
     password: process.env.TEST_USER_2_PASSWORD,
   },
 };
+
+export type TestUserKey = keyof typeof TEST_USER_LIST;
