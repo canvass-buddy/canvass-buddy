@@ -1,6 +1,5 @@
 
 scalar Geo
-scalar Project
 
 type Mutation {
   createTeam(team: CreateTeam!): Team!
@@ -38,5 +37,4 @@ type Team {
   latitude: Float!
   image: String!
   users: [User!]
-  project: [Project!]
 }

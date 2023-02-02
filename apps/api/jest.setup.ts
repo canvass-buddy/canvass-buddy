@@ -1,6 +1,7 @@
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
 import { TestUserKey, TEST_USER_LIST } from 'src/testHelpers/user';
+import { Project, Team } from './resolvers-types';
 
 const createEnv = async ({
   email,
@@ -28,10 +29,10 @@ const createEnv = async ({
     },
     user,
   });
-  await authedQuery({
+  const { team } = await authedQuery<{ team: Team }>({
     query: /* GraphQL */ `
       mutation CreateTeam($team: CreateTeam!) {
-        createTeam(team: $team) {
+        team: createTeam(team: $team) {
           id
         }
       }
@@ -45,6 +46,28 @@ const createEnv = async ({
       },
     },
     user,
+  });
+  await authedQuery<{ project: Project }>({
+    query: /* GraphQL */ `
+      mutation CreateProject($teamId: String!, $project: CreateProject!) {
+        project: createProject(teamId: $teamId, project: $project) {
+          title
+          id
+        }
+      }
+    `,
+    variables: {
+      teamId: team.id,
+      project: {
+        title: `${name}-TEST_PROJECT`,
+        area: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 0,
+        },
+      },
+    },
   });
 };
 
@@ -69,7 +92,15 @@ export const teardown = async () => {
         email: userCreds.email,
       },
       include: {
-        teams: {},
+        teams: {
+          include: {
+            team: {
+              include: {
+                projects: {},
+              },
+            },
+          },
+        },
         profile: {},
       },
     });
@@ -91,6 +122,36 @@ export const teardown = async () => {
     await prismaClient.user.delete({
       where: {
         email: userCreds.email,
+      },
+    });
+
+    const projects = await prismaClient.project.findMany({
+      where: {
+        teamId: {
+          in:
+            user.teams
+              ?.map((team) => team.team)
+              .flat()
+              .map((team) => team.id) ?? [],
+        },
+      },
+    });
+
+    const projectIds = projects.map((p) => p.id);
+
+    await prismaClient.projectArea.deleteMany({
+      where: {
+        projectId: {
+          in: projectIds,
+        },
+      },
+    });
+
+    await prismaClient.project.deleteMany({
+      where: {
+        id: {
+          in: projectIds,
+        },
       },
     });
   }

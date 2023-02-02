@@ -1,0 +1,46 @@
+
+scalar Task
+
+type Mutation {
+  createProject(teamId: String!, project:CreateProject!): Project!
+  updateProject(project:UpdateProject!): Project!
+  deleteProject(projectId: String!): Boolean!
+}
+
+input CreateProject {
+  title: String!
+  area: ProjectAreaInput!
+}
+
+input UpdateProject {
+  id: String!
+  title: String!
+  area: ProjectAreaInput!
+}
+input ProjectAreaInput {
+  x1: Float!
+  x2: Float!
+  y1: Float!
+  y2: Float!
+}
+
+type Project {
+  id: String!
+  title: String!
+  area: ProjectArea!
+}
+
+type ProjectArea {
+  x1: Float!
+  x2: Float!
+  y1: Float!
+  y2: Float!
+}
+
+type User {
+  projects: [Project!]
+}
+
+type Team {
+  projects: [Project!]
+}
