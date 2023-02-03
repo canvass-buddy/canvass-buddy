@@ -1,7 +1,8 @@
-import { Task } from 'src/../resolvers-types';
+import { Task, User } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery, genTestName } from 'src/testHelpers';
 import { fetchUserData } from 'src/testHelpers/user';
+
 const createTask = async (): Promise<Task> => {
   const { projects } = await fetchUserData('USER_1');
   return (
@@ -51,7 +52,7 @@ test('Project Tasks', async () => {
       }
     `,
   });
-  expect(user);
+  expect(user.projects?.[0].tasks).toHaveLength(1);
 });
 
 test('Create Task', async () => {
