@@ -71,6 +71,8 @@ model Project {
   teamId String
   team Team @relation(fields: [teamId], references: [id])
 
+  tasks Task[]
+
   area ProjectArea?
 
   createdAt DateTime @default(now())
@@ -89,4 +91,18 @@ model ProjectArea {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Task {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  title String
+  description String
+  type String
+
+  projectId String
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }

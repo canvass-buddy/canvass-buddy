@@ -1,7 +1,7 @@
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
 import { TestUserKey, TEST_USER_LIST } from 'src/testHelpers/user';
-import { Project, Team } from './resolvers-types';
+import { Project, Task, Team } from './resolvers-types';
 
 const createEnv = async ({
   email,
@@ -47,7 +47,7 @@ const createEnv = async ({
     },
     user,
   });
-  await authedQuery<{ project: Project }>({
+  const { project } = await authedQuery<{ project: Project }>({
     query: /* GraphQL */ `
       mutation CreateProject($teamId: String!, $project: CreateProject!) {
         project: createProject(teamId: $teamId, project: $project) {
@@ -66,6 +66,26 @@ const createEnv = async ({
           y1: 0,
           y2: 0,
         },
+      },
+    },
+  });
+
+  await authedQuery<{ task: Task }>({
+    query: /* GraphQL */ `
+      mutation CreateTask($projectId: String!, $task: CreateTask!) {
+        task: createTask(projectId: $projectId, task: $task) {
+          id
+          title
+          description
+        }
+      }
+    `,
+    variables: {
+      projectId: project.id,
+      task: {
+        title: `${name}-TEST_TASK`,
+        description: 'A_TEST_TASK',
+        type: 'checkbox',
       },
     },
   });
@@ -94,11 +114,7 @@ export const teardown = async () => {
       include: {
         teams: {
           include: {
-            team: {
-              include: {
-                projects: {},
-              },
-            },
+            team: {},
           },
         },
         profile: {},
@@ -138,6 +154,14 @@ export const teardown = async () => {
     });
 
     const projectIds = projects.map((p) => p.id);
+
+    await prismaClient.task.deleteMany({
+      where: {
+        projectId: {
+          in: projectIds,
+        },
+      },
+    });
 
     await prismaClient.projectArea.deleteMany({
       where: {

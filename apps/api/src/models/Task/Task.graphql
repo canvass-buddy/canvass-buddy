@@ -1,0 +1,30 @@
+
+type Mutation {
+  createTask(projectId: String!, task: CreateTask!):Task!
+  updateTask(task: UpdateTask!):Task!
+  deleteTask(taskId:String!): Boolean!
+}
+
+input CreateTask {
+  title: String!
+  description:String!
+  type: String!
+}
+
+input UpdateTask {
+  id: String!
+  title: String!
+  description:String!
+  type: String!
+}
+
+type Task {
+  id: String!
+  title: String!
+  description: String!
+  type: String!
+}
+
+type Project {
+  tasks: [Task]
+}

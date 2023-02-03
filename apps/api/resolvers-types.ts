@@ -15,7 +15,6 @@ export type Scalars = {
   Float: number;
   Geo: any;
   ProfileImage: any;
-  Task: any;
 };
 
 export type AuthPayload = {
@@ -29,6 +28,12 @@ export type CreateProject = {
   title: Scalars['String'];
 };
 
+export type CreateTask = {
+  description: Scalars['String'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type CreateTeam = {
   description: Scalars['String'];
   image?: InputMaybe<Scalars['ProfileImage']>;
@@ -40,12 +45,15 @@ export type CreateTeam = {
 export type Mutation = {
   __typename?: 'Mutation';
   createProject: Project;
+  createTask: Task;
   createTeam: Team;
   deleteProject: Scalars['Boolean'];
+  deleteTask: Scalars['Boolean'];
   deleteTeam: Scalars['Boolean'];
   login: AuthPayload;
   signUp: AuthPayload;
   updateProject: Project;
+  updateTask: Task;
   updateTeam: Team;
   updateTeamMembers: Team;
 };
@@ -57,6 +65,12 @@ export type MutationCreateProjectArgs = {
 };
 
 
+export type MutationCreateTaskArgs = {
+  projectId: Scalars['String'];
+  task: CreateTask;
+};
+
+
 export type MutationCreateTeamArgs = {
   team: CreateTeam;
 };
@@ -64,6 +78,11 @@ export type MutationCreateTeamArgs = {
 
 export type MutationDeleteProjectArgs = {
   projectId: Scalars['String'];
+};
+
+
+export type MutationDeleteTaskArgs = {
+  taskId: Scalars['String'];
 };
 
 
@@ -91,6 +110,11 @@ export type MutationUpdateProjectArgs = {
 };
 
 
+export type MutationUpdateTaskArgs = {
+  task: UpdateTask;
+};
+
+
 export type MutationUpdateTeamArgs = {
   team: UpdateTeam;
 };
@@ -110,6 +134,7 @@ export type Project = {
   __typename?: 'Project';
   area: ProjectArea;
   id: Scalars['String'];
+  tasks?: Maybe<Array<Maybe<Task>>>;
   title: Scalars['String'];
 };
 
@@ -134,6 +159,14 @@ export type Query = {
   user?: Maybe<User>;
 };
 
+export type Task = {
+  __typename?: 'Task';
+  description: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type Team = {
   __typename?: 'Team';
   description: Scalars['String'];
@@ -150,6 +183,13 @@ export type UpdateProject = {
   area: ProjectAreaInput;
   id: Scalars['String'];
   title: Scalars['String'];
+};
+
+export type UpdateTask = {
+  description: Scalars['String'];
+  id: Scalars['String'];
+  title: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UpdateTeam = {
@@ -242,6 +282,7 @@ export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateProject: CreateProject;
+  CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Geo: ResolverTypeWrapper<Scalars['Geo']>;
@@ -254,9 +295,10 @@ export type ResolversTypes = {
   ProjectAreaInput: ProjectAreaInput;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Task: ResolverTypeWrapper<Scalars['Task']>;
+  Task: ResolverTypeWrapper<Task>;
   Team: ResolverTypeWrapper<Team>;
   UpdateProject: UpdateProject;
+  UpdateTask: UpdateTask;
   UpdateTeam: UpdateTeam;
   User: ResolverTypeWrapper<User>;
 };
@@ -266,6 +308,7 @@ export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean'];
   CreateProject: CreateProject;
+  CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: Scalars['Float'];
   Geo: Scalars['Geo'];
@@ -278,9 +321,10 @@ export type ResolversParentTypes = {
   ProjectAreaInput: ProjectAreaInput;
   Query: {};
   String: Scalars['String'];
-  Task: Scalars['Task'];
+  Task: Task;
   Team: Team;
   UpdateProject: UpdateProject;
+  UpdateTask: UpdateTask;
   UpdateTeam: UpdateTeam;
   User: User;
 };
@@ -297,12 +341,15 @@ export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'project' | 'teamId'>>;
+  createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'projectId' | 'task'>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
   deleteProject?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectArgs, 'projectId'>>;
+  deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'taskId'>>;
   deleteTeam?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTeamArgs, 'teamId'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'project'>>;
+  updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'task'>>;
   updateTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationUpdateTeamArgs, 'team'>>;
   updateTeamMembers?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationUpdateTeamMembersArgs, 'memberIds' | 'teamId'>>;
 };
@@ -319,6 +366,7 @@ export interface ProfileImageScalarConfig extends GraphQLScalarTypeConfig<Resolv
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   area?: Resolver<ResolversTypes['ProjectArea'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -336,9 +384,13 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
-export interface TaskScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Task'], any> {
-  name: 'Task';
-}
+export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type TeamResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Team'] = ResolversParentTypes['Team']> = {
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -370,7 +422,7 @@ export type Resolvers<ContextType = Context> = {
   Project?: ProjectResolvers<ContextType>;
   ProjectArea?: ProjectAreaResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Task?: GraphQLScalarType;
+  Task?: TaskResolvers<ContextType>;
   Team?: TeamResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };

@@ -24,6 +24,10 @@ export const fetchUserData = async (user: TestUserKey) => {
           id
           name
           email
+          projects {
+            id
+            title
+          }
           teams {
             id
             title
