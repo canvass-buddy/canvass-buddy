@@ -1,3 +1,4 @@
+import { MarkerResolvers } from './Marker';
 import { ProjectResolvers } from './Project';
 import { TaskResolves } from './Task';
 import { TeamResolvers } from './Team';
@@ -8,4 +9,5 @@ export const resolvers = [
   TeamResolvers,
   ProjectResolvers,
   TaskResolves,
+  MarkerResolvers,
 ];

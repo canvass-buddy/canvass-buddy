@@ -1,0 +1,32 @@
+
+type Mutation {
+  createMarker(projectId: String!, marker: CreateMarker!): Marker!
+  updateMarker(marker: UpdateMarker!): Marker!
+  deleteMarker(markerId: String!): Boolean!
+}
+
+input CreateMarker {
+  longitude: Float!
+  latitude: Float!
+  completedTasks: [String!]!
+}
+
+input UpdateMarker {
+  id: String!
+  longitude: Float!
+  latitude: Float!
+  completedTasks: [String!]!
+}
+
+type Marker {
+  id: String!
+  longitude: Float!
+  latitude: Float!
+  completedTasks: [Task!]!
+  userId: String!
+  user: User!
+}
+
+type Project {
+  markers: [Marker]
+}

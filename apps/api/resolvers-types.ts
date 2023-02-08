@@ -23,6 +23,12 @@ export type AuthPayload = {
   user: User;
 };
 
+export type CreateMarker = {
+  completedTasks: Array<Scalars['String']>;
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+};
+
 export type CreateProject = {
   area: ProjectAreaInput;
   title: Scalars['String'];
@@ -42,20 +48,39 @@ export type CreateTeam = {
   title: Scalars['String'];
 };
 
+export type Marker = {
+  __typename?: 'Marker';
+  completedTasks: Array<Task>;
+  id: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+  user: User;
+  userId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createMarker: Marker;
   createProject: Project;
   createTask: Task;
   createTeam: Team;
+  deleteMarker: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteTask: Scalars['Boolean'];
   deleteTeam: Scalars['Boolean'];
   login: AuthPayload;
   signUp: AuthPayload;
+  updateMarker: Marker;
   updateProject: Project;
   updateTask: Task;
   updateTeam: Team;
   updateTeamMembers: Team;
+};
+
+
+export type MutationCreateMarkerArgs = {
+  marker: CreateMarker;
+  projectId: Scalars['String'];
 };
 
 
@@ -73,6 +98,11 @@ export type MutationCreateTaskArgs = {
 
 export type MutationCreateTeamArgs = {
   team: CreateTeam;
+};
+
+
+export type MutationDeleteMarkerArgs = {
+  markerId: Scalars['String'];
 };
 
 
@@ -105,6 +135,11 @@ export type MutationSignUpArgs = {
 };
 
 
+export type MutationUpdateMarkerArgs = {
+  marker: UpdateMarker;
+};
+
+
 export type MutationUpdateProjectArgs = {
   project: UpdateProject;
 };
@@ -134,6 +169,7 @@ export type Project = {
   __typename?: 'Project';
   area: ProjectArea;
   id: Scalars['String'];
+  markers?: Maybe<Array<Maybe<Marker>>>;
   tasks?: Maybe<Array<Maybe<Task>>>;
   title: Scalars['String'];
 };
@@ -177,6 +213,13 @@ export type Team = {
   projects?: Maybe<Array<Project>>;
   title: Scalars['String'];
   users?: Maybe<Array<User>>;
+};
+
+export type UpdateMarker = {
+  completedTasks: Array<Scalars['String']>;
+  id: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
 export type UpdateProject = {
@@ -281,12 +324,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  CreateMarker: CreateMarker;
   CreateProject: CreateProject;
   CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Geo: ResolverTypeWrapper<Scalars['Geo']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Marker: ResolverTypeWrapper<Marker>;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
   ProfileImage: ResolverTypeWrapper<Scalars['ProfileImage']>;
@@ -297,6 +342,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Task: ResolverTypeWrapper<Task>;
   Team: ResolverTypeWrapper<Team>;
+  UpdateMarker: UpdateMarker;
   UpdateProject: UpdateProject;
   UpdateTask: UpdateTask;
   UpdateTeam: UpdateTeam;
@@ -307,12 +353,14 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean'];
+  CreateMarker: CreateMarker;
   CreateProject: CreateProject;
   CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: Scalars['Float'];
   Geo: Scalars['Geo'];
   ID: Scalars['ID'];
+  Marker: Marker;
   Mutation: {};
   Profile: Profile;
   ProfileImage: Scalars['ProfileImage'];
@@ -323,6 +371,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Task: Task;
   Team: Team;
+  UpdateMarker: UpdateMarker;
   UpdateProject: UpdateProject;
   UpdateTask: UpdateTask;
   UpdateTeam: UpdateTeam;
@@ -339,15 +388,28 @@ export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
   name: 'Geo';
 }
 
+export type MarkerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Marker'] = ResolversParentTypes['Marker']> = {
+  completedTasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createMarker?: Resolver<ResolversTypes['Marker'], ParentType, ContextType, RequireFields<MutationCreateMarkerArgs, 'marker' | 'projectId'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'project' | 'teamId'>>;
   createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'projectId' | 'task'>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
+  deleteMarker?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteMarkerArgs, 'markerId'>>;
   deleteProject?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectArgs, 'projectId'>>;
   deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'taskId'>>;
   deleteTeam?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTeamArgs, 'teamId'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;
+  updateMarker?: Resolver<ResolversTypes['Marker'], ParentType, ContextType, RequireFields<MutationUpdateMarkerArgs, 'marker'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'project'>>;
   updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'task'>>;
   updateTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationUpdateTeamArgs, 'team'>>;
@@ -366,6 +428,7 @@ export interface ProfileImageScalarConfig extends GraphQLScalarTypeConfig<Resolv
 export type ProjectResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   area?: Resolver<ResolversTypes['ProjectArea'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  markers?: Resolver<Maybe<Array<Maybe<ResolversTypes['Marker']>>>, ParentType, ContextType>;
   tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -416,6 +479,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 export type Resolvers<ContextType = Context> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Geo?: GraphQLScalarType;
+  Marker?: MarkerResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;
   ProfileImage?: GraphQLScalarType;
