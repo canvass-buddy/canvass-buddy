@@ -19,6 +19,7 @@ export const MarkerResolvers: Resolvers = {
           longitude: marker.longitude,
           latitude: marker.latitude,
           userId: context.userId ?? '',
+          projectId,
           completedTasks: {
             // createMany: {},
           },
@@ -100,6 +101,30 @@ export const MarkerResolvers: Resolvers = {
       });
 
       return true;
+    },
+  },
+  Project: {
+    async markers(parent, _args) {
+      const markers = await prismaClient.marker.findMany({
+        where: {
+          projectId: parent.id,
+        },
+        include: {
+          completedTasks: {
+            include: {
+              task: {},
+            },
+          },
+          user: {},
+        },
+      });
+      return markers.map((dbMarker) => {
+        const resMarker: Marker = {
+          ...dbMarker,
+          completedTasks: dbMarker.completedTasks.map((task) => task.task),
+        };
+        return resMarker;
+      });
     },
   },
 };

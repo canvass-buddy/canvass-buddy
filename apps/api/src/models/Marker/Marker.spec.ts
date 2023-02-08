@@ -1,4 +1,5 @@
-import { Marker } from 'src/../resolvers-types';
+import { createSchema } from 'graphql-yoga';
+import { Marker, User } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 import { authedQuery } from 'src/testHelpers';
 import { fetchUserData } from 'src/testHelpers/user';
@@ -76,6 +77,13 @@ test('update marker', async () => {
 
   expect(dbMarker?.longitude).toBe(420);
   expect(dbMarker?.latitude).toBe(69);
+
+  await prismaClient.marker.deleteMany({
+    where: {
+      longitude: 420,
+      latitude: 69,
+    },
+  });
 });
 
 test('delete marker', async () => {
@@ -106,4 +114,23 @@ test('delete marker', async () => {
       },
     })
   ).resolves.toHaveLength(0);
+});
+
+test('fetch project markers', async () => {
+  await createMarker();
+
+  const { user } = await authedQuery<{ user: User }>({
+    query: /* GraphQL */ `
+      query {
+        user {
+          projects {
+            markers {
+              id
+            }
+          }
+        }
+      }
+    `,
+  });
+  expect(user.projects?.[0].markers).toHaveLength(1);
 });

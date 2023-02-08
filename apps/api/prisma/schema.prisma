@@ -74,6 +74,8 @@ model Project {
 
   tasks Task[]
 
+  markers Marker[]
+
   area ProjectArea?
 
   createdAt DateTime @default(now())
@@ -118,6 +120,9 @@ model Marker {
 
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  projectId String
+  project Project @relation(fields: [projectId], references:[id], onDelete: Cascade)
 
   longitude Float
   latitude Float
