@@ -8,6 +8,7 @@ import { ApplicationProvider, Layout } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Screens } from './src/Screens';
+import { Providers } from './src/Providers';
 
 const client = new ApolloClient({
   uri: `http://${Constants.manifest?.debuggerHost
@@ -20,15 +21,17 @@ export default function Native() {
   return (
     <ApplicationProvider {...eva} theme={eva.dark}>
       <ApolloProvider client={client}>
-        <StacksProvider spacing={4}>
-          <Layout style={{ height: '100%' }}>
-            <SafeAreaProvider>
-              <NavigationContainer>
-                <Screens />
-              </NavigationContainer>
-            </SafeAreaProvider>
-          </Layout>
-        </StacksProvider>
+        <Providers>
+          <StacksProvider spacing={4}>
+            <Layout style={{ height: '100%' }}>
+              <SafeAreaProvider>
+                <NavigationContainer>
+                  <Screens />
+                </NavigationContainer>
+              </SafeAreaProvider>
+            </Layout>
+          </StacksProvider>
+        </Providers>
       </ApolloProvider>
     </ApplicationProvider>
   );
