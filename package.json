@@ -13,5 +13,8 @@
   "devDependencies": {
     "prettier": "^2.7.1",
     "turbo": "latest"
+  },
+  "dependencies": {
+    "graphql": "^16.6.0"
   }
 }

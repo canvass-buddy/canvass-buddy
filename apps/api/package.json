@@ -51,6 +51,7 @@
     "graphql-yoga": "3.3.0",
     "jsonwebtoken": "^9.0.0",
     "minio": "^7.0.32",
+    "graphql": "^16.6.0",
     "uuid": "^9.0.0"
   }
 }
