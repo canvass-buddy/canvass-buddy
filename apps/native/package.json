@@ -12,13 +12,14 @@
     "dev": "npm start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "codegen":"graphql-codegen",
-    "codegen:watch":"graphql-codegen -w"
+    "codegen": "graphql-codegen",
+    "codegen:watch": "graphql-codegen -w"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
     "@eva-design/eva": "^2.1.1",
     "@mobily/stacks": "^2.2.2",
+    "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
     "@ui-kitten/components": "^5.1.2",
