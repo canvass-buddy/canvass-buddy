@@ -2,9 +2,12 @@ import { Column, Columns, FillView, Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Input, Layout, Text } from '@ui-kitten/components';
 import { useFormik } from 'formik';
+import { some } from 'lodash';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { toFormikValidate } from 'zod-formik-adapter';
+import { z } from 'zod/lib';
 import { useAuth } from '../../Providers';
 import { RootStackParamList } from '../types';
 
@@ -16,7 +19,13 @@ export function Login({
   const { t } = useTranslation();
   const { login } = useAuth();
 
+  const Schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1, t`errors.required`),
+  });
+
   const f = useFormik({
+    validate: toFormikValidate(Schema),
     initialValues: {
       password: '',
       email: '',
@@ -38,16 +47,21 @@ export function Login({
           <Stack space={4} padding={4} align="center">
             <Text category="h1">{t`auth.login`}</Text>
             <Input
+              placeholder={t`auth.username`}
               value={f.values.email}
               onChangeText={f.handleChange('email')}
               onBlur={f.handleBlur('email')}
-              placeholder={t`auth.username`}
+              status={f.errors.email ? 'danger' : 'basic'}
+              caption={f.errors.email}
             />
             <Input
+              placeholder={t`auth.password`}
+              secureTextEntry
               value={f.values.password}
               onChangeText={f.handleChange('password')}
               onBlur={f.handleBlur('password')}
-              placeholder={t`auth.password`}
+              status={f.errors.password ? 'danger' : 'basic'}
+              caption={f.errors.password}
             />
             <Columns defaultWidth="1/2" space={4}>
               <Column>
@@ -58,6 +72,7 @@ export function Login({
               <Column>
                 <Button
                   onPress={() => f.handleSubmit()}
+                  disabled={some(f.errors)}
                 >{t`auth.login`}</Button>
               </Column>
             </Columns>
