@@ -71,6 +71,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       setToken(auth.token);
     },
   });
+
   const [signUp] = useMutation(SIGN_UP_QUERY, {
     onCompleted: async ({ auth }) => {
       await AsyncStorage.setItem('token', auth.token);
@@ -80,6 +81,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const logout = () => {
     setToken(undefined);
+    AsyncStorage.clear();
   };
 
   return (

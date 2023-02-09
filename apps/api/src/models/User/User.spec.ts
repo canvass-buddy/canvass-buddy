@@ -36,6 +36,13 @@ test('Sign Up', async () => {
     },
   });
   expect(res.signUp.token).toBeTruthy();
+  await expect(
+    prismaClient.user.findMany({
+      where: {
+        email,
+      },
+    })
+  ).resolves.toHaveLength(1);
 });
 
 test('Login', async () => {

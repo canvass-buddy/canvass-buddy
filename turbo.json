@@ -13,11 +13,18 @@
     "$TEST_USER_1_NAME"
   ],
   "pipeline": {
+    "generate:watch": {
+      "cache": false
+    },
+    "test:watch": {
+      "cache":false
+    },
     "build": {
       "outputs": ["dist/**", ".next/**"],
       "dependsOn": ["^build"]
     },
     "dev": {
+      "dependsOn":["^generate:watch"],
       "cache": false,
       "persistent": true
     },

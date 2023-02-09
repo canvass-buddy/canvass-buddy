@@ -3,6 +3,10 @@
     "login":"Login",
     "signUp":"Sign Up",
     "username":"Username",
-    "password":"Password"
+    "password":"Password",
+    "passwordConfirm":"Confirm Password",
+    "firstName":"First Name",
+    "lastName":"Last Name",
+    "email":"Email",
   }
 }

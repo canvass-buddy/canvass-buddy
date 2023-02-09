@@ -12,8 +12,8 @@
     "dev": "npm start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "codegen": "graphql-codegen",
-    "codegen:watch": "graphql-codegen -w"
+    "generate": "graphql-codegen",
+    "generate:watch": "graphql-codegen -w"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
@@ -38,7 +38,9 @@
     "react-native-screens": "^3.19.0",
     "react-native-svg": "12.3.0",
     "react-native-web": "^0.18.9",
-    "ui": "*"
+    "ui": "*",
+    "zod": "^3.20.6",
+    "zod-formik-adapter": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
