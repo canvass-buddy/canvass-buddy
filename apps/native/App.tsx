@@ -17,6 +17,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Screens } from './src/Screens';
 import { Providers } from './src/Providers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createUploadLink } from 'apollo-upload-client';
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(async () => {
@@ -36,8 +37,14 @@ const link = new HttpLink({
     .shift()}:4000/graphql`,
 });
 
+const uploadLink = createUploadLink({
+  uri: `http://${Constants.manifest?.debuggerHost
+    ?.split(':')
+    .shift()}:4000/graphql`,
+});
+
 const client = new ApolloClient({
-  link: concat(authMiddleware, link),
+  link: ApolloLink.from([authMiddleware, uploadLink]),
   cache: new InMemoryCache(),
 });
 

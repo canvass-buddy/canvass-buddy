@@ -63,6 +63,9 @@ export const UserResolvers: Resolvers = {
         where: {
           id: context.userId,
         },
+        include: {
+          profile: {},
+        },
       });
       if (!user) throw new Error('User Not Found');
       return user;

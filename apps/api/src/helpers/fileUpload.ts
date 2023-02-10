@@ -1,5 +1,6 @@
 import { minioClient } from 'src/clients';
 import { v4 } from 'uuid';
+import { networkInterfaces } from 'os';
 
 const createBucket = async (bucketName: string) => {
   if (await minioClient.bucketExists(bucketName)) return;
@@ -37,6 +38,7 @@ const createBucket = async (bucketName: string) => {
   await minioClient.makeBucket(bucketName, 'us-east-1');
   await minioClient.setBucketPolicy(bucketName, JSON.stringify(policy));
 };
+Object.values({}).map((item) => item);
 
 export const uploadFile = async (
   file: File,
@@ -49,5 +51,5 @@ export const uploadFile = async (
 
   minioClient.putObject(bucketName, assetId, buffer);
 
-  return `${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${assetId}`;
+  return `${bucketName}/${assetId}`;
 };

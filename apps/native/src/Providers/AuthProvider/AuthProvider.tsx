@@ -19,7 +19,7 @@ interface AuthProviderState {
   >;
   signUp: MutationFunction<
     { auth: { token: string } },
-    { email: string; name: string; password: string }
+    { email: string; name: string; password: string; profileImage?: any }
   >;
   logout(): void;
 }
@@ -46,8 +46,18 @@ const LOGIN_QUERY = gql(/* GraphQL */ `
 `);
 
 const SIGN_UP_QUERY = gql(/* GraphQL */ `
-  mutation SignUp($email: String!, $password: String!, $name: String!) {
-    auth: signUp(password: $password, name: $name, email: $email) {
+  mutation SignUp(
+    $email: String!
+    $password: String!
+    $name: String!
+    $profileImage: ProfileImage
+  ) {
+    auth: signUp(
+      password: $password
+      name: $name
+      email: $email
+      profileImage: $profileImage
+    ) {
       token
     }
   }
@@ -72,12 +82,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  const [signUp] = useMutation(SIGN_UP_QUERY, {
+  const [signUp, { loading }] = useMutation(SIGN_UP_QUERY, {
     onCompleted: async ({ auth }) => {
       await AsyncStorage.setItem('token', auth.token);
       setToken(auth.token);
     },
   });
+  console.log('loading sign up....', loading);
 
   const logout = () => {
     setToken(undefined);

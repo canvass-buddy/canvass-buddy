@@ -1,19 +1,23 @@
 import { Column, Columns, FillView, Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Input, Layout, Text } from '@ui-kitten/components';
+import { Avatar, Button, Input, Layout, Text } from '@ui-kitten/components';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { useAuth } from '../../Providers';
 import { RootStackParamList } from '../types';
+import * as ImagePicker from 'expo-image-picker';
+import { ReactNativeFile } from 'apollo-upload-client';
 
 export function SignUp({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, 'SignUp'>) {
   const onLogin = () => navigation.navigate('Login');
+
+  const [imageUri, setImageUri] = useState<string>();
 
   const { t } = useTranslation();
   const { signUp } = useAuth();
@@ -34,30 +38,52 @@ export function SignUp({
   const f = useFormik({
     validate: toFormikValidate(Schema),
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
+      firstName: 'Erik',
+      lastName: 'Badger',
+      email: 'erikbadger777@gmail.com',
+      password: 'abcd1234',
+      passwordConfirm: 'abcd1234',
     },
     async onSubmit({ email, password, firstName, lastName }) {
       const name = `${firstName} ${lastName}`;
+      // const profileImage = imageUri
+      //   ? await fetch(imageUri).then((f) => f.blob())
+      //   : null;
+      // console.log('profile image', profileImage);
+      const profileImage = new ReactNativeFile({
+        uri: imageUri ?? '',
+        name: 'a.jpg',
+        type: 'image/jpeg',
+      });
       await signUp({
         variables: {
           email,
           password,
           name,
+          profileImage,
         },
       });
     },
   });
 
+  const onPickImage = async () => {
+    const res = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    setImageUri(res.assets?.[0].uri);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flexGrow: 1 }}>
         <FillView alignX="center" alignY="center">
+          <Avatar size="giant" source={{ uri: imageUri }} />
           <Text category="h1">Sign Up</Text>
           <Stack space={4} padding={4}>
+            <Button onPress={onPickImage}>Pick Image</Button>
             <Columns defaultWidth="1/2" space={4}>
               <Column>
                 <Input
