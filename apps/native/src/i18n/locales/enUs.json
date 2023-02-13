@@ -8,5 +8,13 @@
     "firstName":"First Name",
     "lastName":"Last Name",
     "email":"Email",
+  },
+  "util":{
+    "teams":"Teams",
+    "projects":"Projects"
+  },
+  "status":{
+    "noProjects":"You Don't have any projects",
+    "noTeams":"You Don't have any teams"
   }
 }
