@@ -14,12 +14,11 @@ export const TeamResolvers: Resolvers = {
           image: args.team.image
             ? await uploadFile(args.team.image as File, 'team-images')
             : '',
-        },
-      });
-      await prismaClient.teamMember.create({
-        data: {
-          teamId: team.id,
-          userId: context.userId ?? '',
+          members: {
+            create: {
+              userId: context.userId ?? 'abcd',
+            },
+          },
         },
       });
       return team;
