@@ -72,8 +72,8 @@ export function HomeRoot({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flex: 1, height: '100%' }}>
-        <FillView alignY="between" padding={4}>
-          <Stack space={6}>
+        <FillView alignY="between" padding={6} paddingTop={10}>
+          <Stack space={4}>
             <Card onPress={() => navigation.navigate('Profile', {})}>
               <Stack align="center" padding={4} space={4}>
                 {data?.user?.profile?.image && (
@@ -81,59 +81,66 @@ export function HomeRoot({
                     source={{ uri: imageUri(data?.user?.profile?.image) }}
                   />
                 )}
-                <Text category="h4">{data?.user?.name}</Text>
+                <Text category="h2">{data?.user?.name}</Text>
                 <Text category="s1" appearance="hint">
                   Minneapolis, Minnesota
                 </Text>
               </Stack>
             </Card>
-            <Stack space={4} padding={4}>
+            <Stack space={6} padding={6}>
               <Text
                 category="h2"
                 style={styles.header}
               >{t`util.projects`}</Text>
-              <Menu>
-                {data?.user?.projects?.length ? (
-                  data.user.projects.map((project) => (
-                    <MenuItem
-                      key={project.id}
-                      title={project.title}
-                      onPress={() =>
-                        navigation.navigate('Project', {
-                          id: project.id,
-                        })
-                      }
-                    />
-                  ))
-                ) : (
-                  <MissingDataCard text={t`status.noProjects`} />
-                )}
-              </Menu>
-              <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
-              <Menu>
-                {data?.user?.teams?.length ? (
-                  data?.user?.teams?.map((project) =>
-                    project ? (
+              <Card>
+                <Menu>
+                  {data?.user?.projects?.length ? (
+                    data.user.projects.map((project) => (
                       <MenuItem
                         key={project.id}
                         title={project.title}
-                        onPress={() =>
-                          navigation.navigate('Team', {
-                            id: project.id,
-                          })
-                        }
                         accessoryRight={() => (
                           <AntDesign name="right" color="white" />
                         )}
+                        onPress={() =>
+                          navigation.navigate('Project', {
+                            id: project.id,
+                          })
+                        }
                       />
-                    ) : (
-                      <></>
+                    ))
+                  ) : (
+                    <MissingDataCard text={t`status.noProjects`} />
+                  )}
+                </Menu>
+              </Card>
+              <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
+              <Card>
+                <Menu>
+                  {data?.user?.teams?.length ? (
+                    data?.user?.teams?.map((project) =>
+                      project ? (
+                        <MenuItem
+                          key={project.id}
+                          title={project.title}
+                          accessoryRight={() => (
+                            <AntDesign name="right" color="white" />
+                          )}
+                          onPress={() =>
+                            navigation.navigate('Team', {
+                              id: project.id,
+                            })
+                          }
+                        />
+                      ) : (
+                        <></>
+                      )
                     )
-                  )
-                ) : (
-                  <MissingDataCard text={t`status.noTeams`} />
-                )}
-              </Menu>
+                  ) : (
+                    <MissingDataCard text={t`status.noTeams`} />
+                  )}
+                </Menu>
+              </Card>
             </Stack>
           </Stack>
         </FillView>
