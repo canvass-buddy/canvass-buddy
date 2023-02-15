@@ -1,10 +1,16 @@
 import { useMutation } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Input, Layout, TopNavigation } from '@ui-kitten/components';
+import { Button, Input, useTheme } from '@ui-kitten/components';
+import {
+  getLastKnownPositionAsync,
+  LocationObject,
+  useForegroundPermissions,
+} from 'expo-location';
 import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, { LatLng, Polygon } from 'react-native-maps';
 import { ScreenLayout } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
@@ -23,6 +29,22 @@ export function ProjectCreate({
 }: NativeStackScreenProps<HomeStackParamList, 'ProjectCreate'>) {
   const { t } = useTranslation();
   const [createProject] = useMutation(CREATE_PROJECT);
+
+  const [foregroundPermissions, requestForegroundPermissions] =
+    useForegroundPermissions();
+
+  const [position, setPosition] = useState<LocationObject | null>();
+
+  const [polygonStart, setPolygonStart] = useState<LatLng>();
+  const [polygonEnd, setPolygonEnd] = useState<LatLng>();
+
+  useEffect(() => {
+    requestForegroundPermissions();
+    getLastKnownPositionAsync().then((position) => {
+      setPosition(position);
+    });
+  }, [foregroundPermissions]);
+
   const f = useFormik({
     initialValues: {
       title: '',
@@ -34,10 +56,10 @@ export function ProjectCreate({
           project: {
             title,
             area: {
-              x1: 0,
-              x2: 0,
-              y1: 0,
-              y2: 0,
+              x1: polygonStart?.longitude ?? 0,
+              y1: polygonStart?.latitude ?? 0,
+              x2: polygonEnd?.longitude ?? 0,
+              y2: polygonEnd?.latitude ?? 0,
             },
           },
         },
@@ -49,6 +71,7 @@ export function ProjectCreate({
       }
     },
   });
+  const theme = useTheme();
   return (
     <ScreenLayout>
       <Stack padding={4} space={4}>
@@ -58,6 +81,56 @@ export function ProjectCreate({
           onChangeText={f.handleChange('title')}
           onBlur={f.handleBlur('title')}
         />
+        <MapView
+          style={{ width: '100%', height: 400 }}
+          initialRegion={
+            position?.coords && {
+              longitude: position?.coords.longitude ?? 0,
+              latitude: position?.coords.latitude ?? 0,
+              longitudeDelta: 0.0922,
+              latitudeDelta: 0.0922,
+            }
+          }
+          showsUserLocation
+          onTouchStart={() => {
+            setPolygonStart(undefined);
+          }}
+          onPanDrag={({ nativeEvent }) => {
+            if (!polygonStart)
+              setPolygonStart({
+                latitude: nativeEvent.coordinate.latitude,
+                longitude: nativeEvent.coordinate.longitude,
+              });
+            setPolygonEnd({
+              latitude: nativeEvent.coordinate.latitude,
+              longitude: nativeEvent.coordinate.longitude,
+            });
+          }}
+          pitchEnabled={false}
+          scrollEnabled={false}
+          zoomEnabled={false}
+        >
+          {polygonStart && polygonEnd ? (
+            <Polygon
+              coordinates={[
+                polygonStart,
+                {
+                  longitude: polygonStart.longitude,
+                  latitude: polygonEnd.latitude,
+                },
+                polygonEnd,
+                {
+                  longitude: polygonEnd.longitude,
+                  latitude: polygonStart.latitude,
+                },
+              ]}
+              fillColor={theme['color-info-transparent-500']}
+              strokeColor={theme['color-info-transparent-600']}
+            />
+          ) : (
+            <></>
+          )}
+        </MapView>
         <Button
           onPress={() => f.handleSubmit()}
         >{t`util.createProject`}</Button>

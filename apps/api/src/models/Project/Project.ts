@@ -87,6 +87,9 @@ export const ProjectResolvers: Resolvers = {
             },
           },
         },
+        include: {
+          area: {},
+        },
       });
       return project as unknown as Project;
     },
