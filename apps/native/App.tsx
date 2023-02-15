@@ -10,8 +10,7 @@ import { setContext } from '@apollo/client/link/context';
 import * as eva from '@eva-design/eva';
 import { StacksProvider } from '@mobily/stacks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
-import { ApplicationProvider, Layout } from '@ui-kitten/components';
+import { ApplicationProvider } from '@ui-kitten/components';
 import { createUploadLink } from 'apollo-upload-client';
 import Constants from 'expo-constants';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -45,13 +44,9 @@ export default function Native() {
       <ApolloProvider client={client}>
         <Providers>
           <StacksProvider spacing={4}>
-            <Layout style={{ height: '100%' }}>
-              <SafeAreaProvider>
-                <NavigationContainer>
-                  <Screens />
-                </NavigationContainer>
-              </SafeAreaProvider>
-            </Layout>
+            <SafeAreaProvider>
+              <Screens />
+            </SafeAreaProvider>
           </StacksProvider>
         </Providers>
       </ApolloProvider>

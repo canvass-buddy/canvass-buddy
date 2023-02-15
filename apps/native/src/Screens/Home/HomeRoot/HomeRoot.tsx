@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { useAuth } from '../../../Providers';
 import { gql } from '../../../__generated__';
@@ -70,32 +71,52 @@ export function HomeRoot({
   const { t } = useTranslation();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flex: 1, height: '100%' }}>
-        <FillView alignY="between" padding={6} paddingTop={10}>
-          <Stack space={4}>
-            <Card onPress={() => navigation.navigate('Profile', {})}>
-              <Stack align="center" padding={4} space={4}>
-                {data?.user?.profile?.image && (
-                  <Avatar
-                    source={{ uri: imageUri(data?.user?.profile?.image) }}
-                  />
+    <ScreenLayout>
+      <FillView alignY="between" padding={6} paddingTop={10}>
+        <Stack space={4}>
+          <Card onPress={() => navigation.navigate('Profile', {})}>
+            <Stack align="center" padding={4} space={4}>
+              {data?.user?.profile?.image && (
+                <Avatar
+                  source={{ uri: imageUri(data?.user?.profile?.image) }}
+                />
+              )}
+              <Text category="h2">{data?.user?.name}</Text>
+              <Text category="s1" appearance="hint">
+                Minneapolis, Minnesota
+              </Text>
+            </Stack>
+          </Card>
+          <Stack space={6} padding={6}>
+            <Text category="h2" style={styles.header}>{t`util.projects`}</Text>
+            <Card>
+              <Menu>
+                {data?.user?.projects?.length ? (
+                  data.user.projects.map((project) => (
+                    <MenuItem
+                      key={project.id}
+                      title={project.title}
+                      accessoryRight={() => (
+                        <AntDesign name="right" color="white" />
+                      )}
+                      onPress={() =>
+                        navigation.navigate('Project', {
+                          id: project.id,
+                        })
+                      }
+                    />
+                  ))
+                ) : (
+                  <MissingDataCard text={t`status.noProjects`} />
                 )}
-                <Text category="h2">{data?.user?.name}</Text>
-                <Text category="s1" appearance="hint">
-                  Minneapolis, Minnesota
-                </Text>
-              </Stack>
+              </Menu>
             </Card>
-            <Stack space={6} padding={6}>
-              <Text
-                category="h2"
-                style={styles.header}
-              >{t`util.projects`}</Text>
-              <Card>
-                <Menu>
-                  {data?.user?.projects?.length ? (
-                    data.user.projects.map((project) => (
+            <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
+            <Card>
+              <Menu>
+                {data?.user?.teams?.length ? (
+                  data?.user?.teams?.map((project) =>
+                    project ? (
                       <MenuItem
                         key={project.id}
                         title={project.title}
@@ -103,48 +124,23 @@ export function HomeRoot({
                           <AntDesign name="right" color="white" />
                         )}
                         onPress={() =>
-                          navigation.navigate('Project', {
+                          navigation.navigate('Team', {
                             id: project.id,
                           })
                         }
                       />
-                    ))
-                  ) : (
-                    <MissingDataCard text={t`status.noProjects`} />
-                  )}
-                </Menu>
-              </Card>
-              <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
-              <Card>
-                <Menu>
-                  {data?.user?.teams?.length ? (
-                    data?.user?.teams?.map((project) =>
-                      project ? (
-                        <MenuItem
-                          key={project.id}
-                          title={project.title}
-                          accessoryRight={() => (
-                            <AntDesign name="right" color="white" />
-                          )}
-                          onPress={() =>
-                            navigation.navigate('Team', {
-                              id: project.id,
-                            })
-                          }
-                        />
-                      ) : (
-                        <></>
-                      )
+                    ) : (
+                      <></>
                     )
-                  ) : (
-                    <MissingDataCard text={t`status.noTeams`} />
-                  )}
-                </Menu>
-              </Card>
-            </Stack>
+                  )
+                ) : (
+                  <MissingDataCard text={t`status.noTeams`} />
+                )}
+              </Menu>
+            </Card>
           </Stack>
-        </FillView>
-      </Layout>
+        </Stack>
+      </FillView>
       <FillView
         style={{
           position: 'absolute',
@@ -165,6 +161,6 @@ export function HomeRoot({
           Create Team
         </Button>
       </FillView>
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }

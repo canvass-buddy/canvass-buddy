@@ -5,6 +5,7 @@ import { Button, Input, Layout, TopNavigation } from '@ui-kitten/components';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -49,21 +50,18 @@ export function ProjectCreate({
     },
   });
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title="Project Create" />
-      <Layout style={{ flexGrow: 1 }}>
-        <Stack padding={4} space={4}>
-          <Input
-            placeholder={t`util.projectName`}
-            value={f.values.title}
-            onChangeText={f.handleChange('title')}
-            onBlur={f.handleBlur('title')}
-          />
-          <Button
-            onPress={() => f.handleSubmit()}
-          >{t`util.createProject`}</Button>
-        </Stack>
-      </Layout>
-    </SafeAreaView>
+    <ScreenLayout>
+      <Stack padding={4} space={4}>
+        <Input
+          placeholder={t`util.projectName`}
+          value={f.values.title}
+          onChangeText={f.handleChange('title')}
+          onBlur={f.handleBlur('title')}
+        />
+        <Button
+          onPress={() => f.handleSubmit()}
+        >{t`util.createProject`}</Button>
+      </Stack>
+    </ScreenLayout>
   );
 }

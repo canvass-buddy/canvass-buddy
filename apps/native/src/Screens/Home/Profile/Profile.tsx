@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Avatar, Layout, Text, TopNavigation } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
@@ -26,7 +27,7 @@ export function Profile({}: NativeStackScreenProps<
 >) {
   const { data } = useQuery(USER_QUERY);
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <ScreenLayout>
       <TopNavigation title="Profile" alignment="center" />
       <Layout style={{ flexGrow: 1 }}>
         <Stack padding={4} space={4} align="center">
@@ -41,6 +42,6 @@ export function Profile({}: NativeStackScreenProps<
           <Text category="h6">{data?.user?.name}</Text>
         </Stack>
       </Layout>
-    </SafeAreaView>
+    </ScreenLayout>
   );
 }

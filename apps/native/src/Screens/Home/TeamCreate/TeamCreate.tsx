@@ -5,6 +5,7 @@ import { Button, Input, Layout, TopNavigation } from '@ui-kitten/components';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -48,26 +49,23 @@ export function TeamCreate({
     },
   });
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title="Team Create" alignment="center" />
-      <Layout style={{ flexGrow: 1 }}>
-        <Stack padding={4} space={4}>
-          <Button>{t`util.uploadTeamImage`}</Button>
-          <Input
-            placeholder={t`util.teamTitle`}
-            onChangeText={f.handleChange('title')}
-            onBlur={f.handleBlur('title')}
-            value={f.values.title}
-          />
-          <Input
-            placeholder={t`util.teamDescription`}
-            onChangeText={f.handleChange('description')}
-            onBlur={f.handleBlur('description')}
-            value={f.values.description}
-          />
-          <Button onPress={() => f.handleSubmit()}>{t`util.createTeam`}</Button>
-        </Stack>
-      </Layout>
-    </SafeAreaView>
+    <ScreenLayout>
+      <Stack padding={4} space={4}>
+        <Button>{t`util.uploadTeamImage`}</Button>
+        <Input
+          placeholder={t`util.teamTitle`}
+          onChangeText={f.handleChange('title')}
+          onBlur={f.handleBlur('title')}
+          value={f.values.title}
+        />
+        <Input
+          placeholder={t`util.teamDescription`}
+          onChangeText={f.handleChange('description')}
+          onBlur={f.handleBlur('description')}
+          value={f.values.description}
+        />
+        <Button onPress={() => f.handleSubmit()}>{t`util.createTeam`}</Button>
+      </Stack>
+    </ScreenLayout>
   );
 }

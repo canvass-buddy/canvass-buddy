@@ -2,18 +2,10 @@ import { useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Button,
-  Card,
-  Layout,
-  Menu,
-  MenuItem,
-  Text,
-  TopNavigation,
-} from '@ui-kitten/components';
+import { Button, Card, Menu, MenuItem, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -55,64 +47,58 @@ export function Team({
   });
   const { t } = useTranslation();
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flexGrow: 1 }}>
-        <Stack space={4} padding={4}>
-          <Text category="h2" style={styles.text}>
-            {data?.user?.team?.title}
-          </Text>
-          <Text category="s1" style={styles.text}>
-            {data?.user?.team?.description}
-          </Text>
-          <Text category="h6" style={styles.text}>{t`util.projects`}</Text>
-          <Card>
-            <Menu>
-              {data?.user?.team?.projects?.map((project) => (
-                <MenuItem
-                  key={project.id}
-                  title={project.title}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Project', {
-                      id: project.id,
-                    });
-                  }}
-                />
-              ))}
-            </Menu>
-          </Card>
-          <Button
-            onPress={() =>
-              navigation.push('ProjectCreate', {
-                id: route.params.id,
-              })
-            }
-          >
-            {t`util.createProject`}
-          </Button>
-          <Stack space={2}>
-            <Text category="h6" style={styles.text}>{t`util.users`}</Text>
-            <Menu>
-              {data?.user?.team?.users?.map((user) => (
-                <MenuItem
-                  key={user.id}
-                  title={user.name}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Profile', {
-                      id: user.id,
-                    });
-                  }}
-                />
-              ))}
-            </Menu>
-          </Stack>
+    <ScreenLayout>
+      <Stack space={4} padding={4}>
+        <Text category="h2" style={styles.text}>
+          {data?.user?.team?.title}
+        </Text>
+        <Text category="s1" style={styles.text}>
+          {data?.user?.team?.description}
+        </Text>
+        <Text category="h6" style={styles.text}>{t`util.projects`}</Text>
+        <Card>
+          <Menu>
+            {data?.user?.team?.projects?.map((project) => (
+              <MenuItem
+                key={project.id}
+                title={project.title}
+                accessoryRight={() => <AntDesign name="right" color="white" />}
+                onPress={() => {
+                  navigation.navigate('Project', {
+                    id: project.id,
+                  });
+                }}
+              />
+            ))}
+          </Menu>
+        </Card>
+        <Button
+          onPress={() =>
+            navigation.push('ProjectCreate', {
+              id: route.params.id,
+            })
+          }
+        >
+          {t`util.createProject`}
+        </Button>
+        <Stack space={2}>
+          <Text category="h6" style={styles.text}>{t`util.users`}</Text>
+          <Menu>
+            {data?.user?.team?.users?.map((user) => (
+              <MenuItem
+                key={user.id}
+                title={user.name}
+                accessoryRight={() => <AntDesign name="right" color="white" />}
+                onPress={() => {
+                  navigation.navigate('Profile', {
+                    id: user.id,
+                  });
+                }}
+              />
+            ))}
+          </Menu>
         </Stack>
-      </Layout>
-    </SafeAreaView>
+      </Stack>
+    </ScreenLayout>
   );
 }

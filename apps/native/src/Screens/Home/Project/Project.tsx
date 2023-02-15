@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/native-stack';
 import { Layout, Text } from '@ui-kitten/components';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenLayout } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -28,14 +29,12 @@ export function Project({
     },
   });
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flexGrow: 1 }}>
-        <Stack padding={4} space={4}>
-          <Text category="h2" style={{ textAlign: 'center' }}>
-            {data?.user?.project?.title}
-          </Text>
-        </Stack>
-      </Layout>
-    </SafeAreaView>
+    <ScreenLayout>
+      <Stack padding={4} space={4}>
+        <Text category="h2" style={{ textAlign: 'center' }}>
+          {data?.user?.project?.title}
+        </Text>
+      </Stack>
+    </ScreenLayout>
   );
 }
