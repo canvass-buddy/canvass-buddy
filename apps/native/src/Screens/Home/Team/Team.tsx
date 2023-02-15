@@ -4,8 +4,9 @@ import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Card, Menu, MenuItem, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
-import { ScreenLayout } from '../../../Components';
+import { StyleSheet, Image } from 'react-native';
+import { ResponsiveImage, ScreenLayout } from '../../../Components';
+import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -49,6 +50,10 @@ export function Team({
   return (
     <ScreenLayout>
       <Stack space={4} padding={4}>
+        <ResponsiveImage
+          source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
+          aspect={[16, 9]}
+        />
         <Text category="h2" style={styles.text}>
           {data?.user?.team?.title}
         </Text>
