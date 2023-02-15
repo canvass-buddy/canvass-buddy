@@ -17,7 +17,8 @@
     "uploadTeamImage":"Upload Team Image",
     "teamTitle":"Team Title",
     "teamDescription":"Team Description",
-    "createTeam":"Create Team"
+    "createTeam":"Create Team",
+    "projectName":"Project Name"
   },
   "status":{
     "noProjects":"You Don't have any projects",

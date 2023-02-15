@@ -15,7 +15,7 @@ export const ResponsiveImage = ({
       style={{ width: '100%' }}
       onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
     >
-      <Image source={source} style={{ width, height }} />
+      <Image source={source} style={{ width, height, borderRadius: 10 }} />
     </View>
   );
 };

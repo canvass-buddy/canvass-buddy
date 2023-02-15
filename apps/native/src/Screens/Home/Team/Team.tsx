@@ -2,9 +2,16 @@ import { useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Card, Menu, MenuItem, Text } from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  Card,
+  Menu,
+  MenuItem,
+  Text,
+} from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import { ResponsiveImage, ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -21,6 +28,9 @@ const TEAM_QUERY = gql(/* GraphQL */ `
         users {
           id
           name
+          profile {
+            image
+          }
         }
         projects {
           id
@@ -47,62 +57,87 @@ export function Team({
     },
   });
   const { t } = useTranslation();
+
   return (
     <ScreenLayout>
       <Stack space={4} padding={4}>
-        <ResponsiveImage
-          source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
-          aspect={[16, 9]}
-        />
-        <Text category="h2" style={styles.text}>
-          {data?.user?.team?.title}
-        </Text>
-        <Text category="s1" style={styles.text}>
-          {data?.user?.team?.description}
-        </Text>
-        <Text category="h6" style={styles.text}>{t`util.projects`}</Text>
-        <Card>
-          <Menu>
-            {data?.user?.team?.projects?.map((project) => (
-              <MenuItem
-                key={project.id}
-                title={project.title}
-                accessoryRight={() => <AntDesign name="right" color="white" />}
-                onPress={() => {
-                  navigation.navigate('Project', {
-                    id: project.id,
-                  });
-                }}
-              />
-            ))}
-          </Menu>
-        </Card>
-        <Button
-          onPress={() =>
-            navigation.push('ProjectCreate', {
-              id: route.params.id,
-            })
-          }
+        <Card
+          header={(props) => (
+            <View {...props}>
+              <Text category="h2">{data?.user?.team?.title}</Text>
+              <Text category="s1">{data?.user?.team?.description}</Text>
+            </View>
+          )}
         >
-          {t`util.createProject`}
-        </Button>
-        <Stack space={2}>
-          <Text category="h6" style={styles.text}>{t`util.users`}</Text>
-          <Menu>
-            {data?.user?.team?.users?.map((user) => (
-              <MenuItem
-                key={user.id}
-                title={user.name}
-                accessoryRight={() => <AntDesign name="right" color="white" />}
-                onPress={() => {
-                  navigation.navigate('Profile', {
-                    id: user.id,
-                  });
-                }}
-              />
-            ))}
-          </Menu>
-        </Stack>
+          {data?.user?.team?.image && (
+            <ResponsiveImage
+              source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
+              aspect={[16, 9]}
+            />
+          )}
+        </Card>
+        <Card
+          header={(props) => (
+            <Text {...props} category="h6">{t`util.projects`}</Text>
+          )}
+        >
+          <Stack space={2}>
+            <Menu>
+              {data?.user?.team?.projects?.map((project) => (
+                <MenuItem
+                  key={project.id}
+                  title={project.title}
+                  accessoryRight={() => (
+                    <AntDesign name="right" color="white" />
+                  )}
+                  onPress={() => {
+                    navigation.navigate('Project', {
+                      id: project.id,
+                    });
+                  }}
+                />
+              ))}
+            </Menu>
+            <Button
+              onPress={() =>
+                navigation.push('ProjectCreate', {
+                  id: route.params.id,
+                })
+              }
+            >
+              {t`util.createProject`}
+            </Button>
+          </Stack>
+        </Card>
+        <Card
+          header={(props) => (
+            <Text {...props} category="h6">{t`util.users`}</Text>
+          )}
+        >
+          <Stack space={2}>
+            <Menu>
+              {data?.user?.team?.users?.map((user) => (
+                <MenuItem
+                  key={user.id}
+                  title={user.name}
+                  accessoryLeft={() => (
+                    <Avatar
+                      source={{ uri: imageUri(user.profile?.image ?? '') }}
+                    />
+                  )}
+                  accessoryRight={() => (
+                    <AntDesign name="right" color="white" />
+                  )}
+                  onPress={() => {
+                    navigation.navigate('Profile', {
+                      id: user.id,
+                    });
+                  }}
+                />
+              ))}
+            </Menu>
+          </Stack>
+        </Card>
       </Stack>
     </ScreenLayout>
   );

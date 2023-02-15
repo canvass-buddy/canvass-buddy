@@ -71,4 +71,14 @@ export const UserResolvers: Resolvers = {
       return user;
     },
   },
+  User: {
+    async profile(parent) {
+      const profile = await client.profile.findFirst({
+        where: {
+          userId: parent.id,
+        },
+      });
+      return profile;
+    },
+  },
 };
