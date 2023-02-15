@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import { AntDesign } from '@expo/vector-icons';
 import { FillView, Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
@@ -9,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Text,
+  useTheme,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
@@ -64,7 +66,6 @@ const MissingDataCard = ({ text }: { text: string }) => {
 export function HomeRoot({
   navigation,
 }: NativeStackScreenProps<HomeStackParamList, 'HomeRoot'>) {
-  const { logout } = useAuth();
   const { data } = useQuery(HOME_QUERY);
   const { t } = useTranslation();
 
@@ -73,7 +74,7 @@ export function HomeRoot({
       <Layout style={{ flex: 1, height: '100%' }}>
         <FillView alignY="between" padding={4}>
           <Stack space={6}>
-            <Card onPress={() => navigation.navigate('Profile')}>
+            <Card onPress={() => navigation.navigate('Profile', {})}>
               <Stack align="center" padding={4} space={4}>
                 {data?.user?.profile?.image && (
                   <Avatar
@@ -111,17 +112,24 @@ export function HomeRoot({
               <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
               <Menu>
                 {data?.user?.teams?.length ? (
-                  data?.user?.teams?.map((project) => (
-                    <MenuItem
-                      key={project.id}
-                      title={project.title}
-                      onPress={() =>
-                        navigation.navigate('Team', {
-                          id: project.id,
-                        })
-                      }
-                    />
-                  ))
+                  data?.user?.teams?.map((project) =>
+                    project ? (
+                      <MenuItem
+                        key={project.id}
+                        title={project.title}
+                        onPress={() =>
+                          navigation.navigate('Team', {
+                            id: project.id,
+                          })
+                        }
+                        accessoryRight={() => (
+                          <AntDesign name="right" color="white" />
+                        )}
+                      />
+                    ) : (
+                      <></>
+                    )
+                  )
                 ) : (
                   <MissingDataCard text={t`status.noTeams`} />
                 )}

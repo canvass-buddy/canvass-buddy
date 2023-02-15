@@ -75,6 +75,21 @@ export const ProjectResolvers: Resolvers = {
         .flat();
       return projects as Project[];
     },
+    async project(parent, { id }) {
+      const project = await prismaClient.project.findFirst({
+        where: {
+          id,
+          team: {
+            members: {
+              some: {
+                userId: parent.id,
+              },
+            },
+          },
+        },
+      });
+      return project as unknown as Project;
+    },
   },
   Team: {
     async projects(parent) {

@@ -88,6 +88,18 @@ export const TeamResolvers: Resolvers = {
 
       return teamMembers.map((team) => team.team);
     },
+    async team(parent, { teamId }) {
+      const teamMember = await prismaClient.teamMember.findFirst({
+        where: {
+          userId: parent.id,
+          teamId,
+        },
+        include: {
+          team: {},
+        },
+      });
+      return teamMember?.team ?? null;
+    },
   },
   Team: {
     async users(parent) {

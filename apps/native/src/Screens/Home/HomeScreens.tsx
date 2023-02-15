@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeRoot } from './HomeRoot';
 import { Profile } from './Profile';
 import { Project } from './Project';
+import { ProjectCreate } from './ProjectCreate';
 import { Team } from './Team';
 import { TeamCreate } from './TeamCreate';
 import { HomeStackParamList } from './types';
@@ -19,6 +20,7 @@ export function HomeScreens() {
       <HomeStack.Screen name="Project" component={Project} />
       <HomeStack.Screen name="Team" component={Team} />
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />
+      <HomeStack.Screen name="ProjectCreate" component={ProjectCreate} />
     </HomeStack.Navigator>
   );
 }

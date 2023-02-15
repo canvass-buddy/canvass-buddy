@@ -11,7 +11,9 @@
   },
   "util":{
     "teams":"Teams",
-    "projects":"Projects"
+    "projects":"Projects",
+    "users":"Users",
+    "createProject":"Create Project",
   },
   "status":{
     "noProjects":"You Don't have any projects",

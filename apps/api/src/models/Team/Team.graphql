@@ -8,8 +8,9 @@ type Mutation {
   deleteTeam(teamId: String!): Boolean!
 }
 
-type Query {
-  teams: [Team]!
+type User {
+  teams: [Team]
+  team(teamId: String!): Team
 }
 
 input CreateTeam {

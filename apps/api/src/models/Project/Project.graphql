@@ -39,8 +39,10 @@ type ProjectArea {
 
 type User {
   projects: [Project!]
+  project(id: String!): Project
 }
 
 type Team {
   projects: [Project!]
+  project(id: String!): Project
 }

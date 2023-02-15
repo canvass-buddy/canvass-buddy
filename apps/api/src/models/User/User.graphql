@@ -23,5 +23,4 @@ type User {
   name: String!
   email: String!
   profile: Profile
-  teams: [Team!]
 }

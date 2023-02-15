@@ -1,11 +1,41 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Text, View } from 'react-native';
+import { useQuery } from '@apollo/client';
+import { Stack } from '@mobily/stacks';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+import { Layout, Text } from '@ui-kitten/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
-import { ProjectScreens } from './ProjectScreens';
 
-export function Project({}: NativeStackScreenProps<
-  HomeStackParamList,
-  'Project'
->) {
-  return <ProjectScreens />;
+const PROJECT_QUERY = gql(/* GraphQL */ `
+  query Project($id: String!) {
+    user {
+      project(id: $id) {
+        title
+      }
+    }
+  }
+`);
+
+export function Project({
+  route,
+}: NativeStackScreenProps<HomeStackParamList, 'Project'>) {
+  const { data } = useQuery(PROJECT_QUERY, {
+    variables: {
+      id: route.params.id,
+    },
+  });
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Layout style={{ flexGrow: 1 }}>
+        <Stack padding={4} space={4}>
+          <Text category="h2" style={{ textAlign: 'center' }}>
+            {data?.user?.project?.title}
+          </Text>
+        </Stack>
+      </Layout>
+    </SafeAreaView>
+  );
 }

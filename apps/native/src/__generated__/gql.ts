@@ -17,6 +17,9 @@ const documents = {
     "\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n": types.SignUpDocument,
     "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n": types.HomeQueryDocument,
     "\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n": types.UserQueryDocument,
+    "\n  query Project($id: String!) {\n    user {\n      project(id: $id) {\n        title\n      }\n    }\n  }\n": types.ProjectDocument,
+    "\n  mutation CreateProject($teamId: String!, $project: CreateProject!) {\n    createProject(teamId: $teamId, project: $project) {\n      id\n    }\n  }\n": types.CreateProjectDocument,
+    "\n  query TeamPage($id: String!) {\n    user {\n      team(teamId: $id) {\n        id\n        title\n        description\n        image\n        users {\n          id\n          name\n        }\n        projects {\n          id\n          title\n        }\n      }\n    }\n  }\n": types.TeamPageDocument,
     "\n  mutation CreateTeam($team: CreateTeam!) {\n    createTeam(team: $team) {\n      id\n    }\n  }\n": types.CreateTeamDocument,
 };
 
@@ -50,6 +53,18 @@ export function gql(source: "\n  query HomeQuery {\n    user {\n      id\n      
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n"): (typeof documents)["\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query Project($id: String!) {\n    user {\n      project(id: $id) {\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query Project($id: String!) {\n    user {\n      project(id: $id) {\n        title\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateProject($teamId: String!, $project: CreateProject!) {\n    createProject(teamId: $teamId, project: $project) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateProject($teamId: String!, $project: CreateProject!) {\n    createProject(teamId: $teamId, project: $project) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query TeamPage($id: String!) {\n    user {\n      team(teamId: $id) {\n        id\n        title\n        description\n        image\n        users {\n          id\n          name\n        }\n        projects {\n          id\n          title\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query TeamPage($id: String!) {\n    user {\n      team(teamId: $id) {\n        id\n        title\n        description\n        image\n        users {\n          id\n          name\n        }\n        projects {\n          id\n          title\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

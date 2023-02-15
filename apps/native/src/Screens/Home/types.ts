@@ -1,6 +1,10 @@
+import { InviteUser } from './InviteUser';
+
 export type HomeStackParamList = {
   HomeRoot: undefined;
-  Profile: undefined;
+  Profile: {
+    id?: string;
+  };
   TeamCreate: undefined;
   Team: {
     id: string;
@@ -8,4 +12,9 @@ export type HomeStackParamList = {
   Project: {
     id: string;
   };
+  ProjectCreate: {
+    id: string;
+  };
+  InviteUser: undefined;
+  GroundView: undefined;
 };
