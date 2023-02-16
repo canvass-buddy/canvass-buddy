@@ -8,10 +8,14 @@ import {
   useForegroundPermissions,
 } from 'expo-location';
 import { useFormik } from 'formik';
+import { some } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MapView, { LatLng, Polygon } from 'react-native-maps';
+import { z } from 'zod';
+import { toFormikValidate } from 'zod-formik-adapter';
 import { ScreenLayout } from '../../../Components';
+import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -45,7 +49,12 @@ export function ProjectCreate({
     });
   }, [foregroundPermissions]);
 
+  const Schema = z.object({
+    title: z.string().min(1, t`errors.required`),
+  });
+
   const f = useFormik({
+    validate: toFormikValidate(Schema),
     initialValues: {
       title: '',
     },
@@ -80,59 +89,65 @@ export function ProjectCreate({
           value={f.values.title}
           onChangeText={f.handleChange('title')}
           onBlur={f.handleBlur('title')}
+          status={f.errors.title ? 'danger' : 'basic'}
+          caption={f.errors.title}
         />
-        <MapView
-          style={{ width: '100%', height: 400 }}
-          initialRegion={
-            position?.coords && {
-              longitude: position?.coords.longitude ?? 0,
-              latitude: position?.coords.latitude ?? 0,
-              longitudeDelta: 0.0922,
-              latitudeDelta: 0.0922,
+        {position && (
+          <MapView
+            style={{ width: '100%', height: 400 }}
+            customMapStyle={mapStyles}
+            initialRegion={
+              position?.coords && {
+                longitude: position.coords.longitude ?? 0,
+                latitude: position.coords.latitude ?? 0,
+                longitudeDelta: 0.0922,
+                latitudeDelta: 0.0922,
+              }
             }
-          }
-          showsUserLocation
-          onTouchStart={() => {
-            setPolygonStart(undefined);
-          }}
-          onPanDrag={({ nativeEvent }) => {
-            if (!polygonStart)
-              setPolygonStart({
+            showsUserLocation
+            onTouchStart={() => {
+              setPolygonStart(undefined);
+            }}
+            onPanDrag={({ nativeEvent }) => {
+              if (!polygonStart)
+                setPolygonStart({
+                  latitude: nativeEvent.coordinate.latitude,
+                  longitude: nativeEvent.coordinate.longitude,
+                });
+              setPolygonEnd({
                 latitude: nativeEvent.coordinate.latitude,
                 longitude: nativeEvent.coordinate.longitude,
               });
-            setPolygonEnd({
-              latitude: nativeEvent.coordinate.latitude,
-              longitude: nativeEvent.coordinate.longitude,
-            });
-          }}
-          pitchEnabled={false}
-          scrollEnabled={false}
-          zoomEnabled={false}
-        >
-          {polygonStart && polygonEnd ? (
-            <Polygon
-              coordinates={[
-                polygonStart,
-                {
-                  longitude: polygonStart.longitude,
-                  latitude: polygonEnd.latitude,
-                },
-                polygonEnd,
-                {
-                  longitude: polygonEnd.longitude,
-                  latitude: polygonStart.latitude,
-                },
-              ]}
-              fillColor={theme['color-info-transparent-500']}
-              strokeColor={theme['color-info-transparent-600']}
-            />
-          ) : (
-            <></>
-          )}
-        </MapView>
+            }}
+            pitchEnabled={false}
+            scrollEnabled={false}
+            zoomEnabled={false}
+          >
+            {polygonStart && polygonEnd ? (
+              <Polygon
+                coordinates={[
+                  polygonStart,
+                  {
+                    longitude: polygonStart.longitude,
+                    latitude: polygonEnd.latitude,
+                  },
+                  polygonEnd,
+                  {
+                    longitude: polygonEnd.longitude,
+                    latitude: polygonStart.latitude,
+                  },
+                ]}
+                fillColor={theme['color-info-transparent-500']}
+                strokeColor={theme['color-info-transparent-600']}
+              />
+            ) : (
+              <></>
+            )}
+          </MapView>
+        )}
         <Button
           onPress={() => f.handleSubmit()}
+          disabled={some(f.errors)}
         >{t`util.createProject`}</Button>
       </Stack>
     </ScreenLayout>

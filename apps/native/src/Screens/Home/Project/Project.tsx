@@ -8,6 +8,7 @@ import { Layout, Text, useTheme } from '@ui-kitten/components';
 import MapView, { Polygon } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenLayout } from '../../../Components';
+import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -51,6 +52,7 @@ export function Project({
               longitudeDelta: 0.09,
               latitudeDelta: 0.09,
             }}
+            customMapStyle={mapStyles}
           >
             <Polygon
               fillColor={theme['color-info-transparent-500']}
