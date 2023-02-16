@@ -16,5 +16,7 @@ export type HomeStackParamList = {
     id: string;
   };
   InviteUser: undefined;
-  GroundView: undefined;
+  GroundView: {
+    id: string;
+  };
 };

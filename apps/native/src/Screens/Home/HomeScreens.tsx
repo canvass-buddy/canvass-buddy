@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GroundView } from './GroundView';
 import { HomeRoot } from './HomeRoot';
 import { Profile } from './Profile';
 import { Project } from './Project';
@@ -21,6 +22,7 @@ export function HomeScreens() {
       <HomeStack.Screen name="Team" component={Team} />
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />
       <HomeStack.Screen name="ProjectCreate" component={ProjectCreate} />
+      <HomeStack.Screen name="GroundView" component={GroundView} />
     </HomeStack.Navigator>
   );
 }

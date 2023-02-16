@@ -1,12 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import { Layout, Text, useTheme } from '@ui-kitten/components';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Button, Text, useTheme } from '@ui-kitten/components';
+import { useTranslation } from 'react-i18next';
 import MapView, { Polygon } from 'react-native-maps';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenLayout } from '../../../Components';
 import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -29,6 +26,7 @@ const PROJECT_QUERY = gql(/* GraphQL */ `
 `);
 
 export function Project({
+  navigation,
   route,
 }: NativeStackScreenProps<HomeStackParamList, 'Project'>) {
   const { data } = useQuery(PROJECT_QUERY, {
@@ -37,6 +35,7 @@ export function Project({
     },
   });
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <ScreenLayout>
       <Stack padding={4} space={4}>
@@ -49,10 +48,11 @@ export function Project({
             initialRegion={{
               longitude: data.user.project.area.x1,
               latitude: data.user.project.area.y1,
-              longitudeDelta: 0.09,
-              latitudeDelta: 0.09,
+              longitudeDelta: 0.06,
+              latitudeDelta: 0.06,
             }}
             customMapStyle={mapStyles}
+            showsUserLocation
           >
             <Polygon
               fillColor={theme['color-info-transparent-500']}
@@ -78,6 +78,14 @@ export function Project({
             />
           </MapView>
         )}
+        <Button
+          onPress={() =>
+            navigation.navigate('GroundView', {
+              id: route.params.id,
+            })
+          }
+        >{t`util.start`}</Button>
+        <Text category="h2">{t`util.users`}</Text>
       </Stack>
     </ScreenLayout>
   );

@@ -82,13 +82,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  const [signUp, { loading }] = useMutation(SIGN_UP_QUERY, {
+  const [signUp] = useMutation(SIGN_UP_QUERY, {
     onCompleted: async ({ auth }) => {
       await AsyncStorage.setItem('token', auth.token);
       setToken(auth.token);
     },
   });
-  console.log('loading sign up....', loading);
 
   const logout = () => {
     setToken(undefined);
