@@ -1,7 +1,10 @@
+import { AbortSignal } from 'node-abort-controller';
 import { prismaClient } from 'src/clients';
 import { authedQuery, query } from 'src/testHelpers';
 import { TestUserKey, TEST_USER_LIST } from 'src/testHelpers/user';
 import { Project, Task, Team } from './resolvers-types';
+
+globalThis.AbortSignal = AbortSignal as any;
 
 const createEnv = async ({
   email,
@@ -112,7 +115,7 @@ export const teardown = async () => {
         email: userCreds.email,
       },
       include: {
-        teams: {
+        teamMembers: {
           include: {
             team: {},
           },
@@ -124,7 +127,7 @@ export const teardown = async () => {
     await prismaClient.team.deleteMany({
       where: {
         id: {
-          in: user.teams.map((team) => team.id),
+          in: user.teamMembers.map((team) => team.id),
         },
       },
     });
@@ -145,7 +148,7 @@ export const teardown = async () => {
       where: {
         teamId: {
           in:
-            user.teams
+            user.teamMembers
               ?.map((team) => team.team)
               .flat()
               .map((team) => team.id) ?? [],
