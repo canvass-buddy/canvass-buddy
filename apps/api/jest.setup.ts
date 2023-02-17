@@ -71,6 +71,7 @@ const createEnv = async ({
         },
       },
     },
+    user,
   });
 
   await authedQuery<{ task: Task }>({
@@ -91,6 +92,7 @@ const createEnv = async ({
         type: 'checkbox',
       },
     },
+    user,
   });
 };
 

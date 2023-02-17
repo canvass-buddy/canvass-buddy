@@ -3,7 +3,7 @@ import { prismaClient } from 'src/clients';
 import { authedQuery, genTestName } from 'src/testHelpers';
 import { fetchUserData } from 'src/testHelpers/user';
 
-afterEach(async () => {
+beforeEach(async () => {
   const projects = await prismaClient.project.findMany({
     where: {
       title: {
@@ -15,6 +15,14 @@ afterEach(async () => {
   const ids = projects.map((project) => project.id);
 
   await prismaClient.projectArea.deleteMany({
+    where: {
+      projectId: {
+        in: ids,
+      },
+    },
+  });
+
+  await prismaClient.projectMember.deleteMany({
     where: {
       projectId: {
         in: ids,
@@ -70,7 +78,7 @@ test('fetch team projects', async () => {
       }
     `,
   });
-  expect(user.teams?.[0].projects).toHaveLength(1);
+  expect(user.teams?.[0]?.projects).toHaveLength(1);
 });
 
 test('fetch user projects', async () => {
@@ -79,18 +87,24 @@ test('fetch user projects', async () => {
       query {
         user {
           projects {
+            title
             id
+            users {
+              id
+            }
           }
         }
       }
     `,
   });
   expect(user.projects).toHaveLength(1);
+  expect(user.projects?.[0]?.users).toBeTruthy();
+  expect(user.projects?.[0]?.users).toHaveLength(1);
 });
 
 test('create project', async () => {
   const { teams } = await fetchUserData('USER_1');
-  await expect(createProject(teams?.[0].id ?? '')).resolves.toBeTruthy();
+  await expect(createProject(teams?.[0]?.id ?? '')).resolves.toBeTruthy();
   await expect(
     prismaClient.project.findMany({
       where: {
@@ -104,7 +118,7 @@ test('create project', async () => {
 
 test('delete project', async () => {
   const { teams } = await fetchUserData('USER_1');
-  const project = await createProject(teams?.[0].id ?? '');
+  const project = await createProject(teams?.[0]?.id ?? '');
 
   await expect(
     authedQuery<{ project: Project }>({

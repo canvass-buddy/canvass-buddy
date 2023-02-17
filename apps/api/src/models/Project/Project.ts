@@ -1,9 +1,10 @@
+import { format } from 'path';
 import { Project, Resolvers } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 
 export const ProjectResolvers: Resolvers = {
   Mutation: {
-    async createProject(_, args) {
+    async createProject(_, args, context) {
       const project = await prismaClient.project.create({
         data: {
           teamId: args.teamId,
@@ -11,6 +12,11 @@ export const ProjectResolvers: Resolvers = {
           area: {
             create: {
               ...args.project.area,
+            },
+          },
+          members: {
+            create: {
+              userId: context.userId ?? '',
             },
           },
         },
@@ -53,27 +59,20 @@ export const ProjectResolvers: Resolvers = {
   },
   User: {
     async projects(parent) {
-      const memberships = await prismaClient.teamMember.findMany({
+      const memberships = await prismaClient.projectMember.findMany({
         where: {
           userId: parent.id,
         },
         include: {
-          team: {
+          project: {
             include: {
-              projects: {
-                include: {
-                  area: {},
-                },
-              },
+              area: {},
             },
           },
         },
       });
 
-      const projects = memberships
-        .map((membership) => membership.team.projects)
-        .flat();
-      return projects as Project[];
+      return memberships.map((membership) => membership.project) as Project[];
     },
     async project(parent, { id }) {
       const project = await prismaClient.project.findFirst({
@@ -92,6 +91,20 @@ export const ProjectResolvers: Resolvers = {
         },
       });
       return project as unknown as Project;
+    },
+  },
+  Project: {
+    async users(parent) {
+      const members = await prismaClient.projectMember.findMany({
+        where: {
+          projectId: parent.id,
+        },
+        include: {
+          user: {},
+        },
+      });
+
+      return members.map((member) => member.user);
     },
   },
   Team: {

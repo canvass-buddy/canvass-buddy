@@ -28,6 +28,7 @@ type Project {
   id: String!
   title: String!
   area: ProjectArea!
+  users: [User!]
 }
 
 type ProjectArea {

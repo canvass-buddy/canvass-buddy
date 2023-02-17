@@ -172,6 +172,7 @@ export type Project = {
   markers?: Maybe<Array<Maybe<Marker>>>;
   tasks?: Maybe<Array<Maybe<Task>>>;
   title: Scalars['String'];
+  users?: Maybe<Array<User>>;
 };
 
 export type ProjectArea = {
@@ -449,6 +450,7 @@ export type ProjectResolvers<ContextType = Context, ParentType extends Resolvers
   markers?: Resolver<Maybe<Array<Maybe<ResolversTypes['Marker']>>>, ParentType, ContextType>;
   tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
