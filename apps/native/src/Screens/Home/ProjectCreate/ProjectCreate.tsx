@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Input, useTheme } from '@ui-kitten/components';
+import { Button, Input, Text, useTheme } from '@ui-kitten/components';
 import {
   getLastKnownPositionAsync,
   LocationObject,
@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import MapView, { LatLng, Polygon } from 'react-native-maps';
 import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
-import { ScreenLayout } from '../../../Components';
+import { ScreenLayout, TaskInput } from '../../../Components';
 import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
@@ -145,6 +145,8 @@ export function ProjectCreate({
             )}
           </MapView>
         )}
+        <Text category="h2">{t`util.tasks`}</Text>
+        <TaskInput onAdd={() => {}} />
         <Button
           onPress={() => f.handleSubmit()}
           disabled={some(f.errors)}
