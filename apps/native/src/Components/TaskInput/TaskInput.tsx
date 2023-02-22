@@ -2,8 +2,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { Column, Columns, Stack } from '@mobily/stacks';
 import { Button, Input } from '@ui-kitten/components';
 import { useFormik } from 'formik';
+import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
+import { z } from 'zod';
+import { toFormikValidate } from 'zod-formik-adapter';
 import { Task } from '../../__generated__/graphql';
 
 const styles = StyleSheet.create({
@@ -25,7 +28,15 @@ export function TaskInput({
   task?: Partial<Task>;
   onAdd(task: Omit<Task, 'id'>): void;
 }) {
-  const { values, handleChange, handleBlur, handleSubmit } = useFormik({
+  const { t } = useTranslation();
+
+  const Schema = z.object({
+    title: z.string().min(1, t('errors.required')),
+  });
+
+  const { values, handleChange, handleBlur, handleSubmit, errors } = useFormik({
+    validate: toFormikValidate(Schema),
+    validateOnChange: false,
     initialValues: {
       title: task?.title ?? '',
       description: task?.description ?? '',
@@ -38,7 +49,6 @@ export function TaskInput({
       });
     },
   });
-  const { t } = useTranslation();
   return (
     <Columns defaultWidth="1/2" space={4}>
       <Column width="3/5">
@@ -61,6 +71,7 @@ export function TaskInput({
       <Column width="2/5">
         <Button
           appearance="outline"
+          disabled={some(errors)}
           style={styles.button}
           onPress={() => handleSubmit()}
         >
