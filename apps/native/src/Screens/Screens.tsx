@@ -12,8 +12,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function Screens() {
   const { token, isLoadingToken } = useAuth();
-  if (isLoadingToken) return <></>;
   const theme = useTheme();
+
+  if (isLoadingToken) return <></>;
+
   return (
     <NavigationContainer
       theme={{
