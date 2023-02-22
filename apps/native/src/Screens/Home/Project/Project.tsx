@@ -1,11 +1,19 @@
 import { useQuery } from '@apollo/client';
+import { AntDesign } from '@expo/vector-icons';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Text, useTheme } from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  Menu,
+  MenuItem,
+  Text,
+  useTheme,
+} from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import MapView, { Polygon } from 'react-native-maps';
 import { ScreenLayout } from '../../../Components';
-import { mapStyles } from '../../../helpers';
+import { imageUri, mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -19,6 +27,13 @@ const PROJECT_QUERY = gql(/* GraphQL */ `
           y1
           x2
           y2
+        }
+        users {
+          id
+          name
+          profile {
+            image
+          }
         }
       }
     }
@@ -86,6 +101,23 @@ export function Project({
           }
         >{t`util.start`}</Button>
         <Text category="h2">{t`util.users`}</Text>
+        <Menu>
+          {data?.user?.project?.users?.map((user) => (
+            <MenuItem
+              key={user.id}
+              accessoryLeft={() => (
+                <Avatar source={{ uri: imageUri(user.profile?.image) }} />
+              )}
+              accessoryRight={() => <AntDesign name="right" color="white" />}
+              title={user.name}
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  id: user.id,
+                })
+              }
+            />
+          ))}
+        </Menu>
       </Stack>
     </ScreenLayout>
   );
