@@ -86,6 +86,7 @@ export type MutationCreateMarkerArgs = {
 
 export type MutationCreateProjectArgs = {
   project: CreateProject;
+  tasks: Array<CreateTask>;
   teamId: Scalars['String'];
 };
 
@@ -419,7 +420,7 @@ export type MarkerResolvers<ContextType = Context, ParentType extends ResolversP
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createMarker?: Resolver<ResolversTypes['Marker'], ParentType, ContextType, RequireFields<MutationCreateMarkerArgs, 'marker' | 'projectId'>>;
-  createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'project' | 'teamId'>>;
+  createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'project' | 'tasks' | 'teamId'>>;
   createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'projectId' | 'task'>>;
   createTeam?: Resolver<ResolversTypes['Team'], ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'team'>>;
   deleteMarker?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteMarkerArgs, 'markerId'>>;

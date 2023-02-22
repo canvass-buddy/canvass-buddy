@@ -1,4 +1,3 @@
-import { format } from 'path';
 import { Project, Resolvers } from 'src/../resolvers-types';
 import { prismaClient } from 'src/clients';
 
@@ -17,6 +16,11 @@ export const ProjectResolvers: Resolvers = {
           members: {
             create: {
               userId: context.userId ?? '',
+            },
+          },
+          tasks: {
+            createMany: {
+              data: args.tasks,
             },
           },
         },

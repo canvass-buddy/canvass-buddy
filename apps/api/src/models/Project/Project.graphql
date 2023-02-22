@@ -1,8 +1,6 @@
 
-scalar Task
-
 type Mutation {
-  createProject(teamId: String!, project:CreateProject!): Project!
+  createProject(teamId: String!, project:CreateProject!, tasks: [CreateTask!]!): Project!
   updateProject(project:UpdateProject!): Project!
   deleteProject(projectId: String!): Boolean!
 }
