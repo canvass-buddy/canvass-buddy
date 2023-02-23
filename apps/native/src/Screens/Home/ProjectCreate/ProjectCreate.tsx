@@ -1,7 +1,14 @@
 import { useMutation } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Input, Text, useTheme } from '@ui-kitten/components';
+import {
+  Button,
+  Input,
+  Menu,
+  MenuItem,
+  Text,
+  useTheme,
+} from '@ui-kitten/components';
 import {
   getLastKnownPositionAsync,
   LocationObject,
@@ -18,11 +25,16 @@ import { toFormikValidate } from 'zod-formik-adapter';
 import { ScreenLayout, TaskInput } from '../../../Components';
 import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
+import { Task } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const CREATE_PROJECT = gql(/* GraphQL */ `
-  mutation CreateProject($teamId: String!, $project: CreateProject!) {
-    createProject(teamId: $teamId, project: $project) {
+  mutation CreateProject(
+    $teamId: String!
+    $project: CreateProject!
+    $tasks: [CreateTask!]!
+  ) {
+    createProject(teamId: $teamId, project: $project, tasks: $tasks) {
       id
     }
   }
@@ -40,9 +52,6 @@ export function ProjectCreate({
 
   const [position, setPosition] = useState<LocationObject | null>();
 
-  const [polygonStart, setPolygonStart] = useState<LatLng>();
-  const [polygonEnd, setPolygonEnd] = useState<LatLng>();
-
   useEffect(() => {
     requestForegroundPermissions();
     getLastKnownPositionAsync().then((position) => {
@@ -52,26 +61,49 @@ export function ProjectCreate({
 
   const Schema = z.object({
     title: z.string().min(1, t`errors.required`),
+    tasks: z
+      .array(
+        z.object({
+          title: z.string(),
+        })
+      )
+      .min(1),
+    area: z.object({
+      x1: z.number(),
+      y1: z.number(),
+      x2: z.number(),
+      y2: z.number(),
+    }),
   });
 
-  const f = useFormik({
+  const {
+    handleChange,
+    handleSubmit,
+    values,
+    errors,
+    handleBlur,
+    setFieldValue,
+  } = useFormik({
     validate: toFormikValidate(Schema),
     initialValues: {
       title: '',
+      tasks: [] as Array<Omit<Task, 'id'>>,
+      area: {
+        x1: 0,
+        y1: 0,
+        x2: 0,
+        y2: 0,
+      },
     },
-    async onSubmit({ title }) {
+    async onSubmit({ title, area, tasks }) {
       const { data } = await createProject({
         variables: {
           teamId: route.params.id,
           project: {
             title,
-            area: {
-              x1: polygonStart?.longitude ?? 0,
-              y1: polygonStart?.latitude ?? 0,
-              x2: polygonEnd?.longitude ?? 0,
-              y2: polygonEnd?.latitude ?? 0,
-            },
+            area,
           },
+          tasks,
         },
       });
       if (data) {
@@ -81,18 +113,20 @@ export function ProjectCreate({
       }
     },
   });
+
   const theme = useTheme();
+
   return (
     <ScreenLayout>
       <ScrollView>
         <Stack padding={4} space={4}>
           <Input
             placeholder={t`util.projectName`}
-            value={f.values.title}
-            onChangeText={f.handleChange('title')}
-            onBlur={f.handleBlur('title')}
-            status={f.errors.title ? 'danger' : 'basic'}
-            caption={f.errors.title}
+            value={values.title}
+            onChangeText={handleChange('title')}
+            onBlur={handleBlur('title')}
+            status={errors.title ? 'danger' : 'basic'}
+            caption={errors.title}
           />
           {position && (
             <MapView
@@ -108,35 +142,45 @@ export function ProjectCreate({
               }
               showsUserLocation
               onTouchStart={() => {
-                setPolygonStart(undefined);
+                setFieldValue('area', {});
               }}
               onPanDrag={({ nativeEvent }) => {
-                if (!polygonStart)
-                  setPolygonStart({
-                    latitude: nativeEvent.coordinate.latitude,
-                    longitude: nativeEvent.coordinate.longitude,
+                if (!values.area.x1 || !values.area.y1) {
+                  setFieldValue('area', {
+                    ...values.area,
+                    x1: nativeEvent.coordinate.latitude,
+                    y1: nativeEvent.coordinate.longitude,
                   });
-                setPolygonEnd({
-                  latitude: nativeEvent.coordinate.latitude,
-                  longitude: nativeEvent.coordinate.longitude,
-                });
+                } else {
+                  setFieldValue('area', {
+                    ...values.area,
+                    x2: nativeEvent.coordinate.latitude,
+                    y2: nativeEvent.coordinate.longitude,
+                  });
+                }
               }}
               pitchEnabled={false}
               scrollEnabled={false}
               zoomEnabled={false}
             >
-              {polygonStart && polygonEnd ? (
+              {values.area.x1 && values.area.x2 ? (
                 <Polygon
                   coordinates={[
-                    polygonStart,
                     {
-                      longitude: polygonStart.longitude,
-                      latitude: polygonEnd.latitude,
+                      longitude: values.area.x1,
+                      latitude: values.area.y1,
                     },
-                    polygonEnd,
                     {
-                      longitude: polygonEnd.longitude,
-                      latitude: polygonStart.latitude,
+                      longitude: values.area.x1,
+                      latitude: values.area.y2,
+                    },
+                    {
+                      longitude: values.area.x2,
+                      latitude: values.area.y2,
+                    },
+                    {
+                      longitude: values.area.x2,
+                      latitude: values.area.y1,
                     },
                   ]}
                   fillColor={theme['color-info-transparent-500']}
@@ -148,10 +192,19 @@ export function ProjectCreate({
             </MapView>
           )}
           <Text category="h2">{t`util.tasks`}</Text>
-          <TaskInput onAdd={() => {}} />
+          <TaskInput
+            onAdd={(task) => {
+              setFieldValue('tasks', [...values.tasks, task]);
+            }}
+          />
+          <Menu>
+            {values.tasks.map((task) => (
+              <MenuItem key={task.title} title={task.title} />
+            ))}
+          </Menu>
           <Button
-            onPress={() => f.handleSubmit()}
-            disabled={some(f.errors)}
+            onPress={() => handleSubmit()}
+            disabled={some(errors)}
           >{t`util.createProject`}</Button>
         </Stack>
       </ScrollView>
