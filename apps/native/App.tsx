@@ -16,9 +16,11 @@ import Constants from 'expo-constants';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Providers } from './src/Providers';
 import { Screens } from './src/Screens';
+import { some } from 'lodash';
 
 const authLink = setContext(async (_, { headers }) => {
   const token = await AsyncStorage.getItem('token');
+  if (!some(token)) return;
   return {
     headers: {
       ...headers,
