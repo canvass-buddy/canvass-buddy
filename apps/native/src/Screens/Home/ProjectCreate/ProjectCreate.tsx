@@ -84,7 +84,7 @@ export function ProjectCreate({
     handleBlur,
     setFieldValue,
   } = useFormik({
-    // validate: toFormikValidate(Schema),
+    validate: toFormikValidate(Schema),
     initialValues: {
       title: '',
       tasks: [] as Array<Omit<Task, 'id'>>,
