@@ -1,14 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Button,
-  Input,
-  Menu,
-  MenuItem,
-  Text,
-  useTheme,
-} from '@ui-kitten/components';
+import { Button, Input, Menu, MenuItem, Text } from '@ui-kitten/components';
 import {
   getLastKnownPositionAsync,
   LocationObject,
@@ -18,12 +11,9 @@ import { useFormik } from 'formik';
 import { some } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView } from 'react-native';
-import MapView, { LatLng, Polygon } from 'react-native-maps';
 import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { DrawMap, ScreenLayout, TaskInput } from '../../../Components';
-import { mapStyles } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { ProjectArea, Task } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
@@ -47,8 +37,7 @@ export function ProjectCreate({
   const { t } = useTranslation();
   const [createProject] = useMutation(CREATE_PROJECT);
 
-  const [foregroundPermissions, requestForegroundPermissions] =
-    useForegroundPermissions();
+  const [, requestForegroundPermissions] = useForegroundPermissions();
 
   const [position, setPosition] = useState<LocationObject | null>();
 
