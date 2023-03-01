@@ -11,6 +11,8 @@ import { HomeStackParamList } from './types';
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
 export function HomeScreens() {
+  console.log('rendering???');
+
   return (
     <HomeStack.Navigator
       initialRouteName="HomeRoot"
