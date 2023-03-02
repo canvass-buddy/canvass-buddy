@@ -1,4 +1,8 @@
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DefaultTheme,
+  LinkingOptions,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '@ui-kitten/components';
 import React from 'react';
@@ -10,6 +14,19 @@ import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['localhost'],
+  config: {
+    screens: {
+      Home: {
+        path: '/',
+      },
+      Login: '/login',
+      SignUp: '/signup',
+    },
+  },
+};
+
 export function Screens() {
   const { token, isLoadingToken } = useAuth();
   const theme = useTheme();
@@ -18,6 +35,7 @@ export function Screens() {
 
   return (
     <NavigationContainer
+      linking={linking}
       theme={{
         ...DefaultTheme,
         colors: {

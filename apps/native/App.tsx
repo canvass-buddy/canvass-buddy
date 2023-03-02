@@ -29,10 +29,17 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
+const uri = (): string => {
+  const host =
+    Constants.manifest?.debuggerHost?.split(':').shift() ?? 'localhost';
+
+  const port = 4000;
+
+  return `http://${host}:${port}/graphql`;
+};
+
 const uploadLink = createUploadLink({
-  uri: `http://${Constants.manifest?.debuggerHost
-    ?.split(':')
-    .shift()}:4000/graphql`,
+  uri: uri(),
 });
 
 const client = new ApolloClient({
