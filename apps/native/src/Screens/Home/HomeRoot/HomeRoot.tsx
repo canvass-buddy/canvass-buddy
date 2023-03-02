@@ -6,18 +6,14 @@ import {
   Avatar,
   Button,
   Card,
-  Layout,
   Menu,
   MenuItem,
   Text,
-  useTheme,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
-import { useAuth } from '../../../Providers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -146,26 +142,18 @@ export function HomeRoot({
           </Stack>
         </ScrollView>
       </FillView>
-      <FillView
+      <View
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          height: '100%',
           width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          padding: 18,
         }}
-        alignY="bottom"
-        alignX="right"
-        padding={4}
       >
-        <Button
-          status="info"
-          style={{ width: '100%' }}
-          onPress={() => navigation.navigate('TeamCreate')}
-        >
+        <Button status="info" onPress={() => navigation.navigate('TeamCreate')}>
           Create Team
         </Button>
-      </FillView>
+      </View>
     </ScreenLayout>
   );
 }
