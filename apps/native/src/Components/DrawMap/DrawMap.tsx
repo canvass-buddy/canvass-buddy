@@ -107,13 +107,15 @@ export const DrawMap: FC<DrawMapProps> = memo(
             <></>
           )}
         </MapView>
-        <Button
-          style={{ width: 75 }}
-          onPress={toggleEditting}
-          appearance={isEditing ? 'outline' : undefined}
-        >
-          <AntDesign name="edit" />
-        </Button>
+        {onChangeArea && (
+          <Button
+            style={{ width: 75 }}
+            onPress={toggleEditting}
+            appearance={isEditing ? 'outline' : undefined}
+          >
+            <AntDesign name="edit" />
+          </Button>
+        )}
       </Stack>
     );
   }
