@@ -11,7 +11,7 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Image, View, Platform } from 'react-native';
+import { StyleSheet, Image, View, Platform, ScrollView } from 'react-native';
 import { ResponsiveImage, ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -86,91 +86,93 @@ export function Team({
 
   return (
     <ScreenLayout>
-      <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-        <Card
-          header={(props) => (
-            <View style={props?.style}>
-              <Text category="h2">{data?.user?.team?.title}</Text>
-              <Text category="s1">{data?.user?.team?.description}</Text>
-            </View>
-          )}
-        >
-          {data?.user?.team?.image && (
-            <ResponsiveImage
-              source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
-              aspect={[16, 9]}
-            />
-          )}
-        </Card>
-        <Card
-          header={(props) => (
-            <Text {...props} category="h6">{t`util.projects`}</Text>
-          )}
-        >
-          <Stack space={2}>
-            <Menu>
-              {data?.user?.team?.projects?.map((project) => (
-                <MenuItem
-                  key={project.id}
-                  title={project.title}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Project', {
-                      id: project.id,
-                    });
-                  }}
-                />
-              ))}
-            </Menu>
+      <ScrollView>
+        <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
+          <Card
+            header={(props) => (
+              <View style={props?.style}>
+                <Text category="h2">{data?.user?.team?.title}</Text>
+                <Text category="s1">{data?.user?.team?.description}</Text>
+              </View>
+            )}
+          >
+            {data?.user?.team?.image && (
+              <ResponsiveImage
+                source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
+                aspect={[16, 9]}
+              />
+            )}
+          </Card>
+          <Card
+            header={(props) => (
+              <Text {...props} category="h6">{t`util.projects`}</Text>
+            )}
+          >
+            <Stack space={2}>
+              <Menu>
+                {data?.user?.team?.projects?.map((project) => (
+                  <MenuItem
+                    key={project.id}
+                    title={project.title}
+                    accessoryRight={() => (
+                      <AntDesign name="right" color="white" />
+                    )}
+                    onPress={() => {
+                      navigation.navigate('Project', {
+                        id: project.id,
+                      });
+                    }}
+                  />
+                ))}
+              </Menu>
+              <Button
+                onPress={() =>
+                  navigation.push('ProjectCreate', {
+                    id: route.params.id,
+                  })
+                }
+              >
+                {t`util.createProject`}
+              </Button>
+            </Stack>
+          </Card>
+          <Card
+            header={(props) => (
+              <Text {...props} category="h6">{t`util.users`}</Text>
+            )}
+          >
+            <Stack space={2}>
+              <Menu>
+                {data?.user?.team?.users?.map((user) => (
+                  <MenuItem
+                    key={user.id}
+                    title={user.name}
+                    accessoryLeft={() => (
+                      <Avatar
+                        source={{ uri: imageUri(user.profile?.image ?? '') }}
+                      />
+                    )}
+                    accessoryRight={() => (
+                      <AntDesign name="right" color="white" />
+                    )}
+                    onPress={() => {
+                      navigation.navigate('Profile', {
+                        id: user.id,
+                      });
+                    }}
+                  />
+                ))}
+              </Menu>
+            </Stack>
+          </Card>
+          <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
             <Button
-              onPress={() =>
-                navigation.push('ProjectCreate', {
-                  id: route.params.id,
-                })
-              }
-            >
-              {t`util.createProject`}
-            </Button>
-          </Stack>
-        </Card>
-        <Card
-          header={(props) => (
-            <Text {...props} category="h6">{t`util.users`}</Text>
-          )}
-        >
-          <Stack space={2}>
-            <Menu>
-              {data?.user?.team?.users?.map((user) => (
-                <MenuItem
-                  key={user.id}
-                  title={user.name}
-                  accessoryLeft={() => (
-                    <Avatar
-                      source={{ uri: imageUri(user.profile?.image ?? '') }}
-                    />
-                  )}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Profile', {
-                      id: user.id,
-                    });
-                  }}
-                />
-              ))}
-            </Menu>
-          </Stack>
-        </Card>
-        <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
-          <Button
-            status="danger"
-            onPress={onDeleteTeam}
-          >{t`util.deleteTeam`}</Button>
-        </Card>
-      </Tiles>
+              status="danger"
+              onPress={onDeleteTeam}
+            >{t`util.deleteTeam`}</Button>
+          </Card>
+        </Tiles>
+      </ScrollView>
     </ScreenLayout>
   );
 }
