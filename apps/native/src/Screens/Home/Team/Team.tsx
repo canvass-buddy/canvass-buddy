@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
-import { Stack } from '@mobily/stacks';
+import { Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Avatar,
@@ -11,7 +11,7 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Platform } from 'react-native';
 import { ResponsiveImage, ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -60,7 +60,7 @@ export function Team({
 
   return (
     <ScreenLayout>
-      <Stack space={4} padding={4}>
+      <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
         <Card
           header={(props) => (
             <View {...props}>
@@ -138,7 +138,7 @@ export function Team({
             </Menu>
           </Stack>
         </Card>
-      </Stack>
+      </Tiles>
     </ScreenLayout>
   );
 }
