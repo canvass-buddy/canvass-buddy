@@ -48,6 +48,16 @@ export const TeamResolvers: Resolvers = {
       return team;
     },
     async deleteTeam(_, args) {
+      await prismaClient.teamMember.deleteMany({
+        where: {
+          teamId: args.teamId,
+        },
+      });
+      await prismaClient.project.deleteMany({
+        where: {
+          teamId: args.teamId,
+        },
+      });
       await prismaClient.team.delete({
         where: {
           id: args.teamId,

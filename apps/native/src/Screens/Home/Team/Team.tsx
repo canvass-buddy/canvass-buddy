@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import { Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -41,6 +41,12 @@ const TEAM_QUERY = gql(/* GraphQL */ `
   }
 `);
 
+const DELETE_TEAM_MUTATION = gql(/* GraphQL */ `
+  mutation DeleteTeam($teamId: String!) {
+    deleteTeam(teamId: $teamId)
+  }
+`);
+
 const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
@@ -56,6 +62,26 @@ export function Team({
       id: route.params.id,
     },
   });
+
+  const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
+    update() {
+      client.refetchQueries({
+        include: 'active',
+      });
+      navigation.navigate('HomeRoot');
+    },
+  });
+
+  const client = useApolloClient();
+
+  const onDeleteTeam = async () => {
+    await deleteTeam({
+      variables: {
+        teamId: route.params.id,
+      },
+    });
+  };
+
   const { t } = useTranslation();
 
   return (
@@ -63,7 +89,7 @@ export function Team({
       <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
         <Card
           header={(props) => (
-            <View {...props}>
+            <View style={props?.style}>
               <Text category="h2">{data?.user?.team?.title}</Text>
               <Text category="s1">{data?.user?.team?.description}</Text>
             </View>
@@ -137,6 +163,12 @@ export function Team({
               ))}
             </Menu>
           </Stack>
+        </Card>
+        <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
+          <Button
+            status="danger"
+            onPress={onDeleteTeam}
+          >{t`util.deleteTeam`}</Button>
         </Card>
       </Tiles>
     </ScreenLayout>
