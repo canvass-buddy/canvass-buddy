@@ -15,6 +15,7 @@
     "turbo": "latest"
   },
   "dependencies": {
+    "css-select": "^5.1.0",
     "graphql": "^16.6.0"
   }
 }

@@ -11,6 +11,7 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
+import { Platform } from 'react-native';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
@@ -75,7 +76,7 @@ export function HomeRoot({
             padding={4}
             paddingTop={10}
             paddingBottom={20}
-            columns={3}
+            columns={Platform.OS === 'web' ? 3 : 1}
           >
             <Card onPress={() => navigation.navigate('Profile', {})}>
               <Stack align="center" padding={4} space={4}>
@@ -92,7 +93,7 @@ export function HomeRoot({
             </Card>
             <Card
               header={(props) => (
-                <View {...props}>
+                <View style={props?.style}>
                   <Text
                     category="h2"
                     style={styles.header}
@@ -123,7 +124,7 @@ export function HomeRoot({
             </Card>
             <Card
               header={(props) => (
-                <View {...props}>
+                <View style={props?.style}>
                   <Text
                     category="h2"
                     style={styles.header}
