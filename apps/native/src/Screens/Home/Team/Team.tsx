@@ -64,6 +64,9 @@ export function Team({
   });
 
   const [deleteTeam] = useMutation(DELETE_TEAM_MUTATION, {
+    variables: {
+      teamId: route.params.id,
+    },
     update() {
       client.refetchQueries({
         include: 'active',
@@ -73,14 +76,6 @@ export function Team({
   });
 
   const client = useApolloClient();
-
-  const onDeleteTeam = async () => {
-    await deleteTeam({
-      variables: {
-        teamId: route.params.id,
-      },
-    });
-  };
 
   const { t } = useTranslation();
 
@@ -168,7 +163,7 @@ export function Team({
           <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
             <Button
               status="danger"
-              onPress={onDeleteTeam}
+              onPress={() => deleteTeam()}
             >{t`util.deleteTeam`}</Button>
           </Card>
         </Tiles>
