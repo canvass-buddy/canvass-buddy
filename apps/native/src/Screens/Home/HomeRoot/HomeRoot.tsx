@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
-import { FillView, Stack } from '@mobily/stacks';
+import { FillView, Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Avatar,
@@ -70,7 +70,13 @@ export function HomeRoot({
     <ScreenLayout>
       <FillView alignY="between">
         <ScrollView>
-          <Stack space={4} padding={4} paddingTop={10} paddingBottom={20}>
+          <Tiles
+            space={4}
+            padding={4}
+            paddingTop={10}
+            paddingBottom={20}
+            columns={3}
+          >
             <Card onPress={() => navigation.navigate('Profile', {})}>
               <Stack align="center" padding={4} space={4}>
                 {data?.user?.profile?.image && (
@@ -84,15 +90,51 @@ export function HomeRoot({
                 </Text>
               </Stack>
             </Card>
-            <Stack space={6} padding={6}>
-              <Text
-                category="h2"
-                style={styles.header}
-              >{t`util.projects`}</Text>
-              <Card>
-                <Menu>
-                  {data?.user?.projects?.length ? (
-                    data.user.projects.map((project) => (
+            <Card
+              header={(props) => (
+                <View {...props}>
+                  <Text
+                    category="h2"
+                    style={styles.header}
+                  >{t`util.projects`}</Text>
+                </View>
+              )}
+            >
+              <Menu>
+                {data?.user?.projects?.length ? (
+                  data.user.projects.map((project) => (
+                    <MenuItem
+                      key={project.id}
+                      title={project.title}
+                      accessoryRight={() => (
+                        <AntDesign name="right" color="white" />
+                      )}
+                      onPress={() =>
+                        navigation.navigate('Project', {
+                          id: project.id,
+                        })
+                      }
+                    />
+                  ))
+                ) : (
+                  <MissingDataCard text={t`status.noProjects`} />
+                )}
+              </Menu>
+            </Card>
+            <Card
+              header={(props) => (
+                <View {...props}>
+                  <Text
+                    category="h2"
+                    style={styles.header}
+                  >{t`util.teams`}</Text>
+                </View>
+              )}
+            >
+              <Menu>
+                {data?.user?.teams?.length ? (
+                  data?.user?.teams?.map((project) =>
+                    project ? (
                       <MenuItem
                         key={project.id}
                         title={project.title}
@@ -100,46 +142,21 @@ export function HomeRoot({
                           <AntDesign name="right" color="white" />
                         )}
                         onPress={() =>
-                          navigation.navigate('Project', {
+                          navigation.navigate('Team', {
                             id: project.id,
                           })
                         }
                       />
-                    ))
-                  ) : (
-                    <MissingDataCard text={t`status.noProjects`} />
-                  )}
-                </Menu>
-              </Card>
-              <Text category="h2" style={styles.header}>{t`util.teams`}</Text>
-              <Card>
-                <Menu>
-                  {data?.user?.teams?.length ? (
-                    data?.user?.teams?.map((project) =>
-                      project ? (
-                        <MenuItem
-                          key={project.id}
-                          title={project.title}
-                          accessoryRight={() => (
-                            <AntDesign name="right" color="white" />
-                          )}
-                          onPress={() =>
-                            navigation.navigate('Team', {
-                              id: project.id,
-                            })
-                          }
-                        />
-                      ) : (
-                        <></>
-                      )
+                    ) : (
+                      <></>
                     )
-                  ) : (
-                    <MissingDataCard text={t`status.noTeams`} />
-                  )}
-                </Menu>
-              </Card>
-            </Stack>
-          </Stack>
+                  )
+                ) : (
+                  <MissingDataCard text={t`status.noTeams`} />
+                )}
+              </Menu>
+            </Card>
+          </Tiles>
         </ScrollView>
       </FillView>
       <View
