@@ -1,6 +1,12 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Stack, Tiles } from '@mobily/stacks';
-import { Button, Card, useTheme } from '@ui-kitten/components';
+import {
+  Button,
+  Card,
+  useTheme,
+  StyleService,
+  useStyleSheet,
+} from '@ui-kitten/components';
 import {
   LocationObject,
   useForegroundPermissions,
@@ -9,6 +15,7 @@ import {
 import React, { FC, memo, PropsWithChildren, useEffect, useState } from 'react';
 import {
   Animated,
+  Easing,
   StyleSheet,
   useAnimatedValue,
   View,
@@ -30,7 +37,7 @@ interface DrawMapProps {
   drawerButtonDisabled?: boolean;
   markers?: Marker[];
 }
-const styles = StyleSheet.create({
+const themedStyles = StyleService.create({
   pannel: {
     position: 'absolute',
     bottom: 0,
@@ -40,10 +47,10 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
+    backgroundColor: 'background-basic-color-1',
+    padding: 16,
   },
 });
-
-const AnimatedCard = Animated.createAnimatedComponent(Card);
 
 export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
   ({
@@ -77,9 +84,8 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
     });
 
     useEffect(() => {
-      Animated.timing(value, {
+      Animated.spring(value, {
         toValue: isPanelOpen ? 1 : 0.1,
-        duration: 100,
         useNativeDriver: false,
       }).start();
     }, [isPanelOpen, value]);
@@ -96,6 +102,8 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
         setPosition(position);
       });
     }, []);
+
+    const styles = useStyleSheet(themedStyles);
 
     if (!position) return <></>;
 
@@ -187,10 +195,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
           ))}
         </MapView>
         {!isDrawing && children && (
-          <AnimatedCard
-            style={[styles.pannel, { height: panelHeight }]}
-            disabled
-          >
+          <Animated.View style={[styles.pannel, { height: panelHeight }]}>
             <Stack space={4}>
               <Tiles columns={onChangeArea ? 2 : 1} space={4}>
                 {onChangeArea && (
@@ -211,7 +216,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
               </Tiles>
               {isPanelOpen && <View>{children}</View>}
             </Stack>
-          </AnimatedCard>
+          </Animated.View>
         )}
       </View>
     );
