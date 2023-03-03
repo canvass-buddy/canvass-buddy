@@ -6,6 +6,7 @@ import {
   Avatar,
   Button,
   Card,
+  Divider,
   Menu,
   MenuItem,
   Text,
@@ -66,6 +67,7 @@ export function Project({
         >
           <Stack space={4}>
             <Text category="h1">{data.user.project.title}</Text>
+            <Divider />
             <Button
               onPress={() =>
                 navigation.navigate('GroundView', {
