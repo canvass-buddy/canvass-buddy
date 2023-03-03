@@ -1,7 +1,14 @@
 import { AntDesign } from '@expo/vector-icons';
-import { Stack } from '@mobily/stacks';
-import { Button, useTheme } from '@ui-kitten/components';
-import React, { FC, memo, useState } from 'react';
+import { Stack, Tiles } from '@mobily/stacks';
+import { Button, Card, useTheme } from '@ui-kitten/components';
+import React, { FC, memo, PropsWithChildren, useEffect, useState } from 'react';
+import {
+  Animated,
+  StyleSheet,
+  useAnimatedValue,
+  View,
+  ViewStyle,
+} from 'react-native';
 import MapView, { LatLng, Polygon } from 'react-native-maps';
 import { mapStyles } from '../../helpers';
 import { ProjectArea } from '../../__generated__/graphql';
@@ -10,10 +17,25 @@ interface DrawMapProps {
   initialRegion: LatLng;
   onChangeArea?(area: ProjectArea): void;
   area?: ProjectArea;
+  style?: ViewStyle;
 }
+const styles = StyleSheet.create({
+  pannel: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: '10%',
+    elevation: 5,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+});
 
-export const DrawMap: FC<DrawMapProps> = memo(
-  ({ initialRegion, onChangeArea, area: initialArea }) => {
+const AnimatedCard = Animated.createAnimatedComponent(Card);
+
+export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
+  ({ initialRegion, onChangeArea, area: initialArea, style, children }) => {
     const [area, setArea] = useState<ProjectArea>(
       initialArea ?? {
         x1: 0,
@@ -25,15 +47,31 @@ export const DrawMap: FC<DrawMapProps> = memo(
 
     const [isDrawing, setDrawing] = useState(false);
     const [isEditing, setEditing] = useState(false);
+    const [isPanelOpen, setPanelOpen] = useState(false);
 
     const theme = useTheme();
 
+    const value = useAnimatedValue(0.1);
+    const panelHeight = value.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0%', '100%'],
+    });
+
+    useEffect(() => {
+      Animated.timing(value, {
+        toValue: isPanelOpen ? 1 : 0.1,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    }, [isPanelOpen, value]);
+
     const toggleEditting = () => setEditing((edit) => !edit);
+    const togglePannel = () => setPanelOpen((open) => !open);
 
     return (
-      <Stack space={4}>
+      <View>
         <MapView
-          style={{ width: '100%', height: 400 }}
+          style={[{ width: '100%', height: 400 }, style]}
           customMapStyle={mapStyles}
           initialRegion={{
             longitude: initialRegion.longitude ?? 0,
@@ -107,16 +145,25 @@ export const DrawMap: FC<DrawMapProps> = memo(
             <></>
           )}
         </MapView>
-        {onChangeArea && (
-          <Button
-            style={{ width: 75 }}
-            onPress={toggleEditting}
-            appearance={isEditing ? 'outline' : undefined}
-          >
-            <AntDesign name="edit" />
-          </Button>
+        {onChangeArea && !isDrawing && (
+          <AnimatedCard style={[styles.pannel, { height: panelHeight }]}>
+            <Stack space={4}>
+              <Tiles columns={2} space={4}>
+                <Button
+                  onPress={toggleEditting}
+                  appearance={isEditing ? 'outline' : 'filled'}
+                >
+                  <AntDesign name="edit" />
+                </Button>
+                <Button onPress={togglePannel}>
+                  <AntDesign name={isPanelOpen ? 'down' : 'up'} />
+                </Button>
+              </Tiles>
+              {isPanelOpen && <View>{children}</View>}
+            </Stack>
+          </AnimatedCard>
         )}
-      </Stack>
+      </View>
     );
   }
 );

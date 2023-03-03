@@ -109,38 +109,40 @@ export function ProjectCreate({
 
   return (
     <ScreenLayout>
-      <Stack padding={4} space={4}>
-        <Input
-          placeholder={t`util.projectName`}
-          value={values.title}
-          onChangeText={handleChange('title')}
-          onBlur={handleBlur('title')}
-          status={errors.title ? 'danger' : 'basic'}
-          caption={errors.title}
-        />
-        <DrawMap
-          initialRegion={{
-            longitude: position?.coords.longitude ?? 0,
-            latitude: position?.coords.latitude ?? 0,
-          }}
-          onChangeArea={onChangeArea}
-        />
-        <Text category="h2">{t`util.tasks`}</Text>
-        <TaskInput
-          onAdd={(task) => {
-            setFieldValue('tasks', [...values.tasks, task]);
-          }}
-        />
-        <Menu>
-          {values.tasks.map((task) => (
-            <MenuItem key={task.title} title={task.title} />
-          ))}
-        </Menu>
-        <Button
-          onPress={() => handleSubmit()}
-          disabled={some(errors)}
-        >{t`util.createProject`}</Button>
-      </Stack>
+      <DrawMap
+        initialRegion={{
+          longitude: position?.coords.longitude ?? 0,
+          latitude: position?.coords.latitude ?? 0,
+        }}
+        style={{ height: '100%' }}
+        onChangeArea={onChangeArea}
+      >
+        <Stack space={4}>
+          <Input
+            placeholder={t`util.projectName`}
+            value={values.title}
+            onChangeText={handleChange('title')}
+            onBlur={handleBlur('title')}
+            status={errors.title ? 'danger' : 'basic'}
+            caption={errors.title}
+          />
+          <Text category="h2">{t`util.tasks`}</Text>
+          <TaskInput
+            onAdd={(task) => {
+              setFieldValue('tasks', [...values.tasks, task]);
+            }}
+          />
+          <Menu>
+            {values.tasks.map((task) => (
+              <MenuItem key={task.title} title={task.title} />
+            ))}
+          </Menu>
+          <Button
+            onPress={() => handleSubmit()}
+            disabled={some(errors)}
+          >{t`util.createProject`}</Button>
+        </Stack>
+      </DrawMap>
     </ScreenLayout>
   );
 }
