@@ -6,6 +6,7 @@ import {
   Avatar,
   Button,
   Card,
+  Divider,
   Menu,
   MenuItem,
   Text,
@@ -78,7 +79,10 @@ export function HomeRoot({
             paddingBottom={20}
             columns={Platform.OS === 'web' ? 3 : 1}
           >
-            <Card onPress={() => navigation.navigate('Profile', {})}>
+            <Card
+              onPress={() => navigation.navigate('Profile', {})}
+              status="primary"
+            >
               <Stack align="center" padding={4} space={4}>
                 {data?.user?.profile?.image && (
                   <Avatar
@@ -92,6 +96,7 @@ export function HomeRoot({
               </Stack>
             </Card>
             <Card
+              status="info"
               header={(props) => (
                 <View style={props?.style}>
                   <Text
@@ -101,28 +106,27 @@ export function HomeRoot({
                 </View>
               )}
             >
-              <Menu>
-                {data?.user?.projects?.length ? (
-                  data.user.projects.map((project) => (
-                    <MenuItem
-                      key={project.id}
-                      title={project.title}
-                      accessoryRight={() => (
-                        <AntDesign name="right" color="white" />
-                      )}
-                      onPress={() =>
-                        navigation.navigate('Project', {
-                          id: project.id,
-                        })
-                      }
-                    />
-                  ))
-                ) : (
-                  <MissingDataCard text={t`status.noProjects`} />
-                )}
-              </Menu>
+              {data?.user?.projects?.length ? (
+                data.user.projects.map((project) => (
+                  <MenuItem
+                    key={project.id}
+                    title={project.title}
+                    accessoryRight={() => (
+                      <AntDesign name="right" color="white" />
+                    )}
+                    onPress={() =>
+                      navigation.navigate('Project', {
+                        id: project.id,
+                      })
+                    }
+                  />
+                ))
+              ) : (
+                <MissingDataCard text={t`status.noProjects`} />
+              )}
             </Card>
             <Card
+              status="info"
               header={(props) => (
                 <View style={props?.style}>
                   <Text
@@ -132,7 +136,7 @@ export function HomeRoot({
                 </View>
               )}
             >
-              <Menu>
+              <Stack space={4}>
                 {data?.user?.teams?.length ? (
                   data?.user?.teams?.map((project) =>
                     project ? (
@@ -155,23 +159,19 @@ export function HomeRoot({
                 ) : (
                   <MissingDataCard text={t`status.noTeams`} />
                 )}
-              </Menu>
+                <Divider />
+                <Button
+                  status="info"
+                  appearance="outline"
+                  onPress={() => navigation.navigate('TeamCreate')}
+                >
+                  Create Team
+                </Button>
+              </Stack>
             </Card>
           </Tiles>
         </ScrollView>
       </FillView>
-      <View
-        style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 0,
-          padding: 18,
-        }}
-      >
-        <Button status="info" onPress={() => navigation.navigate('TeamCreate')}>
-          Create Team
-        </Button>
-      </View>
     </ScreenLayout>
   );
 }

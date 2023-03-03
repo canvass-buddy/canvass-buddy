@@ -106,22 +106,20 @@ export function Team({
             )}
           >
             <Stack space={2}>
-              <Menu>
-                {data?.user?.team?.projects?.map((project) => (
-                  <MenuItem
-                    key={project.id}
-                    title={project.title}
-                    accessoryRight={() => (
-                      <AntDesign name="right" color="white" />
-                    )}
-                    onPress={() => {
-                      navigation.navigate('Project', {
-                        id: project.id,
-                      });
-                    }}
-                  />
-                ))}
-              </Menu>
+              {data?.user?.team?.projects?.map((project) => (
+                <MenuItem
+                  key={project.id}
+                  title={project.title}
+                  accessoryRight={() => (
+                    <AntDesign name="right" color="white" />
+                  )}
+                  onPress={() => {
+                    navigation.navigate('Project', {
+                      id: project.id,
+                    });
+                  }}
+                />
+              ))}
               <Button
                 onPress={() =>
                   navigation.push('ProjectCreate', {
@@ -140,27 +138,25 @@ export function Team({
             )}
           >
             <Stack space={2}>
-              <Menu>
-                {data?.user?.team?.users?.map((user) => (
-                  <MenuItem
-                    key={user.id}
-                    title={user.name}
-                    accessoryLeft={() => (
-                      <Avatar
-                        source={{ uri: imageUri(user.profile?.image ?? '') }}
-                      />
-                    )}
-                    accessoryRight={() => (
-                      <AntDesign name="right" color="white" />
-                    )}
-                    onPress={() => {
-                      navigation.navigate('Profile', {
-                        id: user.id,
-                      });
-                    }}
-                  />
-                ))}
-              </Menu>
+              {data?.user?.team?.users?.map((user) => (
+                <MenuItem
+                  key={user.id}
+                  title={user.name}
+                  accessoryLeft={() => (
+                    <Avatar
+                      source={{ uri: imageUri(user.profile?.image ?? '') }}
+                    />
+                  )}
+                  accessoryRight={() => (
+                    <AntDesign name="right" color="white" />
+                  )}
+                  onPress={() => {
+                    navigation.navigate('Profile', {
+                      id: user.id,
+                    });
+                  }}
+                />
+              ))}
             </Stack>
           </Card>
           <Card
@@ -172,7 +168,7 @@ export function Team({
             <Button
               status="danger"
               onPress={() => deleteTeam()}
-            >{t`util.deleteTeam`}</Button>
+            >{t`util.delete`}</Button>
           </Card>
         </Tiles>
       </ScrollView>
