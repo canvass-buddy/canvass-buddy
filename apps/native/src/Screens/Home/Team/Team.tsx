@@ -84,6 +84,7 @@ export function Team({
       <ScrollView>
         <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
           <Card
+            status="primary"
             header={(props) => (
               <View style={props?.style}>
                 <Text category="h2">{data?.user?.team?.title}</Text>
@@ -99,6 +100,7 @@ export function Team({
             )}
           </Card>
           <Card
+            status="info"
             header={(props) => (
               <Text {...props} category="h6">{t`util.projects`}</Text>
             )}
@@ -132,6 +134,7 @@ export function Team({
             </Stack>
           </Card>
           <Card
+            status="info"
             header={(props) => (
               <Text {...props} category="h6">{t`util.users`}</Text>
             )}
@@ -160,7 +163,12 @@ export function Team({
               </Menu>
             </Stack>
           </Card>
-          <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
+          <Card
+            header={(props) => (
+              <Text {...props} category="h6">{t`util.settings`}</Text>
+            )}
+            status="danger"
+          >
             <Button
               status="danger"
               onPress={() => deleteTeam()}
