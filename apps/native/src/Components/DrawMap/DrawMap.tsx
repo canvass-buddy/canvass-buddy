@@ -18,6 +18,7 @@ interface DrawMapProps {
   onChangeArea?(area: ProjectArea): void;
   area?: ProjectArea;
   style?: ViewStyle;
+  drawerButtonDisabled?: boolean;
 }
 const styles = StyleSheet.create({
   pannel: {
@@ -35,7 +36,14 @@ const styles = StyleSheet.create({
 const AnimatedCard = Animated.createAnimatedComponent(Card);
 
 export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
-  ({ initialRegion, onChangeArea, area: initialArea, style, children }) => {
+  ({
+    initialRegion,
+    onChangeArea,
+    area: initialArea,
+    style,
+    drawerButtonDisabled,
+    children,
+  }) => {
     const [area, setArea] = useState<ProjectArea>(
       initialArea ?? {
         x1: 0,
@@ -155,7 +163,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
                 >
                   <AntDesign name="edit" />
                 </Button>
-                <Button onPress={togglePannel}>
+                <Button onPress={togglePannel} disabled={drawerButtonDisabled}>
                   <AntDesign name={isPanelOpen ? 'down' : 'up'} />
                 </Button>
               </Tiles>

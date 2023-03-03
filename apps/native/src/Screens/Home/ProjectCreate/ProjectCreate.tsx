@@ -106,43 +106,48 @@ export function ProjectCreate({
   const onChangeArea = useCallback((area: ProjectArea) => {
     setFieldValue('area', area);
   }, []);
+  const drawerButtonDisabled =
+    !values.area.x1 && !values.area.x2 && !values.area.y1 && !values.area.y2;
 
   return (
     <ScreenLayout>
-      <DrawMap
-        initialRegion={{
-          longitude: position?.coords.longitude ?? 0,
-          latitude: position?.coords.latitude ?? 0,
-        }}
-        style={{ height: '100%' }}
-        onChangeArea={onChangeArea}
-      >
-        <Stack space={4}>
-          <Input
-            placeholder={t`util.projectName`}
-            value={values.title}
-            onChangeText={handleChange('title')}
-            onBlur={handleBlur('title')}
-            status={errors.title ? 'danger' : 'basic'}
-            caption={errors.title}
-          />
-          <Text category="h2">{t`util.tasks`}</Text>
-          <TaskInput
-            onAdd={(task) => {
-              setFieldValue('tasks', [...values.tasks, task]);
-            }}
-          />
-          <Menu>
-            {values.tasks.map((task) => (
-              <MenuItem key={task.title} title={task.title} />
-            ))}
-          </Menu>
-          <Button
-            onPress={() => handleSubmit()}
-            disabled={some(errors)}
-          >{t`util.createProject`}</Button>
-        </Stack>
-      </DrawMap>
+      {position && (
+        <DrawMap
+          initialRegion={{
+            longitude: position?.coords.longitude ?? 0,
+            latitude: position?.coords.latitude ?? 0,
+          }}
+          style={{ height: '100%' }}
+          onChangeArea={onChangeArea}
+          drawerButtonDisabled={drawerButtonDisabled}
+        >
+          <Stack space={4}>
+            <Input
+              placeholder={t`util.projectName`}
+              value={values.title}
+              onChangeText={handleChange('title')}
+              onBlur={handleBlur('title')}
+              status={errors.title ? 'danger' : 'basic'}
+              caption={errors.title}
+            />
+            <Text category="h2">{t`util.tasks`}</Text>
+            <TaskInput
+              onAdd={(task) => {
+                setFieldValue('tasks', [...values.tasks, task]);
+              }}
+            />
+            <Menu>
+              {values.tasks.map((task) => (
+                <MenuItem key={task.title} title={task.title} />
+              ))}
+            </Menu>
+            <Button
+              onPress={() => handleSubmit()}
+              disabled={some(errors)}
+            >{t`util.createProject`}</Button>
+          </Stack>
+        </DrawMap>
+      )}
     </ScreenLayout>
   );
 }
