@@ -15,7 +15,7 @@ import { DrawMap, ScreenLayout } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
 
 const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
@@ -23,6 +23,13 @@ const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
     deleteProject(projectId: $projectId)
   }
 `);
+
+const styles = StyleSheet.create({
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export function Project({
   navigation,
@@ -48,53 +55,64 @@ export function Project({
   const { t } = useTranslation();
   return (
     <ScreenLayout>
-      <ScrollView>
-        <Stack padding={4} space={4}>
-          <Text category="h2" style={{ textAlign: 'center' }}>
-            {data?.user?.project?.title}
-          </Text>
-          {data?.user?.project?.area && (
-            <DrawMap
-              initialRegion={{
-                longitude: data.user.project.area.x1,
-                latitude: data.user.project.area.y1,
-              }}
-              area={data.user.project.area}
-            />
-          )}
-          <Button
-            onPress={() =>
-              navigation.navigate('GroundView', {
-                id: route.params.id,
-              })
-            }
-          >{t`util.start`}</Button>
-          <Text category="h2">{t`util.users`}</Text>
-          <Menu>
-            {data?.user?.project?.users?.map((user) => (
-              <MenuItem
-                key={user.id}
-                accessoryLeft={() => (
-                  <Avatar source={{ uri: imageUri(user.profile?.image) }} />
-                )}
-                accessoryRight={() => <AntDesign name="right" color="white" />}
-                title={user.name}
-                onPress={() =>
-                  navigation.navigate('Profile', {
-                    id: user.id,
-                  })
-                }
-              />
-            ))}
-          </Menu>
-          <Card header={(props) => <Text {...props}>{t`util.settings`}</Text>}>
+      {data?.user?.project?.area && (
+        <DrawMap
+          style={styles.map}
+          initialRegion={{
+            longitude: data.user.project.area.x1,
+            latitude: data.user.project.area.y1,
+          }}
+          area={data.user.project.area}
+        >
+          <Stack space={4}>
+            <Text category="h1">{data.user.project.title}</Text>
             <Button
+              onPress={() =>
+                navigation.navigate('GroundView', {
+                  id: route.params.id,
+                })
+              }
+            >{t`util.start`}</Button>
+            <Card
+              header={(props) => (
+                <Text category="h2" {...props}>{t`util.users`}</Text>
+              )}
+              status="info"
+            >
+              <Menu>
+                {data?.user?.project?.users?.map((user) => (
+                  <MenuItem
+                    key={user.id}
+                    accessoryLeft={() => (
+                      <Avatar source={{ uri: imageUri(user.profile?.image) }} />
+                    )}
+                    accessoryRight={() => (
+                      <AntDesign name="right" color="white" />
+                    )}
+                    title={user.name}
+                    onPress={() =>
+                      navigation.navigate('Profile', {
+                        id: user.id,
+                      })
+                    }
+                  />
+                ))}
+              </Menu>
+            </Card>
+            <Card
               status="danger"
-              onPress={() => deleteProject()}
-            >{t`util.delete`}</Button>
-          </Card>
-        </Stack>
-      </ScrollView>
+              header={(props) => (
+                <Text category="h2" {...props}>{t`util.settings`}</Text>
+              )}
+            >
+              <Button
+                status="danger"
+                onPress={() => deleteProject()}
+              >{t`util.delete`}</Button>
+            </Card>
+          </Stack>
+        </DrawMap>
+      )}
     </ScreenLayout>
   );
 }

@@ -97,6 +97,8 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
       });
     }, []);
 
+    if (!position) return <></>;
+
     return (
       <View>
         <MapView

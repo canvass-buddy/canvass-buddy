@@ -23,6 +23,8 @@
     "tasks":"Tasks",
     "title":"Title",
     "description":"Description",
+    "delete":"Delete",
+    "settings":"Settings"
   },
   "status":{
     "noProjects":"You Don't have any projects",
