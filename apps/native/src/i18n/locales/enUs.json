@@ -19,7 +19,10 @@
     "teamTitle":"Team Title",
     "teamDescription":"Team Description",
     "createTeam":"Create Team",
-    "projectName":"Project Name"
+    "projectName":"Project Name",
+    "tasks":"Tasks",
+    "title":"Title",
+    "description":"Description",
   },
   "status":{
     "noProjects":"You Don't have any projects",
