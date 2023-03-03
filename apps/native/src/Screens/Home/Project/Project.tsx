@@ -16,29 +16,7 @@ import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 import { ScrollView } from 'react-native';
-
-const PROJECT_QUERY = gql(/* GraphQL */ `
-  query Project($id: String!) {
-    user {
-      project(id: $id) {
-        title
-        area {
-          x1
-          y1
-          x2
-          y2
-        }
-        users {
-          id
-          name
-          profile {
-            image
-          }
-        }
-      }
-    }
-  }
-`);
+import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
 
 const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
   mutation DeleteProject($projectId: String!) {

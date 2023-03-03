@@ -1,6 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Stack, Tiles } from '@mobily/stacks';
 import { Button, Card, useTheme } from '@ui-kitten/components';
+import {
+  LocationObject,
+  useForegroundPermissions,
+  getLastKnownPositionAsync,
+} from 'expo-location';
 import React, { FC, memo, PropsWithChildren, useEffect, useState } from 'react';
 import {
   Animated,
@@ -9,16 +14,21 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import MapView, { LatLng, Polygon } from 'react-native-maps';
+import MapView, {
+  LatLng,
+  Polygon,
+  Marker as MapMarker,
+} from 'react-native-maps';
 import { mapStyles } from '../../helpers';
-import { ProjectArea } from '../../__generated__/graphql';
+import { Marker, ProjectArea } from '../../__generated__/graphql';
 
 interface DrawMapProps {
-  initialRegion: LatLng;
+  initialRegion?: LatLng;
   onChangeArea?(area: ProjectArea): void;
   area?: ProjectArea;
   style?: ViewStyle;
   drawerButtonDisabled?: boolean;
+  markers?: Marker[];
 }
 const styles = StyleSheet.create({
   pannel: {
@@ -43,6 +53,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
     style,
     drawerButtonDisabled,
     children,
+    markers,
   }) => {
     const [area, setArea] = useState<ProjectArea>(
       initialArea ?? {
@@ -76,14 +87,25 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
     const toggleEditting = () => setEditing((edit) => !edit);
     const togglePannel = () => setPanelOpen((open) => !open);
 
+    const [, requestForegroundPermissions] = useForegroundPermissions();
+    const [position, setPosition] = useState<LocationObject | null>();
+
+    useEffect(() => {
+      requestForegroundPermissions();
+      getLastKnownPositionAsync().then((position) => {
+        setPosition(position);
+      });
+    }, []);
+
     return (
       <View>
         <MapView
           style={[{ width: '100%', height: 400 }, style]}
           customMapStyle={mapStyles}
           initialRegion={{
-            longitude: initialRegion.longitude ?? 0,
-            latitude: initialRegion.latitude ?? 0,
+            longitude:
+              initialRegion?.longitude ?? position?.coords.longitude ?? 0,
+            latitude: initialRegion?.latitude ?? position?.coords.latitude ?? 0,
             longitudeDelta: 0.0922,
             latitudeDelta: 0.0922,
           }}
@@ -152,18 +174,36 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
           ) : (
             <></>
           )}
+          {markers?.map((marker) => (
+            <MapMarker
+              key={marker.id}
+              coordinate={{
+                longitude: marker.longitude,
+                latitude: marker.latitude,
+              }}
+            />
+          ))}
         </MapView>
-        {onChangeArea && !isDrawing && (
-          <AnimatedCard style={[styles.pannel, { height: panelHeight }]}>
+        {!isDrawing && children && (
+          <AnimatedCard
+            style={[styles.pannel, { height: panelHeight }]}
+            disabled
+          >
             <Stack space={4}>
-              <Tiles columns={2} space={4}>
+              <Tiles columns={onChangeArea ? 2 : 1} space={4}>
+                {onChangeArea && (
+                  <Button
+                    onPress={toggleEditting}
+                    appearance={isEditing ? 'outline' : 'filled'}
+                  >
+                    <AntDesign name="edit" />
+                  </Button>
+                )}
                 <Button
-                  onPress={toggleEditting}
-                  appearance={isEditing ? 'outline' : 'filled'}
+                  onPress={togglePannel}
+                  disabled={drawerButtonDisabled}
+                  appearance="ghost"
                 >
-                  <AntDesign name="edit" />
-                </Button>
-                <Button onPress={togglePannel} disabled={drawerButtonDisabled}>
                   <AntDesign name={isPanelOpen ? 'down' : 'up'} />
                 </Button>
               </Tiles>
