@@ -1,7 +1,15 @@
 import { useMutation } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Input, Menu, MenuItem, Text } from '@ui-kitten/components';
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+  Menu,
+  MenuItem,
+  Text,
+} from '@ui-kitten/components';
 import {
   getLastKnownPositionAsync,
   LocationObject,
@@ -13,7 +21,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
-import { DrawMap, ScreenLayout, TaskInput } from '../../../Components';
+import { DrawMap, ScreenLayout, TaskList } from '../../../Components';
 import { gql } from '../../../__generated__';
 import { ProjectArea, Task } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
@@ -131,11 +139,7 @@ export function ProjectCreate({
               caption={errors.title}
             />
             <Text category="h2">{t`util.tasks`}</Text>
-            <TaskInput
-              onAdd={(task) => {
-                setFieldValue('tasks', [...values.tasks, task]);
-              }}
-            />
+            <TaskList />
             <Menu>
               {values.tasks.map((task) => (
                 <MenuItem key={task.title} title={task.title} />
