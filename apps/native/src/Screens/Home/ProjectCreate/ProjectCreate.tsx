@@ -101,7 +101,10 @@ export function ProjectCreate({
             title,
             area,
           },
-          tasks,
+          tasks: tasks.map((t) => ({
+            ...t,
+            id: undefined,
+          })),
         },
       });
       if (data) {
