@@ -69,4 +69,18 @@ export const TaskResolves: Resolvers = {
       return tasks as Task[];
     },
   },
+  Team: {
+    async tasks(context) {
+      const tasks = await prismaClient.task.findMany({
+        where: {
+          project: {
+            team: {
+              id: context.id,
+            },
+          },
+        },
+      });
+      return tasks;
+    },
+  },
 };

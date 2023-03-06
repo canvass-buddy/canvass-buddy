@@ -24,7 +24,10 @@
     "title":"Title",
     "description":"Description",
     "delete":"Delete",
-    "settings":"Settings"
+    "save":"Save",
+    "cancel":"Cancel",
+    "settings":"Settings",
+    "close":"Close",
   },
   "app":{
     "task":{

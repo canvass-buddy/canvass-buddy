@@ -53,7 +53,7 @@ const createEnv = async ({
   const { project } = await authedQuery<{ project: Project }>({
     query: /* GraphQL */ `
       mutation CreateProject($teamId: String!, $project: CreateProject!) {
-        project: createProject(teamId: $teamId, project: $project) {
+        project: createProject(teamId: $teamId, project: $project, tasks: []) {
           title
           id
         }

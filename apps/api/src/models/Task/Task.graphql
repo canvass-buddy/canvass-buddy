@@ -18,6 +18,10 @@ input UpdateTask {
   type: String!
 }
 
+type Team {
+  tasks: [Task]
+}
+
 type Task {
   id: String!
   title: String!
@@ -26,5 +30,5 @@ type Task {
 }
 
 type Project {
-  tasks: [Task]
+  tasks: [Task!]
 }

@@ -55,6 +55,27 @@ test('Project Tasks', async () => {
   expect(user.projects?.[0].tasks).toHaveLength(1);
 });
 
+test('Team Tasks', async () => {
+  const { teams } = await fetchUserData('USER_1');
+  const { user } = await authedQuery<{ user: User }>({
+    variables: {
+      teamId: teams?.[0]?.id,
+    },
+    query: /* GraphQL */ `
+      query Tasks($teamId: String!) {
+        user {
+          team(teamId: $teamId) {
+            tasks {
+              id
+            }
+          }
+        }
+      }
+    `,
+  });
+  expect(user.team?.tasks).toHaveLength(1);
+});
+
 test('Create Task', async () => {
   await expect(createTask()).resolves.toBeTruthy();
 

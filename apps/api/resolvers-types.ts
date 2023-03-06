@@ -213,6 +213,7 @@ export type Team = {
   longitude: Scalars['Float'];
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
+  tasks?: Maybe<Array<Maybe<Task>>>;
   title: Scalars['String'];
   users?: Maybe<Array<User>>;
 };
@@ -483,6 +484,7 @@ export type TeamResolvers<ContextType = Context, ParentType extends ResolversPar
   longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<TeamProjectArgs, 'id'>>;
   projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;
+  tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

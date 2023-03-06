@@ -1,21 +1,17 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Column, Columns, Stack, Tiles } from '@mobily/stacks';
+import { AntDesign, Entypo } from '@expo/vector-icons';
+import { Column, Columns, Stack } from '@mobily/stacks';
 import {
-  Autocomplete,
-  AutocompleteItem,
   Button,
   Card,
+  Divider,
   Input,
-  MenuItem,
   Modal,
   Text,
 } from '@ui-kitten/components';
-import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
-import { z } from 'zod';
-import { toFormikValidate } from 'zod-formik-adapter';
+import { StyleSheet, View } from 'react-native';
+import { v4 } from 'uuid';
 import { gql } from '../../__generated__';
 import { Task } from '../../__generated__/graphql';
 
@@ -24,7 +20,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     minWidth: 300,
-    minHeight: 800,
   },
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -32,84 +27,119 @@ const styles = StyleSheet.create({
 });
 
 interface TaskListProps {
+  teamId: string;
   visible?: boolean;
   tasks?: Task[];
-  onAddTask?(task: Omit<Task, 'id'>): void;
+  onAddTask?(task: Task): void;
+  onDeleteTask?(task: Task): void;
 }
 
 const TASKS_QUERY = gql(/* GraphQL */ `
   query TasksQuery($teamId: String!) {
     user {
       team(teamId: $teamId) {
-        id
-        # tasks
+        tasks {
+          id
+          title
+          description
+          type
+        }
       }
     }
   }
 `);
 
-export function TaskList({ onAddTask, tasks }: TaskListProps) {
+export function TaskList({ onAddTask, onDeleteTask, tasks }: TaskListProps) {
   const { t } = useTranslation();
 
+  // const { data } = useQuery(TASKS_QUERY, {
+  //   variables: {
+  //     teamId,
+  //   },
+  // });
+
   const [isVisible, setIsVisible] = useState(false);
+  const [value, setValue] = useState('');
+  const [id, setId] = useState<string | null>(null);
 
-  const Schema = z.object({
-    title: z.string().min(1, t('errors.required')),
-  });
-
-  const { values, handleChange, handleBlur, handleSubmit, errors } = useFormik({
-    validate: toFormikValidate(Schema),
-    validateOnChange: false,
-    initialValues: {
-      title: '',
+  const addTask = () => {
+    setValue('');
+    onAddTask?.({
+      type: 'checkbox',
       description: '',
-    },
-    onSubmit: ({ title, description }) => {
-      onAddTask?.({
-        title,
-        description,
-        type: 'checkbox',
-      });
-    },
-  });
+      title: value,
+      id: id ?? v4(),
+    });
+  };
+
+  const onClose = () => {
+    setIsVisible(false);
+  };
 
   return (
     <>
-      <Stack horizontal>
-        <Text category="h2">{t`util.tasks`}</Text>
-        <Button onPress={() => setIsVisible(true)} appearance="ghost">
-          <AntDesign name="plus" />
-        </Button>
+      <Stack space={2}>
+        <Stack horizontal>
+          <Text category="h2">{t`util.tasks`}</Text>
+          <Button onPress={() => setIsVisible(true)} appearance="ghost">
+            <AntDesign name="edit" />
+          </Button>
+        </Stack>
+        <Stack space={2}>
+          {tasks?.map((task) => (
+            <Stack horizontal align="center" space={4}>
+              <Entypo name="dot-single" color="white" size={24} />
+              <Text key={task.id} category="h6">
+                {task.title}
+              </Text>
+            </Stack>
+          ))}
+        </Stack>
       </Stack>
       <Modal visible={isVisible} backdropStyle={styles.backdrop}>
-        <Card
-          style={styles.card}
-          header={(props) => (
-            <Text {...props} category="h2">{t`util.tasks`}</Text>
-          )}
-          footer={(props) => (
-            <Tiles style={props?.style} space={2} columns={2}>
-              <Button appearance="outline">{t`util.close`}</Button>
-              <Button>{t`util.save`}</Button>
-            </Tiles>
-          )}
-        >
-          <Stack>
-            <Columns space={2} alignY="center">
-              <Column width="2/3">
-                <Autocomplete>
-                  <AutocompleteItem title="ABCD" />
-                </Autocomplete>
-              </Column>
-              <Column width="1/3">
-                <Button>{t`app.task.addTask`}</Button>
-              </Column>
-            </Columns>
-            {tasks?.map((task) => (
-              <MenuItem key={task.id} title={task.title} />
-            ))}
-          </Stack>
-        </Card>
+        <Stack padding={4}>
+          <Card
+            footer={(props) => (
+              <View style={props?.style}>
+                <Button
+                  onPress={onClose}
+                  appearance="outline"
+                >{t`util.close`}</Button>
+              </View>
+            )}
+          >
+            <Stack space={2}>
+              <Columns space={2} alignY="center">
+                <Column width="2/3">
+                  <Input value={value} onChangeText={setValue} />
+                </Column>
+                <Column width="1/3">
+                  <Button
+                    disabled={!value}
+                    onPress={addTask}
+                  >{t`app.task.addTask`}</Button>
+                </Column>
+              </Columns>
+              <Divider />
+              {tasks?.map((task) => (
+                <Columns key={task.id} alignY="center">
+                  <Column width="4/5">
+                    <Text category="p2">{task.title}</Text>
+                  </Column>
+                  <Column>
+                    <Button
+                      appearance="ghost"
+                      status="danger"
+                      onPress={() => onDeleteTask?.(task)}
+                    >
+                      <AntDesign name="delete" />
+                    </Button>
+                  </Column>
+                </Columns>
+              ))}
+            </Stack>
+          </Card>
+        </Stack>
       </Modal>
     </>
   );

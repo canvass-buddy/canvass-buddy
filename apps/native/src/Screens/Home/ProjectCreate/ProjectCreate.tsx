@@ -5,6 +5,7 @@ import {
   Autocomplete,
   AutocompleteItem,
   Button,
+  Divider,
   Input,
   Menu,
   MenuItem,
@@ -84,7 +85,7 @@ export function ProjectCreate({
     validate: toFormikValidate(Schema),
     initialValues: {
       title: '',
-      tasks: [] as Array<Omit<Task, 'id'>>,
+      tasks: [] as Task[],
       area: {
         x1: 0,
         y1: 0,
@@ -138,13 +139,21 @@ export function ProjectCreate({
               status={errors.title ? 'danger' : 'basic'}
               caption={errors.title}
             />
-            <Text category="h2">{t`util.tasks`}</Text>
-            <TaskList />
-            <Menu>
-              {values.tasks.map((task) => (
-                <MenuItem key={task.title} title={task.title} />
-              ))}
-            </Menu>
+            <Divider />
+            <TaskList
+              teamId={route.params.id}
+              onAddTask={(task) => {
+                setFieldValue('tasks', [...values.tasks, task]);
+              }}
+              onDeleteTask={(task) => {
+                setFieldValue(
+                  'tasks',
+                  values.tasks.filter((t) => t.id !== task.id)
+                );
+              }}
+              tasks={values.tasks}
+            />
+            <Divider />
             <Button
               onPress={() => handleSubmit()}
               disabled={some(errors)}
