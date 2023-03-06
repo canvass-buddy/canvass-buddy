@@ -142,16 +142,10 @@ export function ProjectCreate({
             <Divider />
             <TaskList
               teamId={route.params.id}
-              onAddTask={(task) => {
-                setFieldValue('tasks', [...values.tasks, task]);
-              }}
-              onDeleteTask={(task) => {
-                setFieldValue(
-                  'tasks',
-                  values.tasks.filter((t) => t.id !== task.id)
-                );
-              }}
               tasks={values.tasks}
+              onSave={(tasks) => {
+                setFieldValue('tasks', tasks);
+              }}
             />
             <Divider />
             <Button

@@ -1,5 +1,5 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import { Column, Columns, Stack } from '@mobily/stacks';
+import { Column, Columns, Stack, Tiles } from '@mobily/stacks';
 import {
   Button,
   Card,
@@ -8,7 +8,7 @@ import {
   Modal,
   Text,
 } from '@ui-kitten/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { v4 } from 'uuid';
@@ -30,8 +30,7 @@ interface TaskListProps {
   teamId: string;
   visible?: boolean;
   tasks?: Task[];
-  onAddTask?(task: Task): void;
-  onDeleteTask?(task: Task): void;
+  onSave?(tasks: Task[]): void;
 }
 
 const TASKS_QUERY = gql(/* GraphQL */ `
@@ -49,18 +48,26 @@ const TASKS_QUERY = gql(/* GraphQL */ `
   }
 `);
 
-export function TaskList({ onAddTask, onDeleteTask, tasks }: TaskListProps) {
+export function TaskList({ tasks: inputTasks, onSave }: TaskListProps) {
   const { t } = useTranslation();
-
-  // const { data } = useQuery(TASKS_QUERY, {
-  //   variables: {
-  //     teamId,
-  //   },
-  // });
 
   const [isVisible, setIsVisible] = useState(false);
   const [value, setValue] = useState('');
   const [id, setId] = useState<string | null>(null);
+
+  const [tasks, setTasks] = useState<Task[]>(inputTasks ?? []);
+
+  useEffect(() => {
+    if (inputTasks) setTasks(inputTasks);
+  }, [inputTasks]);
+
+  const onAddTask = (task: Task) => {
+    setTasks((tasks) => [...tasks, task]);
+  };
+
+  const onDeleteTask = (task: Task) => {
+    setTasks((tasks) => tasks.filter((t) => t.id !== task.id));
+  };
 
   const addTask = () => {
     setValue('');
@@ -74,6 +81,12 @@ export function TaskList({ onAddTask, onDeleteTask, tasks }: TaskListProps) {
 
   const onClose = () => {
     setIsVisible(false);
+    setTasks(inputTasks ?? []);
+  };
+
+  const save = () => {
+    onSave?.(tasks);
+    setIsVisible(false);
   };
 
   return (
@@ -86,7 +99,7 @@ export function TaskList({ onAddTask, onDeleteTask, tasks }: TaskListProps) {
           </Button>
         </Stack>
         <Stack space={2}>
-          {tasks?.map((task) => (
+          {inputTasks?.map((task) => (
             <Stack horizontal align="center" space={4}>
               <Entypo name="dot-single" color="white" size={24} />
               <Text key={task.id} category="h6">
@@ -100,12 +113,14 @@ export function TaskList({ onAddTask, onDeleteTask, tasks }: TaskListProps) {
         <Stack padding={4}>
           <Card
             footer={(props) => (
-              <View style={props?.style}>
+              <Tiles style={props?.style} columns={2} space={2}>
                 <Button
                   onPress={onClose}
                   appearance="outline"
+                  status="basic"
                 >{t`util.close`}</Button>
-              </View>
+                <Button onPress={save}>{t`util.save`}</Button>
+              </Tiles>
             )}
           >
             <Stack space={2}>
