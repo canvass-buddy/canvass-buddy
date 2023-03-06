@@ -49,6 +49,7 @@ export function GroundView({
       },
     },
     update() {
+      setCompletedTasks([]);
       client.refetchQueries({ include: 'active' });
     },
   });
@@ -95,7 +96,7 @@ export function GroundView({
           <Button
             onPress={() => createMarker()}
             disabled={isEmpty(completedTasks)}
-          >{t`marker.createMarker`}</Button>
+          >{t`app.marker.createMarker`}</Button>
         </Stack>
       </DrawMap>
     </SafeAreaView>

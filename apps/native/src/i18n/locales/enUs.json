@@ -32,6 +32,9 @@
   "app":{
     "task":{
       "addTask":"Add Task"
+    },
+    "marker":{
+      "createMarker":"Create Marker"
     }
   },
   "status":{
