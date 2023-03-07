@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GroundView } from './GroundView';
 import { HomeRoot } from './HomeRoot';
+import { InviteUser } from './InviteUser';
 import { Profile } from './Profile';
 import { Project } from './Project';
 import { ProjectCreate } from './ProjectCreate';
@@ -23,6 +24,7 @@ export function HomeScreens() {
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />
       <HomeStack.Screen name="ProjectCreate" component={ProjectCreate} />
       <HomeStack.Screen name="GroundView" component={GroundView} />
+      <HomeStack.Screen name="InviteUser" component={InviteUser} />
     </HomeStack.Navigator>
   );
 }

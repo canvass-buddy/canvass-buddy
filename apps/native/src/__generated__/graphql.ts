@@ -170,7 +170,7 @@ export type Project = {
   area: ProjectArea;
   id: Scalars['String'];
   markers?: Maybe<Array<Maybe<Marker>>>;
-  tasks?: Maybe<Array<Maybe<Task>>>;
+  tasks?: Maybe<Array<Task>>;
   title: Scalars['String'];
   users?: Maybe<Array<User>>;
 };
@@ -358,7 +358,7 @@ export type ProjectQueryVariables = Exact<{
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', user?: { __typename?: 'User', project?: { __typename?: 'Project', title: string, tasks?: Array<{ __typename?: 'Task', id: string, title: string, description: string, type: string } | null> | null, markers?: Array<{ __typename?: 'Marker', id: string, longitude: number, latitude: number } | null> | null, area: { __typename?: 'ProjectArea', x1: number, y1: number, x2: number, y2: number }, users?: Array<{ __typename?: 'User', id: string, name: string, profile?: { __typename?: 'Profile', image?: string | null } | null }> | null } | null } | null };
+export type ProjectQuery = { __typename?: 'Query', user?: { __typename?: 'User', project?: { __typename?: 'Project', title: string, tasks?: Array<{ __typename?: 'Task', id: string, title: string, description: string, type: string }> | null, markers?: Array<{ __typename?: 'Marker', id: string, longitude: number, latitude: number } | null> | null, area: { __typename?: 'ProjectArea', x1: number, y1: number, x2: number, y2: number }, users?: Array<{ __typename?: 'User', id: string, name: string, profile?: { __typename?: 'Profile', image?: string | null } | null }> | null } | null } | null };
 
 
 export const TasksQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TasksQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"team"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"teamId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]}}]} as unknown as DocumentNode<TasksQueryQuery, TasksQueryQueryVariables>;

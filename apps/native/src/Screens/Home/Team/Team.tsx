@@ -1,6 +1,7 @@
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
 import { Stack, Tiles } from '@mobily/stacks';
+import { Link } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Avatar,
@@ -104,6 +105,19 @@ export function Team({
             header={(props) => (
               <Text {...props} category="h6">{t`util.projects`}</Text>
             )}
+            footer={(props) => (
+              <Stack style={props?.style}>
+                <Button
+                  onPress={() =>
+                    navigation.push('ProjectCreate', {
+                      id: route.params.id,
+                    })
+                  }
+                >
+                  {t`util.createProject`}
+                </Button>
+              </Stack>
+            )}
           >
             <Stack space={2}>
               {data?.user?.team?.projects?.map((project) => (
@@ -120,21 +134,23 @@ export function Team({
                   }}
                 />
               ))}
-              <Button
-                onPress={() =>
-                  navigation.push('ProjectCreate', {
-                    id: route.params.id,
-                  })
-                }
-              >
-                {t`util.createProject`}
-              </Button>
             </Stack>
           </Card>
           <Card
             status="info"
             header={(props) => (
               <Text {...props} category="h6">{t`util.users`}</Text>
+            )}
+            footer={(props) => (
+              <Stack style={props?.style}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate('InviteUser', {
+                      teamId: route.params.id,
+                    })
+                  }
+                >{t`util.inviteUser`}</Button>
+              </Stack>
             )}
           >
             <Stack space={2}>

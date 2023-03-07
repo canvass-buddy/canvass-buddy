@@ -15,7 +15,9 @@ export type HomeStackParamList = {
   ProjectCreate: {
     id: string;
   };
-  InviteUser: undefined;
+  InviteUser: {
+    teamId: string;
+  };
   GroundView: {
     id: string;
   };

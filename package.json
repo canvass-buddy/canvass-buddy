@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "css-select": "^5.1.0",
-    "graphql": "^16.6.0"
+    "graphql": "^16.6.0",
+    "expo-clipboard": "~4.1.2"
   }
 }
