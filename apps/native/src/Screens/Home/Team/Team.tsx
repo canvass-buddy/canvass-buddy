@@ -22,6 +22,7 @@ import { HomeStackParamList } from '../types';
 const TEAM_QUERY = gql(/* GraphQL */ `
   query TeamPage($id: String!) {
     user {
+      id
       team(teamId: $id) {
         id
         title

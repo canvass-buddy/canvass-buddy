@@ -3,7 +3,9 @@ import { gql } from '../__generated__';
 export const PROJECT_QUERY = gql(/* GraphQL */ `
   query Project($id: String!) {
     user {
+      id
       project(id: $id) {
+        id
         title
         tasks {
           id
