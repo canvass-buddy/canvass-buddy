@@ -1,7 +1,7 @@
 import { FillView } from '@mobily/stacks';
 import { Text, useTheme } from '@ui-kitten/components';
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { imageUri } from '../../helpers';
 import { Team } from '../../__generated__/graphql';
 import { ResponsiveImage } from '../ResponsiveImage';
@@ -9,12 +9,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 interface TeamCardProps {
   team: Team;
+  onPress?(): void;
 }
 
-export const TeamCard: FC<TeamCardProps> = ({ team }) => {
+export const TeamCard: FC<TeamCardProps> = ({ team, onPress }) => {
   const theme = useTheme();
   return (
-    <View style={styles.outerContainer}>
+    <TouchableOpacity style={styles.outerContainer} onPress={onPress}>
       <ResponsiveImage
         aspect={[16, 9]}
         source={{ uri: imageUri(team.image) }}
@@ -26,7 +27,7 @@ export const TeamCard: FC<TeamCardProps> = ({ team }) => {
       <FillView style={styles.textContainer} alignY="bottom" padding={4}>
         <Text category="h1">{team.title}</Text>
       </FillView>
-    </View>
+    </TouchableOpacity>
   );
 };
 

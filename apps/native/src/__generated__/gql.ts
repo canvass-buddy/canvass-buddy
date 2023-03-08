@@ -17,7 +17,7 @@ const documents = {
     "\n  mutation Login($email: String!, $password: String!) {\n    auth: login(email: $email, password: $password) {\n      token\n    }\n  }\n": types.LoginDocument,
     "\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n": types.SignUpDocument,
     "\n  mutation CreateMarker($marker: CreateMarker!, $projectId: String!) {\n    createMarker(marker: $marker, projectId: $projectId) {\n      id\n    }\n  }\n": types.CreateMarkerDocument,
-    "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n": types.HomeQueryDocument,
+    "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n        image\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n": types.HomeQueryDocument,
     "\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n": types.UserQueryDocument,
     "\n  mutation DeleteProject($projectId: String!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
     "\n  mutation CreateProject(\n    $teamId: String!\n    $project: CreateProject!\n    $tasks: [CreateTask!]!\n  ) {\n    createProject(teamId: $teamId, project: $project, tasks: $tasks) {\n      id\n    }\n  }\n": types.CreateProjectDocument,
@@ -60,7 +60,7 @@ export function gql(source: "\n  mutation CreateMarker($marker: CreateMarker!, $
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n        image\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        title\n        image\n      }\n      projects {\n        id\n        title\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
