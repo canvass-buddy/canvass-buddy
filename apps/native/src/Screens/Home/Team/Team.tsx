@@ -13,9 +13,10 @@ import {
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Image, View, Platform, ScrollView } from 'react-native';
-import { ResponsiveImage, ScreenLayout } from '../../../Components';
+import { ResponsiveImage, ScreenLayout, TeamCard } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
+import { Team as ITeam } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const TEAM_QUERY = gql(/* GraphQL */ `
@@ -84,22 +85,23 @@ export function Team({
     <ScreenLayout>
       <ScrollView>
         <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-          <Card
-            status="primary"
-            header={(props) => (
-              <View style={props?.style}>
-                <Text category="h2">{data?.user?.team?.title}</Text>
-                <Text category="s1">{data?.user?.team?.description}</Text>
-              </View>
-            )}
-          >
-            {data?.user?.team?.image && (
-              <ResponsiveImage
-                source={{ uri: imageUri(data?.user?.team?.image ?? '') }}
-                aspect={[16, 9]}
-              />
-            )}
-          </Card>
+          {data && <TeamCard team={data?.user?.team as ITeam} />}
+          {/* <Card */}
+          {/*   status="primary" */}
+          {/*   header={(props) => ( */}
+          {/*     <View style={props?.style}> */}
+          {/*       <Text category="h2">{data?.user?.team?.title}</Text> */}
+          {/*       <Text category="s1">{data?.user?.team?.description}</Text> */}
+          {/*     </View> */}
+          {/*   )} */}
+          {/* > */}
+          {/*   {data?.user?.team?.image && ( */}
+          {/*     <ResponsiveImage */}
+          {/*       source={{ uri: imageUri(data?.user?.team?.image ?? '') }} */}
+          {/*       aspect={[16, 9]} */}
+          {/*     /> */}
+          {/*   )} */}
+          {/* </Card> */}
           <Card
             status="info"
             header={(props) => (
