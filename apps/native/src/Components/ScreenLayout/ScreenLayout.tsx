@@ -3,9 +3,5 @@ import { PropsWithChildren } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const ScreenLayout = ({ children }: PropsWithChildren) => {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Layout style={{ flexGrow: 1, height: '100%' }}>{children}</Layout>
-    </SafeAreaView>
-  );
+  return <Layout style={{ flexGrow: 1, height: '100%' }}>{children}</Layout>;
 };

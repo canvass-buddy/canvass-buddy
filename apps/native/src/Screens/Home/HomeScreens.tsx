@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import { GroundView } from './GroundView';
 import { HomeRoot } from './HomeRoot';
 import { InviteUser } from './InviteUser';
@@ -9,7 +9,7 @@ import { Team } from './Team';
 import { TeamCreate } from './TeamCreate';
 import { HomeStackParamList } from './types';
 
-const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const HomeStack = createSharedElementStackNavigator<HomeStackParamList>();
 
 export function HomeScreens() {
   return (
@@ -20,7 +20,14 @@ export function HomeScreens() {
       <HomeStack.Screen name="HomeRoot" component={HomeRoot} />
       <HomeStack.Screen name="Profile" component={Profile} />
       <HomeStack.Screen name="Project" component={Project} />
-      <HomeStack.Screen name="Team" component={Team} />
+      <HomeStack.Screen
+        name="Team"
+        component={Team}
+        sharedElements={(route, to) => {
+          if (to.name !== 'Team' && to.name !== 'HomeRoot') return [];
+          return [`team.${route.params.id}.card`];
+        }}
+      />
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />
       <HomeStack.Screen name="ProjectCreate" component={ProjectCreate} />
       <HomeStack.Screen name="GroundView" component={GroundView} />

@@ -12,8 +12,9 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { Platform } from 'react-native';
+import { Platform, TouchableOpacity } from 'react-native';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { SharedElement } from 'react-navigation-shared-element';
 import { ScreenLayout, TeamCard } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -128,58 +129,22 @@ export function HomeRoot({
               )}
             </Card>
             <Stack space={4}>
-              {data?.user?.teams?.map((team) => (
-                <TeamCard
-                  key={team?.id}
-                  team={team as Team}
-                  onPress={() => navigation.navigate('Team', { id: team.id })}
-                />
-              ))}
+              {data?.user?.teams?.map(
+                (team) =>
+                  team && (
+                    <TouchableOpacity
+                      key={team?.id}
+                      onPress={() =>
+                        navigation.navigate('Team', { id: team.id })
+                      }
+                    >
+                      <SharedElement id={`team.${team.id}.card`}>
+                        <TeamCard team={team as Team} />
+                      </SharedElement>
+                    </TouchableOpacity>
+                  )
+              )}
             </Stack>
-            {/* <Card */}
-            {/*   status="info" */}
-            {/*   header={(props) => ( */}
-            {/*     <View style={props?.style}> */}
-            {/*       <Text */}
-            {/*         category="h2" */}
-            {/*         style={styles.header} */}
-            {/*       >{t`util.teams`}</Text> */}
-            {/*     </View> */}
-            {/*   )} */}
-            {/* > */}
-            {/*   <Stack space={4}> */}
-            {/*     {data?.user?.teams?.length ? ( */}
-            {/*       data?.user?.teams?.map((project) => */}
-            {/*         project ? ( */}
-            {/*           <MenuItem */}
-            {/*             key={project.id} */}
-            {/*             title={project.title} */}
-            {/*             accessoryRight={() => ( */}
-            {/*               <AntDesign name="right" color="white" /> */}
-            {/*             )} */}
-            {/*             onPress={() => */}
-            {/*               navigation.navigate('Team', { */}
-            {/*                 id: project.id, */}
-            {/*               }) */}
-            {/*             } */}
-            {/*           /> */}
-            {/*         ) : ( */}
-            {/*           <></> */}
-            {/*         ) */}
-            {/*       ) */}
-            {/*     ) : ( */}
-            {/*       <MissingDataCard text={t`status.noTeams`} /> */}
-            {/*     )} */}
-            {/*     <Divider /> */}
-            {/*     <Button */}
-            {/*       status="info" */}
-            {/*       appearance="outline" */}
-            {/*       onPress={() => navigation.navigate('TeamCreate')} */}
-            {/*     > */}
-            {/*       Create Team */}
-            {/*     </Button> */}
-            {/*   </Stack> */}
-            {/* </Card> */}
           </Tiles>
         </ScrollView>
       </FillView>

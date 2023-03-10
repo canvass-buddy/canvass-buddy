@@ -13,6 +13,7 @@ import {
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Image, View, Platform, ScrollView } from 'react-native';
+import { SharedElement } from 'react-navigation-shared-element';
 import { ResponsiveImage, ScreenLayout, TeamCard } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
@@ -86,7 +87,11 @@ export function Team({
     <ScreenLayout>
       <ScrollView>
         <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-          {data && <TeamCard team={data?.user?.team as ITeam} />}
+          {data?.user?.team && (
+            <SharedElement id={`team.${route.params.id}.card`}>
+              <TeamCard team={data.user.team as ITeam} />
+            </SharedElement>
+          )}
           {/* <Card */}
           {/*   status="primary" */}
           {/*   header={(props) => ( */}

@@ -6,6 +6,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '@ui-kitten/components';
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../Providers';
 import { Home } from './Home';
 import { Login } from './Login';
@@ -34,29 +35,31 @@ export function Screens() {
   if (isLoadingToken) return <></>;
 
   return (
-    <NavigationContainer
-      linking={linking}
-      theme={{
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: theme['background-basic-color-1'],
-        },
-      }}
-    >
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}
+    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+      <NavigationContainer
+        linking={linking}
+        theme={{
+          ...DefaultTheme,
+          colors: {
+            ...DefaultTheme.colors,
+            background: theme['background-basic-color-1'],
+          },
+        }}
       >
-        {token ? (
-          <Stack.Screen name="Home" component={Home} />
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ headerShown: false }}
+        >
+          {token ? (
+            <Stack.Screen name="Home" component={Home} />
+          ) : (
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
