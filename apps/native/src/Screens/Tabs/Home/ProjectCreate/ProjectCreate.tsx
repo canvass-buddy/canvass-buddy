@@ -22,9 +22,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
-import { DrawMap, ScreenLayout, TaskList } from '../../../Components';
-import { gql } from '../../../__generated__';
-import { ProjectArea, Task } from '../../../__generated__/graphql';
+import { DrawMap, ScreenLayout, TaskList } from '../../../../Components';
+import { gql } from '../../../../__generated__';
+import { ProjectArea, Task } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const CREATE_PROJECT = gql(/* GraphQL */ `

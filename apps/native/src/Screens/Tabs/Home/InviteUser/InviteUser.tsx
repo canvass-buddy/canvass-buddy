@@ -10,9 +10,9 @@ import {
 } from '@ui-kitten/components';
 import * as Clipboard from 'expo-clipboard';
 import { useState } from 'react';
-import { ScreenLayout, TeamCard } from '../../../Components';
-import { TEAM_QUERY } from '../../../graphql/Team.graphql';
-import { Team } from '../../../__generated__/graphql';
+import { ScreenLayout, TeamCard } from '../../../../Components';
+import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
+import { Team } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 export function InviteUser({

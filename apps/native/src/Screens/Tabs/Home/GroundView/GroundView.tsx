@@ -9,10 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { DrawMap } from '../../../Components';
-import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
-import { gql } from '../../../__generated__';
-import { Marker } from '../../../__generated__/graphql';
+import { DrawMap } from '../../../../Components';
+import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
+import { gql } from '../../../../__generated__';
+import { Marker } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const CREATE_MARKER_MUTATION = gql(/* GraphQL */ `

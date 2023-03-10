@@ -16,10 +16,10 @@ import { useTranslation } from 'react-i18next';
 import { Platform, TouchableOpacity } from 'react-native';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
-import { ProjectList, ScreenLayout, TeamCard } from '../../../Components';
-import { imageUri } from '../../../helpers';
-import { gql } from '../../../__generated__';
-import { Project, Team } from '../../../__generated__/graphql';
+import { ProjectList, ScreenLayout, TeamCard } from '../../../../Components';
+import { imageUri } from '../../../../helpers';
+import { gql } from '../../../../__generated__';
+import { Project, Team } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const HOME_QUERY = gql(/* GraphQL */ `

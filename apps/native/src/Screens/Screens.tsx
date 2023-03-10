@@ -8,7 +8,7 @@ import { useTheme } from '@ui-kitten/components';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../Providers';
-import { Home } from './Home';
+import { Home } from './Tabs/Home';
 import { Login } from './Login';
 import { SignUp } from './SignUp';
 import { TabsScreens } from './Tabs/Tabs';
@@ -20,7 +20,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['localhost'],
   config: {
     screens: {
-      Home: {
+      Tabs: {
         path: '/',
       },
       Login: '/login',
@@ -52,7 +52,7 @@ export function Screens() {
           screenOptions={{ headerShown: false }}
         >
           {token ? (
-            <Stack.Screen name="Home" component={TabsScreens} />
+            <Stack.Screen name="Tabs" component={TabsScreens} />
           ) : (
             <>
               <Stack.Screen name="Login" component={Login} />

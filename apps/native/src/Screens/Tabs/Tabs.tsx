@@ -10,6 +10,7 @@ import {
   Icon,
 } from '@ui-kitten/components';
 import { TabParamList } from './types';
+import { Home } from './Home';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -45,7 +46,7 @@ export const TabsScreens = () => {
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <BottomTabBar {...props} />}
     >
-      <Tab.Screen name="Home" component={HomeComponent} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
       <Tab.Screen name="Profile" component={Search} />
     </Tab.Navigator>

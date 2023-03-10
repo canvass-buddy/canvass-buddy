@@ -4,9 +4,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Avatar, Layout, Text, TopNavigation } from '@ui-kitten/components';
 import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScreenLayout } from '../../../Components';
-import { imageUri } from '../../../helpers';
-import { gql } from '../../../__generated__';
+import { ScreenLayout } from '../../../../Components';
+import { imageUri } from '../../../../helpers';
+import { gql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
 
 const USER_QUERY = gql(/* GraphQL */ `

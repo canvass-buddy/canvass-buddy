@@ -9,10 +9,10 @@ import {
   ProjectTitle,
   ScreenLayout,
   UserList,
-} from '../../../Components';
-import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
-import { gql } from '../../../__generated__';
-import { User, Project as IProject } from '../../../__generated__/graphql';
+} from '../../../../Components';
+import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
+import { gql } from '../../../../__generated__';
+import { User, Project as IProject } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `

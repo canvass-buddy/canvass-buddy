@@ -21,11 +21,15 @@ import {
   ScreenLayout,
   TeamCard,
   UserList,
-} from '../../../Components';
-import { TEAM_QUERY } from '../../../graphql/Team.graphql';
-import { imageUri } from '../../../helpers';
-import { gql } from '../../../__generated__';
-import { Project, Team as ITeam, User } from '../../../__generated__/graphql';
+} from '../../../../Components';
+import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
+import { imageUri } from '../../../../helpers';
+import { gql } from '../../../../__generated__';
+import {
+  Project,
+  Team as ITeam,
+  User,
+} from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const DELETE_TEAM_MUTATION = gql(/* GraphQL */ `
