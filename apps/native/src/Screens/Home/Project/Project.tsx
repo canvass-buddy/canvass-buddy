@@ -1,24 +1,19 @@
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
-import { AntDesign } from '@expo/vector-icons';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Avatar,
-  Button,
-  Card,
-  Divider,
-  Menu,
-  MenuItem,
-  Text,
-} from '@ui-kitten/components';
+import { Button, Card, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { DrawMap, ScreenLayout, UserList } from '../../../Components';
-import { imageUri } from '../../../helpers';
-import { gql } from '../../../__generated__';
-import { HomeStackParamList } from '../types';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import {
+  DrawMap,
+  ProjectTitle,
+  ScreenLayout,
+  UserList,
+} from '../../../Components';
 import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
-import { User } from '../../../__generated__/graphql';
+import { gql } from '../../../__generated__';
+import { User, Project as IProject } from '../../../__generated__/graphql';
+import { HomeStackParamList } from '../types';
 
 const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
   mutation DeleteProject($projectId: String!) {
@@ -57,41 +52,28 @@ export function Project({
   const { t } = useTranslation();
   return (
     <ScreenLayout>
-      {data?.user?.project?.area && (
-        <DrawMap
-          style={styles.map}
-          initialRegion={{
-            longitude: data.user.project.area.x1,
-            latitude: data.user.project.area.y1,
-          }}
-          area={data.user.project.area}
+      <Stack padding={4} space={4}>
+        <ProjectTitle project={data?.user?.project as IProject} />
+        <Button
+          onPress={() =>
+            navigation.navigate('GroundView', {
+              id: route.params.id,
+            })
+          }
+        >{t`util.start`}</Button>
+        <UserList users={data?.user?.project?.users as User[]} />
+        <Card
+          status="danger"
+          header={(props) => (
+            <Text category="h2" {...props}>{t`util.settings`}</Text>
+          )}
         >
-          <Stack space={4}>
-            <Text category="h1">{data.user.project.title}</Text>
-            <Button
-              onPress={() =>
-                navigation.navigate('GroundView', {
-                  id: route.params.id,
-                })
-              }
-            >{t`util.start`}</Button>
-            <Divider />
-            <UserList users={data.user.project.users as User[]} />
-            <Divider />
-            <Card
-              status="danger"
-              header={(props) => (
-                <Text category="h2" {...props}>{t`util.settings`}</Text>
-              )}
-            >
-              <Button
-                status="danger"
-                onPress={() => deleteProject()}
-              >{t`util.delete`}</Button>
-            </Card>
-          </Stack>
-        </DrawMap>
-      )}
+          <Button
+            status="danger"
+            onPress={() => deleteProject()}
+          >{t`util.delete`}</Button>
+        </Card>
+      </Stack>
     </ScreenLayout>
   );
 }

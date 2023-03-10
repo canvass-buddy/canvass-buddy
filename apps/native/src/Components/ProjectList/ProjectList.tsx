@@ -1,10 +1,10 @@
 import { Stack } from '@mobily/stacks';
-import { useTheme, Text } from '@ui-kitten/components';
-import { t } from 'i18next';
+import { Text } from '@ui-kitten/components';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native';
 import { Project } from '../../__generated__/graphql';
+import { ProjectTitle } from '../ProjectTitle/ProjectTitle';
 
 interface ProjectListProps {
   projects?: Project[];
@@ -15,7 +15,6 @@ export const ProjectList: FC<ProjectListProps> = ({
   projects,
   onPressProject,
 }) => {
-  const theme = useTheme();
   const { t } = useTranslation();
   return (
     <Stack space={4}>
@@ -28,15 +27,7 @@ export const ProjectList: FC<ProjectListProps> = ({
               onPressProject?.(project);
             }}
           >
-            <Stack
-              style={{
-                borderBottomColor: theme['color-primary-default'],
-                borderBottomWidth: 1,
-              }}
-              paddingBottom={2}
-            >
-              <Text category="h4">{project.title}</Text>
-            </Stack>
+            <ProjectTitle project={project} />
           </TouchableOpacity>
         ))}
       </Stack>

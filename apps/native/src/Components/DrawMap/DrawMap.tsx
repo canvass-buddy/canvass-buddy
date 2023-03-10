@@ -36,6 +36,7 @@ interface DrawMapProps {
   style?: ViewStyle;
   drawerButtonDisabled?: boolean;
   markers?: Marker[];
+  isOpen?: boolean;
 }
 const themedStyles = StyleService.create({
   pannel: {
@@ -61,6 +62,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
     drawerButtonDisabled,
     children,
     markers,
+    isOpen,
   }) => {
     const [area, setArea] = useState<ProjectArea>(
       initialArea ?? {
@@ -73,11 +75,11 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
 
     const [isDrawing, setDrawing] = useState(false);
     const [isEditing, setEditing] = useState(false);
-    const [isPanelOpen, setPanelOpen] = useState(false);
+    const [isPanelOpen, setPanelOpen] = useState(isOpen);
 
     const theme = useTheme();
 
-    const value = useAnimatedValue(0.1);
+    const value = useAnimatedValue(isOpen ? 1 : 0.1);
     const panelHeight = value.interpolate({
       inputRange: [0, 1],
       outputRange: ['0%', '100%'],

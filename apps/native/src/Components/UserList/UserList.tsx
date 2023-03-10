@@ -7,7 +7,7 @@ import { imageUri } from '../../helpers';
 import { User } from '../../__generated__/graphql';
 
 interface UserListProps {
-  users: User[];
+  users?: User[];
 }
 
 export const UserList: FC<UserListProps> = ({ users }) => {
@@ -16,7 +16,7 @@ export const UserList: FC<UserListProps> = ({ users }) => {
   return (
     <Stack space={4}>
       <Text category="h2">{t`util.users`}</Text>
-      {users.map((user) => (
+      {users?.map((user) => (
         <TouchableOpacity>
           <Stack
             key={user.id}

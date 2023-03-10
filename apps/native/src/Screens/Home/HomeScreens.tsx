@@ -19,7 +19,13 @@ export function HomeScreens() {
     >
       <HomeStack.Screen name="HomeRoot" component={HomeRoot} />
       <HomeStack.Screen name="Profile" component={Profile} />
-      <HomeStack.Screen name="Project" component={Project} />
+      <HomeStack.Screen
+        name="Project"
+        component={Project}
+        sharedElements={(route) => {
+          return [`project.${route.params.id}.title`];
+        }}
+      />
       <HomeStack.Screen
         name="Team"
         component={Team}
