@@ -30,8 +30,13 @@ export function HomeScreens() {
         name="Team"
         component={Team}
         sharedElements={(route, to) => {
-          if (to.name !== 'Team' && to.name !== 'HomeRoot') return [];
-          return [`team.${route.params.id}.card`];
+          if (
+            to.name !== 'Team' &&
+            to.name !== 'HomeRoot' &&
+            to.name !== 'InviteUser'
+          )
+            return [];
+          return [`team.${route.params.id}.image`];
         }}
       />
       <HomeStack.Screen name="TeamCreate" component={TeamCreate} />

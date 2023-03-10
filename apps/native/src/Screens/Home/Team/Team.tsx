@@ -22,35 +22,11 @@ import {
   TeamCard,
   UserList,
 } from '../../../Components';
+import { TEAM_QUERY } from '../../../graphql/Team.graphql';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { Project, Team as ITeam, User } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
-
-const TEAM_QUERY = gql(/* GraphQL */ `
-  query TeamPage($id: String!) {
-    user {
-      id
-      team(teamId: $id) {
-        id
-        title
-        description
-        image
-        users {
-          id
-          name
-          profile {
-            image
-          }
-        }
-        projects {
-          id
-          title
-        }
-      }
-    }
-  }
-`);
 
 const DELETE_TEAM_MUTATION = gql(/* GraphQL */ `
   mutation DeleteTeam($teamId: String!) {
@@ -94,11 +70,7 @@ export function Team({
     <ScreenLayout>
       <ScrollView>
         <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-          {data?.user?.team && (
-            <SharedElement id={`team.${route.params.id}.card`}>
-              <TeamCard team={data.user.team as ITeam} />
-            </SharedElement>
-          )}
+          {data?.user?.team && <TeamCard team={data.user.team as ITeam} />}
           <Divider />
           <ProjectList
             projects={data?.user?.team?.projects as Project[]}

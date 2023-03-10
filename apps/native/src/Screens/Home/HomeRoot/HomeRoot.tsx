@@ -113,9 +113,7 @@ export function HomeRoot({
                         navigation.navigate('Team', { id: team.id })
                       }
                     >
-                      <SharedElement id={`team.${team.id}.card`}>
-                        <TeamCard team={team as Team} />
-                      </SharedElement>
+                      <TeamCard team={team as Team} />
                     </TouchableOpacity>
                   )
               )}

@@ -1,5 +1,6 @@
+import { useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
-import { Column, Columns, FillView } from '@mobily/stacks';
+import { Column, Columns, FillView, Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Button,
@@ -9,13 +10,19 @@ import {
 } from '@ui-kitten/components';
 import * as Clipboard from 'expo-clipboard';
 import { useState } from 'react';
-import { ScreenLayout } from '../../../Components';
+import { ScreenLayout, TeamCard } from '../../../Components';
+import { TEAM_QUERY } from '../../../graphql/Team.graphql';
+import { Team } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 export function InviteUser({
-  navigation,
   route,
 }: NativeStackScreenProps<HomeStackParamList, 'InviteUser'>) {
+  const { data } = useQuery(TEAM_QUERY, {
+    variables: {
+      id: route.params.teamId,
+    },
+  });
   const styles = useStyleSheet(s);
   const [str, setStr] = useState(
     `https://app.canvassbuddy.com/teams/${route.params.teamId}`
@@ -23,19 +30,22 @@ export function InviteUser({
   return (
     <ScreenLayout>
       <FillView alignY="center" alignX="center" padding={4}>
-        <Columns style={styles.outer} padding={2} alignY="center">
-          <Column width="4/5">
-            <Text appearance="hint">{str}</Text>
-          </Column>
-          <Column>
-            <Button
-              appearance="ghost"
-              onPress={() => Clipboard.setStringAsync(str)}
-            >
-              <AntDesign name="copy1" />
-            </Button>
-          </Column>
-        </Columns>
+        <Stack space={4}>
+          <TeamCard team={data?.user?.team as Team} />
+          <Columns style={styles.outer} padding={2} alignY="center">
+            <Column width="4/5">
+              <Text appearance="hint">{str}</Text>
+            </Column>
+            <Column>
+              <Button
+                appearance="ghost"
+                onPress={() => Clipboard.setStringAsync(str)}
+              >
+                <AntDesign name="copy1" />
+              </Button>
+            </Column>
+          </Columns>
+        </Stack>
       </FillView>
     </ScreenLayout>
   );
