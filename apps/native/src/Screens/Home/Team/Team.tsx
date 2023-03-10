@@ -92,22 +92,6 @@ export function Team({
               <TeamCard team={data.user.team as ITeam} />
             </SharedElement>
           )}
-          {/* <Card */}
-          {/*   status="primary" */}
-          {/*   header={(props) => ( */}
-          {/*     <View style={props?.style}> */}
-          {/*       <Text category="h2">{data?.user?.team?.title}</Text> */}
-          {/*       <Text category="s1">{data?.user?.team?.description}</Text> */}
-          {/*     </View> */}
-          {/*   )} */}
-          {/* > */}
-          {/*   {data?.user?.team?.image && ( */}
-          {/*     <ResponsiveImage */}
-          {/*       source={{ uri: imageUri(data?.user?.team?.image ?? '') }} */}
-          {/*       aspect={[16, 9]} */}
-          {/*     /> */}
-          {/*   )} */}
-          {/* </Card> */}
           <Card
             status="info"
             header={(props) => (

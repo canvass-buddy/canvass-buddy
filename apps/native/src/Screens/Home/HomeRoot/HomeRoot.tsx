@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Text,
+  useTheme,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { Platform, TouchableOpacity } from 'react-native';
@@ -71,6 +72,8 @@ export function HomeRoot({
   const { data } = useQuery(HOME_QUERY);
   const { t } = useTranslation();
 
+  const theme = useTheme();
+
   return (
     <ScreenLayout>
       <FillView alignY="between">
@@ -82,52 +85,41 @@ export function HomeRoot({
             paddingBottom={20}
             columns={Platform.OS === 'web' ? 3 : 1}
           >
-            <Card
-              onPress={() => navigation.navigate('Profile', {})}
-              status="primary"
-            >
-              <Stack align="center" padding={4} space={4}>
-                {data?.user?.profile?.image && (
-                  <Avatar
-                    source={{ uri: imageUri(data?.user?.profile?.image) }}
-                  />
-                )}
-                <Text category="h2">{data?.user?.name}</Text>
-                <Text category="s1" appearance="hint">
-                  Minneapolis, Minnesota
-                </Text>
-              </Stack>
-            </Card>
-            <Card
-              status="info"
-              header={(props) => (
-                <View style={props?.style}>
-                  <Text
-                    category="h2"
-                    style={styles.header}
-                  >{t`util.projects`}</Text>
-                </View>
+            <Stack horizontal space={4} align="center">
+              {data?.user?.profile?.image && (
+                <Avatar
+                  source={{ uri: imageUri(data?.user?.profile?.image) }}
+                  size="large"
+                />
               )}
-            >
-              {data?.user?.projects?.length ? (
-                data.user.projects.map((project) => (
-                  <MenuItem
-                    key={project.id}
-                    title={project.title}
-                    accessoryRight={() => (
-                      <AntDesign name="right" color="white" />
-                    )}
-                    onPress={() =>
-                      navigation.navigate('Project', {
-                        id: project.id,
-                      })
-                    }
-                  />
-                ))
-              ) : (
-                <MissingDataCard text={t`status.noProjects`} />
-              )}
-            </Card>
+              <Text category="h1">{data?.user?.name}</Text>
+            </Stack>
+            <Divider />
+            <Text category="h2">{t`util.projects`}</Text>
+            <Stack space={4}>
+              {data?.user?.projects?.map((project) => (
+                <TouchableOpacity
+                  key={project.id}
+                  onPress={() =>
+                    navigation.navigate('Project', {
+                      id: project.id,
+                    })
+                  }
+                >
+                  <Stack
+                    style={{
+                      borderBottomColor: theme['color-primary-default'],
+                      borderBottomWidth: 1,
+                    }}
+                    paddingBottom={2}
+                  >
+                    <Text category="h4">{project.title}</Text>
+                  </Stack>
+                </TouchableOpacity>
+              ))}
+            </Stack>
+            <Divider />
+            <Text category="h2">{t`util.teams`}</Text>
             <Stack space={4}>
               {data?.user?.teams?.map(
                 (team) =>
