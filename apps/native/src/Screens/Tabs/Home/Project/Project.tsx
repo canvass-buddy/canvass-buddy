@@ -50,10 +50,11 @@ export function Project({
     },
   });
   const { t } = useTranslation();
+  const project = data?.user?.project ?? route.params.project;
   return (
     <ScreenLayout>
       <Stack padding={4} space={4}>
-        <ProjectTitle project={data?.user?.project as IProject} />
+        <ProjectTitle project={project as IProject} />
         <Button
           onPress={() =>
             navigation.navigate('GroundView', {

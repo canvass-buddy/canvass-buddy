@@ -1,21 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { AntDesign } from '@expo/vector-icons';
 import { FillView, Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Avatar,
-  Button,
-  Card,
-  Divider,
-  Menu,
-  MenuItem,
-  Text,
-  useTheme,
-} from '@ui-kitten/components';
+import { Avatar, Card, Divider, Text, useTheme } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { Platform, TouchableOpacity } from 'react-native';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { SharedElement } from 'react-navigation-shared-element';
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { ProjectList, ScreenLayout, TeamCard } from '../../../../Components';
 import { imageUri } from '../../../../helpers';
 import { gql } from '../../../../__generated__';
@@ -36,8 +29,7 @@ const HOME_QUERY = gql(/* GraphQL */ `
         image
       }
       projects {
-        id
-        title
+        ...ProjectDetails
       }
     }
   }
@@ -98,7 +90,7 @@ export function HomeRoot({
             <ProjectList
               projects={(data?.user?.projects as Project[]) ?? []}
               onPressProject={(project) =>
-                navigation.navigate('Project', { id: project.id })
+                navigation.navigate('Project', { id: project.id, project })
               }
             />
             <Divider />
@@ -110,7 +102,7 @@ export function HomeRoot({
                     <TouchableOpacity
                       key={team?.id}
                       onPress={() =>
-                        navigation.navigate('Team', { id: team.id })
+                        navigation.navigate('Team', { id: team.id, team })
                       }
                     >
                       <TeamCard team={team as Team} />

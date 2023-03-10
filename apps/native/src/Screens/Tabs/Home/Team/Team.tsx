@@ -1,29 +1,16 @@
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
-import { AntDesign } from '@expo/vector-icons';
-import { Stack, Tiles } from '@mobily/stacks';
-import { Link } from '@react-navigation/native';
+import { Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  Avatar,
-  Button,
-  Card,
-  Divider,
-  Menu,
-  MenuItem,
-  Text,
-} from '@ui-kitten/components';
+import { Button, Card, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Image, View, Platform, ScrollView } from 'react-native';
-import { SharedElement } from 'react-navigation-shared-element';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
 import {
   ProjectList,
-  ResponsiveImage,
   ScreenLayout,
   TeamCard,
   UserList,
 } from '../../../../Components';
 import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
-import { imageUri } from '../../../../helpers';
 import { gql } from '../../../../__generated__';
 import {
   Project,
@@ -70,11 +57,13 @@ export function Team({
 
   const { t } = useTranslation();
 
+  const team = data?.user?.team ?? route.params.team;
+
   return (
     <ScreenLayout>
       <ScrollView>
         <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-          {data?.user?.team && <TeamCard team={data.user.team as ITeam} />}
+          {team && <TeamCard team={team as ITeam} />}
           <Divider />
           <ProjectList
             projects={data?.user?.team?.projects as Project[]}
@@ -85,7 +74,7 @@ export function Team({
             }
           />
           <Divider />
-          <UserList users={(data?.user?.team?.users as User[]) ?? []} />
+          <UserList users={(team?.users as User[]) ?? []} />
           <Button
             appearance="outline"
             onPress={() =>

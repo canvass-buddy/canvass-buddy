@@ -1,0 +1,4 @@
+{
+  "schema": "./apps/api/**/*.graphql",
+  "documents":"./apps/native/**/*.graphql"
+}

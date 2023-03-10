@@ -1,4 +1,4 @@
-import { InviteUser } from './InviteUser';
+import { ProjectDetailsFragment, Team } from '../../../__generated__/graphql';
 
 export type HomeStackParamList = {
   HomeRoot: undefined;
@@ -8,9 +8,11 @@ export type HomeStackParamList = {
   TeamCreate: undefined;
   Team: {
     id: string;
+    team?: Partial<Team>;
   };
   Project: {
     id: string;
+    project?: ProjectDetailsFragment;
   };
   ProjectCreate: {
     id: string;
