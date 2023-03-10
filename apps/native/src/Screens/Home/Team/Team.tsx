@@ -7,6 +7,7 @@ import {
   Avatar,
   Button,
   Card,
+  Divider,
   Menu,
   MenuItem,
   Text,
@@ -14,10 +15,15 @@ import {
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Image, View, Platform, ScrollView } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
-import { ResponsiveImage, ScreenLayout, TeamCard } from '../../../Components';
+import {
+  ProjectList,
+  ResponsiveImage,
+  ScreenLayout,
+  TeamCard,
+} from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
-import { Team as ITeam } from '../../../__generated__/graphql';
+import { Project, Team as ITeam } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const TEAM_QUERY = gql(/* GraphQL */ `
@@ -92,42 +98,16 @@ export function Team({
               <TeamCard team={data.user.team as ITeam} />
             </SharedElement>
           )}
-          <Card
-            status="info"
-            header={(props) => (
-              <Text {...props} category="h6">{t`util.projects`}</Text>
-            )}
-            footer={(props) => (
-              <Stack style={props?.style}>
-                <Button
-                  onPress={() =>
-                    navigation.push('ProjectCreate', {
-                      id: route.params.id,
-                    })
-                  }
-                >
-                  {t`util.createProject`}
-                </Button>
-              </Stack>
-            )}
-          >
-            <Stack space={2}>
-              {data?.user?.team?.projects?.map((project) => (
-                <MenuItem
-                  key={project.id}
-                  title={project.title}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Project', {
-                      id: project.id,
-                    });
-                  }}
-                />
-              ))}
-            </Stack>
-          </Card>
+          <Divider />
+          <ProjectList
+            projects={data?.user?.team?.projects as Project[]}
+            onPressProject={(project) =>
+              navigation.navigate('Project', {
+                id: project.id,
+              })
+            }
+          />
+          <Divider />
           <Card
             status="info"
             header={(props) => (

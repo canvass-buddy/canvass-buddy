@@ -16,10 +16,10 @@ import { useTranslation } from 'react-i18next';
 import { Platform, TouchableOpacity } from 'react-native';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
-import { ScreenLayout, TeamCard } from '../../../Components';
+import { ProjectList, ScreenLayout, TeamCard } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
-import { Team } from '../../../__generated__/graphql';
+import { Project, Team } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const HOME_QUERY = gql(/* GraphQL */ `
@@ -95,29 +95,12 @@ export function HomeRoot({
               <Text category="h1">{data?.user?.name}</Text>
             </Stack>
             <Divider />
-            <Text category="h2">{t`util.projects`}</Text>
-            <Stack space={4}>
-              {data?.user?.projects?.map((project) => (
-                <TouchableOpacity
-                  key={project.id}
-                  onPress={() =>
-                    navigation.navigate('Project', {
-                      id: project.id,
-                    })
-                  }
-                >
-                  <Stack
-                    style={{
-                      borderBottomColor: theme['color-primary-default'],
-                      borderBottomWidth: 1,
-                    }}
-                    paddingBottom={2}
-                  >
-                    <Text category="h4">{project.title}</Text>
-                  </Stack>
-                </TouchableOpacity>
-              ))}
-            </Stack>
+            <ProjectList
+              projects={(data?.user?.projects as Project[]) ?? []}
+              onPressProject={(project) =>
+                navigation.navigate('Project', { id: project.id })
+              }
+            />
             <Divider />
             <Text category="h2">{t`util.teams`}</Text>
             <Stack space={4}>
