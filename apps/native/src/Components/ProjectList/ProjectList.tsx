@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native';
 import { Project } from '../../__generated__/graphql';
 
 interface ProjectListProps {
-  projects: Project[];
+  projects?: Project[];
   onPressProject?(project: Project): void;
 }
 
@@ -21,7 +21,7 @@ export const ProjectList: FC<ProjectListProps> = ({
     <Stack space={4}>
       <Text category="h2">{t`util.projects`}</Text>
       <Stack space={4}>
-        {projects.map((project) => (
+        {projects?.map((project) => (
           <TouchableOpacity
             key={project.id}
             onPress={() => {

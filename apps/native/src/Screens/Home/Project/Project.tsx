@@ -12,12 +12,13 @@ import {
   Text,
 } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { DrawMap, ScreenLayout } from '../../../Components';
+import { DrawMap, ScreenLayout, UserList } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
 import { HomeStackParamList } from '../types';
 import { ScrollView, StyleSheet } from 'react-native';
 import { PROJECT_QUERY } from '../../../graphql/Project.graphql';
+import { User } from '../../../__generated__/graphql';
 
 const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
   mutation DeleteProject($projectId: String!) {
@@ -67,7 +68,6 @@ export function Project({
         >
           <Stack space={4}>
             <Text category="h1">{data.user.project.title}</Text>
-            <Divider />
             <Button
               onPress={() =>
                 navigation.navigate('GroundView', {
@@ -75,32 +75,9 @@ export function Project({
                 })
               }
             >{t`util.start`}</Button>
-            <Card
-              header={(props) => (
-                <Text category="h2" {...props}>{t`util.users`}</Text>
-              )}
-              status="info"
-            >
-              <Menu>
-                {data?.user?.project?.users?.map((user) => (
-                  <MenuItem
-                    key={user.id}
-                    accessoryLeft={() => (
-                      <Avatar source={{ uri: imageUri(user.profile?.image) }} />
-                    )}
-                    accessoryRight={() => (
-                      <AntDesign name="right" color="white" />
-                    )}
-                    title={user.name}
-                    onPress={() =>
-                      navigation.navigate('Profile', {
-                        id: user.id,
-                      })
-                    }
-                  />
-                ))}
-              </Menu>
-            </Card>
+            <Divider />
+            <UserList users={data.user.project.users as User[]} />
+            <Divider />
             <Card
               status="danger"
               header={(props) => (

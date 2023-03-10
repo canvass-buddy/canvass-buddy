@@ -20,10 +20,11 @@ import {
   ResponsiveImage,
   ScreenLayout,
   TeamCard,
+  UserList,
 } from '../../../Components';
 import { imageUri } from '../../../helpers';
 import { gql } from '../../../__generated__';
-import { Project, Team as ITeam } from '../../../__generated__/graphql';
+import { Project, Team as ITeam, User } from '../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const TEAM_QUERY = gql(/* GraphQL */ `
@@ -108,45 +109,16 @@ export function Team({
             }
           />
           <Divider />
-          <Card
-            status="info"
-            header={(props) => (
-              <Text {...props} category="h6">{t`util.users`}</Text>
-            )}
-            footer={(props) => (
-              <Stack style={props?.style}>
-                <Button
-                  onPress={() =>
-                    navigation.navigate('InviteUser', {
-                      teamId: route.params.id,
-                    })
-                  }
-                >{t`util.inviteUser`}</Button>
-              </Stack>
-            )}
-          >
-            <Stack space={2}>
-              {data?.user?.team?.users?.map((user) => (
-                <MenuItem
-                  key={user.id}
-                  title={user.name}
-                  accessoryLeft={() => (
-                    <Avatar
-                      source={{ uri: imageUri(user.profile?.image ?? '') }}
-                    />
-                  )}
-                  accessoryRight={() => (
-                    <AntDesign name="right" color="white" />
-                  )}
-                  onPress={() => {
-                    navigation.navigate('Profile', {
-                      id: user.id,
-                    });
-                  }}
-                />
-              ))}
-            </Stack>
-          </Card>
+          <UserList users={(data?.user?.team?.users as User[]) ?? []} />
+          <Button
+            appearance="outline"
+            onPress={() =>
+              navigation.navigate('InviteUser', {
+                teamId: route.params.id,
+              })
+            }
+          >{t`util.inviteUser`}</Button>
+          <Divider />
           <Card
             header={(props) => (
               <Text {...props} category="h6">{t`util.settings`}</Text>
