@@ -11,6 +11,7 @@ import { useAuth } from '../Providers';
 import { Home } from './Home';
 import { Login } from './Login';
 import { SignUp } from './SignUp';
+import { TabsScreens } from './Tabs/Tabs';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -51,7 +52,7 @@ export function Screens() {
           screenOptions={{ headerShown: false }}
         >
           {token ? (
-            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Home" component={TabsScreens} />
           ) : (
             <>
               <Stack.Screen name="Login" component={Login} />
