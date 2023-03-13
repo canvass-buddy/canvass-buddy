@@ -11,6 +11,7 @@ import {
 } from '@ui-kitten/components';
 import { TabParamList } from './types';
 import { Home } from './Home';
+import { Search } from './Search/Search';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -54,4 +55,3 @@ export const TabsScreens = () => {
 };
 
 const HomeComponent = () => <Text>Home</Text>;
-const Search = () => <Text>Search</Text>;

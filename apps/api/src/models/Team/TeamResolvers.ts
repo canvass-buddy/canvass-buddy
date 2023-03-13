@@ -132,6 +132,7 @@ export const TeamResolvers: Resolvers = {
           private: false,
           title: {
             contains: args.title ?? '',
+            mode: 'insensitive',
           },
         },
       });

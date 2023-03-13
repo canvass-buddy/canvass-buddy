@@ -4,7 +4,8 @@ import { Stack } from '@mobily/stacks';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { Input } from '@ui-kitten/components';
 import { FC, useState } from 'react';
-import { TeamCard } from '../../../Components';
+import { ScrollView } from 'react-native';
+import { ScreenLayout, TeamCard } from '../../../Components';
 import { graphql } from '../../../__generated__';
 import { TabParamList } from '../types';
 
@@ -24,15 +25,22 @@ export const Search: FC<BottomTabScreenProps<TabParamList>> = () => {
       title,
     },
   });
+  // data?.teams[0].id
   return (
-    <Stack>
-      <Stack horizontal>
-        <Input />
-        <AntDesign name="search1" />
+    <ScreenLayout>
+      <Stack space={4} padding={4}>
+        <Stack horizontal align="center" space={2}>
+          <Input value={title} onChangeText={setTitle} />
+          <AntDesign name="search1" />
+        </Stack>
+        <ScrollView>
+          <Stack space={2}>
+            {data?.teams.map((team) => (
+              <TeamCard key={team.id} team={team} />
+            ))}
+          </Stack>
+        </ScrollView>
       </Stack>
-      {data?.teams.map((team) => (
-        <TeamCard id={team.id} team={team} />
-      ))}
-    </Stack>
+    </ScreenLayout>
   );
 };
