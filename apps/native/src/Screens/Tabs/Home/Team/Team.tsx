@@ -11,7 +11,7 @@ import {
   UserList,
 } from '../../../../Components';
 import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
-import { gql } from '../../../../__generated__';
+import { graphql } from '../../../../__generated__';
 import {
   Project,
   Team as ITeam,
@@ -19,7 +19,7 @@ import {
 } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
-const DELETE_TEAM_MUTATION = gql(/* GraphQL */ `
+const DELETE_TEAM_MUTATION = graphql(/* GraphQL */ `
   mutation DeleteTeam($teamId: String!) {
     deleteTeam(teamId: $teamId)
   }

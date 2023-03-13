@@ -1,20 +1,31 @@
 import { FillView } from '@mobily/stacks';
 import { Text, useTheme } from '@ui-kitten/components';
-import React, { FC } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { imageUri } from '../../helpers';
-import { Team } from '../../__generated__/graphql';
-import { ResponsiveImage } from '../ResponsiveImage';
 import { LinearGradient } from 'expo-linear-gradient';
+import React, { FC } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
+import { imageUri } from '../../helpers';
+import { FragmentType, graphql, useFragment } from '../../__generated__';
+import { ResponsiveImage } from '../ResponsiveImage';
+
+const TeamCard_TeamFragment = graphql(/* GraphQL */ `
+  fragment TeamCard_TeamFragment on Team {
+    id
+    private
+    image
+    title
+  }
+`);
 
 interface TeamCardProps {
-  team: Team;
+  team: FragmentType<typeof TeamCard_TeamFragment>;
   onPress?(): void;
 }
 
-export const TeamCard: FC<TeamCardProps> = ({ team, onPress }) => {
+export const TeamCard: FC<TeamCardProps> = ({ team: pTeam, onPress }) => {
   const theme = useTheme();
+  const team = useFragment(TeamCard_TeamFragment, pTeam);
+
   return (
     <SharedElement id={`team.${team.id}.image`}>
       <View style={styles.outerContainer}>

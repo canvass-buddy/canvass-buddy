@@ -1,6 +1,6 @@
-import { gql } from '../__generated__';
+import { graphql } from '../__generated__';
 
-export const PROJECT_FRAGMENT = gql(/* GraphQL */ `
+export const PROJECT_FRAGMENT = graphql(/* GraphQL */ `
   fragment ProjectDetails on Project {
     id
     title
@@ -31,7 +31,7 @@ export const PROJECT_FRAGMENT = gql(/* GraphQL */ `
   }
 `);
 
-export const PROJECT_QUERY = gql(/* GraphQL */ `
+export const PROJECT_QUERY = graphql(/* GraphQL */ `
   query Project($id: String!) {
     user {
       id

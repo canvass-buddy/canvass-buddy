@@ -11,11 +11,11 @@ import {
   UserList,
 } from '../../../../Components';
 import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
-import { gql } from '../../../../__generated__';
+import { graphql } from '../../../../__generated__';
 import { User, Project as IProject } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
-const DELETE_PROJECT_MUTATION = gql(/* GraphQL */ `
+const DELETE_PROJECT_MUTATION = graphql(/* GraphQL */ `
   mutation DeleteProject($projectId: String!) {
     deleteProject(projectId: $projectId)
   }

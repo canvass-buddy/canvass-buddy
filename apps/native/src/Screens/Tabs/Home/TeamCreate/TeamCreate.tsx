@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenLayout } from '../../../../Components';
-import { gql } from '../../../../__generated__';
+import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
 
-const CREATE_TEAM_MUTATION = gql(/* GraphQL */ `
+const CREATE_TEAM_MUTATION = graphql(/* GraphQL */ `
   mutation CreateTeam($team: CreateTeam!) {
     createTeam(team: $team) {
       id

@@ -8,6 +8,7 @@ export const ProjectResolvers: Resolvers = {
         data: {
           teamId: args.teamId,
           title: args.project.title,
+          private: true,
           area: {
             create: {
               ...args.project.area,

@@ -11,11 +11,11 @@ import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawMap } from '../../../../Components';
 import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
-import { gql } from '../../../../__generated__';
+import { graphql } from '../../../../__generated__';
 import { Marker } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
-const CREATE_MARKER_MUTATION = gql(/* GraphQL */ `
+const CREATE_MARKER_MUTATION = graphql(/* GraphQL */ `
   mutation CreateMarker($marker: CreateMarker!, $projectId: String!) {
     createMarker(marker: $marker, projectId: $projectId) {
       id

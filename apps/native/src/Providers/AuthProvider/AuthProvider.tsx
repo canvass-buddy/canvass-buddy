@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { gql } from '../../__generated__';
+import { graphql } from '../../__generated__';
 
 interface AuthProviderState {
   token?: string;
@@ -37,7 +37,7 @@ const AuthContext = createContext<AuthProviderState>({
   },
 });
 
-const LOGIN_QUERY = gql(/* GraphQL */ `
+const LOGIN_QUERY = graphql(/* GraphQL */ `
   mutation Login($email: String!, $password: String!) {
     auth: login(email: $email, password: $password) {
       token
@@ -45,7 +45,7 @@ const LOGIN_QUERY = gql(/* GraphQL */ `
   }
 `);
 
-const SIGN_UP_QUERY = gql(/* GraphQL */ `
+const SIGN_UP_QUERY = graphql(/* GraphQL */ `
   mutation SignUp(
     $email: String!
     $password: String!

@@ -13,7 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Geo: any;
   ProfileImage: any;
 };
 
@@ -45,6 +44,7 @@ export type CreateTeam = {
   image?: InputMaybe<Scalars['ProfileImage']>;
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+  private: Scalars['Boolean'];
   title: Scalars['String'];
 };
 
@@ -193,7 +193,13 @@ export type ProjectAreaInput = {
 
 export type Query = {
   __typename?: 'Query';
+  teams: Array<Team>;
   user?: Maybe<User>;
+};
+
+
+export type QueryTeamsArgs = {
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Task = {
@@ -211,6 +217,7 @@ export type Team = {
   image: Scalars['String'];
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+  private: Scalars['Boolean'];
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
   tasks?: Maybe<Array<Maybe<Task>>>;
@@ -249,6 +256,7 @@ export type UpdateTeam = {
   image?: InputMaybe<Scalars['ProfileImage']>;
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+  private: Scalars['Boolean'];
   title: Scalars['String'];
 };
 
@@ -350,7 +358,6 @@ export type ResolversTypes = {
   CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: ResolverTypeWrapper<Scalars['Float']>;
-  Geo: ResolverTypeWrapper<Scalars['Geo']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Marker: ResolverTypeWrapper<Marker>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -379,7 +386,6 @@ export type ResolversParentTypes = {
   CreateTask: CreateTask;
   CreateTeam: CreateTeam;
   Float: Scalars['Float'];
-  Geo: Scalars['Geo'];
   ID: Scalars['ID'];
   Marker: Marker;
   Mutation: {};
@@ -404,10 +410,6 @@ export type AuthPayloadResolvers<ContextType = Context, ParentType extends Resol
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-
-export interface GeoScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Geo'], any> {
-  name: 'Geo';
-}
 
 export type MarkerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Marker'] = ResolversParentTypes['Marker']> = {
   completedTasks?: Resolver<Array<ResolversTypes['Task']>, ParentType, ContextType>;
@@ -465,6 +467,7 @@ export type ProjectAreaResolvers<ContextType = Context, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
@@ -482,6 +485,7 @@ export type TeamResolvers<ContextType = Context, ParentType extends ResolversPar
   image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<TeamProjectArgs, 'id'>>;
   projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;
   tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
@@ -504,7 +508,6 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = Context> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
-  Geo?: GraphQLScalarType;
   Marker?: MarkerResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Profile?: ProfileResolvers<ContextType>;

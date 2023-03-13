@@ -7,6 +7,7 @@ export const TeamResolvers: Resolvers = {
     async createTeam(_, args, context) {
       const team = await prismaClient.team.create({
         data: {
+          private: args.team.private,
           title: args.team.title,
           description: args.team.description,
           longitude: args.team.longitude,
@@ -122,6 +123,19 @@ export const TeamResolvers: Resolvers = {
         },
       });
       return members.map((member) => member.user);
+    },
+  },
+  Query: {
+    async teams(_, args) {
+      const teams = await prismaClient.team.findMany({
+        where: {
+          private: false,
+          title: {
+            contains: args.title ?? '',
+          },
+        },
+      });
+      return teams;
     },
   },
 };

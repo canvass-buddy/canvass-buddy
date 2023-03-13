@@ -1,6 +1,4 @@
 
-scalar Geo
-
 type Mutation {
   createTeam(team: CreateTeam!): Team!
   updateTeamMembers(teamId: String!, memberIds: [String]!): Team!
@@ -8,10 +6,6 @@ type Mutation {
   deleteTeam(teamId: String!): Boolean!
 }
 
-type User {
-  teams: [Team]
-  team(teamId: String!): Team
-}
 
 input CreateTeam {
   title: String!
@@ -19,6 +13,7 @@ input CreateTeam {
   longitude: Float!
   latitude: Float!
   image: ProfileImage
+  private: Boolean!
 }
 
 input UpdateTeam {
@@ -28,6 +23,7 @@ input UpdateTeam {
   longitude: Float!
   latitude: Float!
   image: ProfileImage
+  private: Boolean!
 }
 
 type Team {
@@ -38,4 +34,14 @@ type Team {
   latitude: Float!
   image: String!
   users: [User!]
+  private: Boolean!
+}
+
+type User {
+  teams: [Team]
+  team(teamId: String!): Team
+}
+
+type Query {
+  teams(title: String): [Team!]!
 }

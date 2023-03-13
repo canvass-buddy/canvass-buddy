@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import { v4 } from 'uuid';
-import { gql } from '../../__generated__';
+import { graphql } from '../../__generated__';
 import { Task } from '../../__generated__/graphql';
 
 const styles = StyleSheet.create({
@@ -33,7 +33,7 @@ interface TaskListProps {
   onSave?(tasks: Task[]): void;
 }
 
-const TASKS_QUERY = gql(/* GraphQL */ `
+const TASKS_QUERY = graphql(/* GraphQL */ `
   query TasksQuery($teamId: String!) {
     user {
       team(teamId: $teamId) {

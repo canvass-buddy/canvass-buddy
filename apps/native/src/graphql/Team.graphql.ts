@@ -1,6 +1,6 @@
-import { gql } from '../__generated__';
+import { graphql } from '../__generated__';
 
-export const TEAM_QUERY = gql(/* GraphQL */ `
+export const TEAM_QUERY = graphql(/* GraphQL */ `
   query TeamPage($id: String!) {
     user {
       id
