@@ -193,8 +193,14 @@ export type ProjectAreaInput = {
 
 export type Query = {
   __typename?: 'Query';
+  team?: Maybe<Team>;
   teams: Array<Team>;
   user?: Maybe<User>;
+};
+
+
+export type QueryTeamArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -467,6 +473,7 @@ export type ProjectAreaResolvers<ContextType = Context, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType, RequireFields<QueryTeamArgs, 'id'>>;
   teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };

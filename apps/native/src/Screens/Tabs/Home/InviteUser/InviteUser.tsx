@@ -11,14 +11,21 @@ import {
 import * as Clipboard from 'expo-clipboard';
 import { useState } from 'react';
 import { ScreenLayout, TeamCard } from '../../../../Components';
-import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
-import { Team } from '../../../../__generated__/graphql';
+import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
+
+const INVITE_USER_QUERY = graphql(/* GraphQL */ `
+  query InviteUserQuery($id: String!) {
+    team(id: $id) {
+      ...TeamCard_TeamFragment
+    }
+  }
+`);
 
 export function InviteUser({
   route,
 }: NativeStackScreenProps<HomeStackParamList, 'InviteUser'>) {
-  const { data } = useQuery(TEAM_QUERY, {
+  const { data } = useQuery(INVITE_USER_QUERY, {
     variables: {
       id: route.params.teamId,
     },
@@ -31,7 +38,7 @@ export function InviteUser({
     <ScreenLayout>
       <FillView alignY="center" alignX="center" padding={4}>
         <Stack space={4}>
-          <TeamCard team={data?.user?.team as Team} />
+          {data?.team && <TeamCard team={data?.team} />}
           <Columns style={styles.outer} padding={2} alignY="center">
             <Column width="4/5">
               <Text appearance="hint">{str}</Text>

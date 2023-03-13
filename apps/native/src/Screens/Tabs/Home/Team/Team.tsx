@@ -3,20 +3,14 @@ import { Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Card, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { Platform, ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import {
   ProjectList,
   ScreenLayout,
   TeamCard,
   UserList,
 } from '../../../../Components';
-import { TEAM_QUERY } from '../../../../graphql/Team.graphql';
 import { graphql } from '../../../../__generated__';
-import {
-  Project,
-  Team as ITeam,
-  User,
-} from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const DELETE_TEAM_MUTATION = graphql(/* GraphQL */ `
@@ -30,6 +24,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+const TEAM_QUERY = graphql(/* GraphQL */ `
+  query TeamQuery($id: String!) {
+    team(id: $id) {
+      ...TeamCard_TeamFragment
+      users {
+        ...UserList_UserFragment
+      }
+      projects {
+        id
+        ...ProjectList_ProjectFragment
+      }
+    }
+  }
+`);
 
 export function Team({
   navigation,
@@ -57,24 +66,24 @@ export function Team({
 
   const { t } = useTranslation();
 
-  const team = data?.user?.team ?? route.params.team;
-
   return (
     <ScreenLayout>
       <ScrollView>
-        <Tiles space={4} padding={4} columns={Platform.OS === 'web' ? 3 : 1}>
-          {team && <TeamCard team={team as ITeam} />}
+        <Tiles space={4} padding={4} columns={1}>
+          {data?.team && <TeamCard team={data.team} />}
           <Divider />
-          <ProjectList
-            projects={data?.user?.team?.projects as Project[]}
-            onPressProject={(project) =>
-              navigation.navigate('Project', {
-                id: project.id,
-              })
-            }
-          />
+          {data?.team?.projects && (
+            <ProjectList
+              projects={data?.team?.projects}
+              onPressProject={(id) =>
+                navigation.navigate('Project', {
+                  id,
+                })
+              }
+            />
+          )}
           <Divider />
-          <UserList users={(team?.users as User[]) ?? []} />
+          {data?.team?.users && <UserList users={data.team.users} />}
           <Button
             appearance="outline"
             onPress={() =>

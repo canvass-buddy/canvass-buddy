@@ -25,7 +25,6 @@ export const Search: FC<BottomTabScreenProps<TabParamList>> = () => {
       title,
     },
   });
-  // data?.teams[0].id
   return (
     <ScreenLayout>
       <Stack space={4} padding={4}>

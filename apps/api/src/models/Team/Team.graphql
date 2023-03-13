@@ -44,4 +44,5 @@ type User {
 
 type Query {
   teams(title: String): [Team!]!
+  team(id: String!): Team
 }

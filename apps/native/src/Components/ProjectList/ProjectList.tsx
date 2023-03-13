@@ -4,22 +4,17 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native';
 import { FragmentType, graphql, useFragment } from '../../__generated__';
-import { Project } from '../../__generated__/graphql';
 import { ProjectTitle } from '../ProjectTitle/ProjectTitle';
 
-export const ProjectList_QueryFragment = graphql(/* GraphQL */ `
-  fragment ProjectList_QueryFragment on Query {
-    user {
-      projects {
-        id
-        ...ProjectTitle_ProjectFragment
-      }
-    }
+export const ProjectList_ProjectFragment = graphql(/* GraphQL */ `
+  fragment ProjectList_ProjectFragment on Project {
+    id
+    ...ProjectTitle_ProjectFragment
   }
 `);
 
 interface ProjectListProps {
-  projects?: FragmentType<typeof ProjectList_QueryFragment>;
+  projects?: FragmentType<typeof ProjectList_ProjectFragment>[];
   onPressProject?(id: string): void;
 }
 
@@ -28,12 +23,12 @@ export const ProjectList: FC<ProjectListProps> = ({
   onPressProject,
 }) => {
   const { t } = useTranslation();
-  const query = useFragment(ProjectList_QueryFragment, pProjects);
+  const query = useFragment(ProjectList_ProjectFragment, pProjects);
   return (
     <Stack space={4}>
       <Text category="h2">{t`util.projects`}</Text>
       <Stack space={4}>
-        {query?.user?.projects?.map((project) => (
+        {query?.map((project) => (
           <TouchableOpacity
             key={project.id}
             onPress={() => {

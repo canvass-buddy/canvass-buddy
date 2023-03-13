@@ -138,5 +138,18 @@ export const TeamResolvers: Resolvers = {
       });
       return teams;
     },
+    async team(_, args, context) {
+      const team = await prismaClient.team.findFirst({
+        where: {
+          id: args.id,
+          members: {
+            some: {
+              userId: context.userId,
+            },
+          },
+        },
+      });
+      return team;
+    },
   },
 };

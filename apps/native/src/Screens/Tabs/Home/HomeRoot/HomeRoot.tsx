@@ -23,9 +23,9 @@ const HOME_QUERY = graphql(/* GraphQL */ `
       }
       projects {
         id
+        ...ProjectList_ProjectFragment
       }
     }
-    ...ProjectList_QueryFragment
   }
 `);
 
@@ -34,6 +34,7 @@ export function HomeRoot({
 }: NativeStackScreenProps<HomeStackParamList, 'HomeRoot'>) {
   const { data } = useQuery(HOME_QUERY);
   const { t } = useTranslation();
+  console.log('data', data?.user?.projects);
 
   return (
     <ScreenLayout>
@@ -56,9 +57,9 @@ export function HomeRoot({
               <Text category="h1">{data?.user?.name}</Text>
             </Stack>
             <Divider />
-            {data?.user?.profile && (
+            {data?.user?.projects && (
               <ProjectList
-                projects={data}
+                projects={data.user.projects}
                 onPressProject={(id) => navigation.navigate('Project', { id })}
               />
             )}
