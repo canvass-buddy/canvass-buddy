@@ -4,5 +4,6 @@ export * from './TaskList';
 export * from './DrawMap';
 export * from './TeamCard/TeamCard';
 export * from './ProjectList/ProjectList';
-export * from './UserList/UserList';
 export * from './ProjectTitle/ProjectTitle';
+export * from './SearchBar/SearchBar';
+export * from './UserProfile/UserProfile';

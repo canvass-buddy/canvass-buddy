@@ -3,6 +3,7 @@ scalar ProfileImage
 
 type Query {
   user: User
+  users(name:String): [User]
 }
 
 type Mutation {

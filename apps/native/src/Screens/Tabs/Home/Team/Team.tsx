@@ -1,14 +1,14 @@
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
-import { Tiles } from '@mobily/stacks';
+import { Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Card, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native';
 import {
   ProjectList,
   ScreenLayout,
   TeamCard,
-  UserList,
+  UserProfile,
 } from '../../../../Components';
 import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
@@ -19,18 +19,13 @@ const DELETE_TEAM_MUTATION = graphql(/* GraphQL */ `
   }
 `);
 
-const styles = StyleSheet.create({
-  text: {
-    textAlign: 'center',
-  },
-});
-
 const TEAM_QUERY = graphql(/* GraphQL */ `
   query TeamQuery($id: String!) {
     team(id: $id) {
       ...TeamCard_TeamFragment
       users {
-        ...UserList_UserFragment
+        id
+        ...UserProfile_UserFragment
       }
       projects {
         id
@@ -83,7 +78,12 @@ export function Team({
             />
           )}
           <Divider />
-          {data?.team?.users && <UserList users={data.team.users} />}
+          <Stack space={4}>
+            <Text category="h2">{t`util.users`}</Text>
+            {data?.team?.users?.map((user) => (
+              <UserProfile key={user.id} user={user} />
+            ))}
+          </Stack>
           <Button
             appearance="outline"
             onPress={() =>

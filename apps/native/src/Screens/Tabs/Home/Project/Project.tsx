@@ -3,7 +3,11 @@ import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Card, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { ProjectTitle, ScreenLayout, UserList } from '../../../../Components';
+import {
+  ProjectTitle,
+  ScreenLayout,
+  UserProfile,
+} from '../../../../Components';
 import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -19,7 +23,8 @@ const PROJECT_QUERY = graphql(/* GraphQL */ `
       project(id: $id) {
         ...ProjectTitle_ProjectFragment
         users {
-          ...UserList_UserFragment
+          id
+          ...UserProfile_UserFragment
         }
       }
     }
@@ -59,7 +64,13 @@ export function Project({
             })
           }
         >{t`util.start`}</Button>
-        <UserList users={data?.user?.project?.users} />
+
+        <Stack space={4}>
+          <Text category="h2">{t`util.users`}</Text>
+          {data?.user?.project?.users?.map((user) => (
+            <UserProfile key={user.id} user={user} />
+          ))}
+        </Stack>
         <Card
           status="danger"
           header={(props) => (

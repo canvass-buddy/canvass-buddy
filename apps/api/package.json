@@ -8,6 +8,7 @@
     "file": "ts-node-dev --exit-child --respawn src/file-upload.ts",
     "start": "ts-node src/main.ts",
     "generate": "prisma generate && graphql-codegen",
+    "generate:watch":"graphql-codegen -w",
     "test": "jest",
     "test:watch": "jest",
     "prestart": "npm run generate",

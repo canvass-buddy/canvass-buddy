@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Resolvers } from '@resolvers-types';
+import { Resolvers, User } from '@resolvers-types';
 import { uploadFile } from 'src/helpers';
 import { APP_SECRET } from '../../constants';
 
@@ -69,6 +69,20 @@ export const UserResolvers: Resolvers = {
       });
       if (!user) throw new Error('User Not Found');
       return user;
+    },
+    async users(_, args) {
+      const users = await client.user.findMany({
+        where: {
+          name: {
+            contains: args.name ?? '',
+            mode: 'insensitive',
+          },
+        },
+        include: {
+          profile: {},
+        },
+      });
+      return users as User[];
     },
   },
   User: {

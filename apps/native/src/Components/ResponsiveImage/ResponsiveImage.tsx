@@ -1,14 +1,23 @@
-import { useState } from 'react';
-import { Image, ImageURISource, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  Animated,
+  Image,
+  ImageStyle,
+  ImageURISource,
+  useAnimatedValue,
+  View,
+} from 'react-native';
 
 export const ResponsiveImage = ({
   source,
   aspect,
   minHeight,
+  imageStyle,
 }: {
   source: ImageURISource;
   aspect: [number, number];
   minHeight?: number;
+  imageStyle?: ImageStyle;
 }) => {
   const [width, setWidth] = useState(0);
   const height = Math.round((width * aspect[1]) / aspect[0]);
@@ -21,7 +30,7 @@ export const ResponsiveImage = ({
     >
       <Image
         source={source}
-        style={{ width, height, borderRadius: 10, minHeight }}
+        style={[{ width, height, borderRadius: 10, minHeight }, imageStyle]}
       />
     </View>
   );

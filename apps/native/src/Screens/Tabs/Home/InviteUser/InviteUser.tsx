@@ -1,16 +1,21 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { AntDesign } from '@expo/vector-icons';
-import { Column, Columns, FillView, Stack } from '@mobily/stacks';
+import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
-  Button,
+  Divider,
   StyleService,
-  Text,
   useStyleSheet,
+  useTheme,
 } from '@ui-kitten/components';
-import * as Clipboard from 'expo-clipboard';
-import { useState } from 'react';
-import { ScreenLayout, TeamCard } from '../../../../Components';
+import React, { useState } from 'react';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import {
+  ScreenLayout,
+  SearchBar,
+  TeamCard,
+  UserProfile,
+} from '../../../../Components';
 import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
 
@@ -18,6 +23,26 @@ const INVITE_USER_QUERY = graphql(/* GraphQL */ `
   query InviteUserQuery($id: String!) {
     team(id: $id) {
       ...TeamCard_TeamFragment
+      users {
+        id
+      }
+    }
+  }
+`);
+
+const USERS_QUERY = graphql(/* GraphQL */ `
+  query InviteUsersUsersQuery($name: String!) {
+    users(name: $name) {
+      id
+      ...UserProfile_UserFragment
+    }
+  }
+`);
+
+const ADD_USER_MUTATION = graphql(/* GraphQL */ `
+  mutation AddUserMutation($teamId: String!, $memberIds: [String!]!) {
+    updateTeamMembers(teamId: $teamId, memberIds: $memberIds) {
+      id
     }
   }
 `);
@@ -25,35 +50,70 @@ const INVITE_USER_QUERY = graphql(/* GraphQL */ `
 export function InviteUser({
   route,
 }: NativeStackScreenProps<HomeStackParamList, 'InviteUser'>) {
-  const { data } = useQuery(INVITE_USER_QUERY, {
+  const [name, setName] = useState('');
+  const { data: teamData, refetch } = useQuery(INVITE_USER_QUERY, {
     variables: {
       id: route.params.teamId,
     },
   });
-  const styles = useStyleSheet(s);
-  const [str, setStr] = useState(
-    `https://app.canvassbuddy.com/teams/${route.params.teamId}`
-  );
+  const { data: userData } = useQuery(USERS_QUERY, {
+    variables: {
+      name,
+    },
+  });
+  const [dispatch] = useMutation(ADD_USER_MUTATION, {
+    onCompleted() {
+      refetch();
+    },
+  });
+  const theme = useTheme();
   return (
     <ScreenLayout>
-      <FillView alignY="center" alignX="center" padding={4}>
-        <Stack space={4}>
-          {data?.team && <TeamCard team={data?.team} />}
-          <Columns style={styles.outer} padding={2} alignY="center">
-            <Column width="4/5">
-              <Text appearance="hint">{str}</Text>
-            </Column>
-            <Column>
-              <Button
-                appearance="ghost"
-                onPress={() => Clipboard.setStringAsync(str)}
+      {teamData?.team && <TeamCard square team={teamData?.team} />}
+      <Stack space={4} padding={2} paddingTop={4}>
+        <SearchBar value={name} onChangeText={setName} />
+        <Divider />
+        <ScrollView>
+          <Stack space={4}>
+            {userData?.users?.map((user) => (
+              <TouchableOpacity
+                key={user?.id}
+                onPress={() =>
+                  dispatch({
+                    variables: {
+                      teamId: route.params.teamId,
+                      memberIds: [
+                        ...(teamData?.team?.users?.map((user) => user?.id) ??
+                          []),
+                        user?.id ?? '',
+                      ],
+                    },
+                  })
+                }
               >
-                <AntDesign name="copy1" />
-              </Button>
-            </Column>
-          </Columns>
-        </Stack>
-      </FillView>
+                <UserProfile
+                  user={user}
+                  accessoryRight={() =>
+                    teamData?.team?.users?.find((u) => u.id === user?.id) ? (
+                      <AntDesign
+                        name="check"
+                        size={24}
+                        color={theme['color-success-default']}
+                      />
+                    ) : (
+                      <AntDesign
+                        name="plus"
+                        size={24}
+                        color={theme['color-primary-default']}
+                      />
+                    )
+                  }
+                />
+              </TouchableOpacity>
+            ))}
+          </Stack>
+        </ScrollView>
+      </Stack>
     </ScreenLayout>
   );
 }

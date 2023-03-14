@@ -196,6 +196,7 @@ export type Query = {
   team?: Maybe<Team>;
   teams: Array<Team>;
   user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -206,6 +207,11 @@ export type QueryTeamArgs = {
 
 export type QueryTeamsArgs = {
   title?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryUsersArgs = {
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type Task = {
@@ -476,6 +482,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType, RequireFields<QueryTeamArgs, 'id'>>;
   teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
 };
 
 export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {

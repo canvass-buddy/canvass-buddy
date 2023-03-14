@@ -21,12 +21,12 @@ export const TeamCard_TeamFragment = graphql(/* GraphQL */ `
 
 interface TeamCardProps {
   team?: FragmentType<typeof TeamCard_TeamFragment> | null;
-  onPress?(): void;
+  square?: boolean;
 }
 
-export const TeamCard: FC<TeamCardProps> = ({ team: pTeam, onPress }) => {
+export const TeamCard: FC<TeamCardProps> = ({ square, ...props }) => {
   const theme = useTheme();
-  const team = useFragment(TeamCard_TeamFragment, pTeam);
+  const team = useFragment(TeamCard_TeamFragment, props.team);
 
   if (!team) return <></>;
 
@@ -36,10 +36,16 @@ export const TeamCard: FC<TeamCardProps> = ({ team: pTeam, onPress }) => {
         <ResponsiveImage
           aspect={[16, 9]}
           source={{ uri: imageUri(team.image) }}
+          imageStyle={{ borderRadius: square ? 0 : 10 }}
         />
         <LinearGradient
           style={styles.gradient}
-          colors={['transparent', theme['background-basic-color-4']]}
+          colors={[
+            'transparent',
+            square
+              ? theme['background-basic-color-2']
+              : theme['background-basic-color-4'],
+          ]}
         />
         <FillView style={styles.textContainer} alignY="bottom" padding={4}>
           <Stack horizontal space={2} align="center">
