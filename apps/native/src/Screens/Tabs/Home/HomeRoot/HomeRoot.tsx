@@ -4,7 +4,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Avatar, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, TouchableOpacity } from 'react-native';
-import { ProjectList, ScreenLayout, TeamCard } from '../../../../Components';
+import {
+  ProjectList,
+  ProjectTitle,
+  ScreenLayout,
+  TeamCard,
+} from '../../../../Components';
 import { imageUri } from '../../../../helpers';
 import { graphql } from '../../../../__generated__';
 import { HomeStackParamList } from '../types';
@@ -23,6 +28,7 @@ const HOME_QUERY = graphql(/* GraphQL */ `
       }
       projects {
         id
+        ...ProjectTitle_ProjectFragment
         ...ProjectList_ProjectFragment
       }
     }
@@ -57,12 +63,23 @@ export function HomeRoot({
               <Text category="h1">{data?.user?.name}</Text>
             </Stack>
             <Divider />
-            {data?.user?.projects && (
-              <ProjectList
-                projects={data.user.projects}
-                onPressProject={(id) => navigation.navigate('Project', { id })}
-              />
-            )}
+            <Text category="h2">{t`util.projects`}</Text>
+            {data?.user?.projects?.map((project) => (
+              <TouchableOpacity
+                key={project.id}
+                onPress={() =>
+                  navigation.navigate('Project', { id: project.id, project })
+                }
+              >
+                <ProjectTitle project={project} />
+              </TouchableOpacity>
+            ))}
+            {/* {data?.user?.projects && ( */}
+            {/*   <ProjectList */}
+            {/*     projects={data.user.projects} */}
+            {/*     onPressProject={(id) => navigation.navigate('Project', { id,  })} */}
+            {/*   /> */}
+            {/* )} */}
             <Divider />
             <Text category="h2">{t`util.teams`}</Text>
             <Stack space={4}>

@@ -1,4 +1,8 @@
-import { ProjectDetailsFragment, Team } from '../../../__generated__/graphql';
+import {
+  ProjectTitle_ProjectFragment,
+  TeamCard_TeamFragment,
+} from '../../../Components';
+import { FragmentType } from '../../../__generated__';
 
 export type HomeStackParamList = {
   HomeRoot: undefined;
@@ -8,11 +12,11 @@ export type HomeStackParamList = {
   TeamCreate: undefined;
   Team: {
     id: string;
-    team?: Partial<Team>;
+    team?: FragmentType<typeof TeamCard_TeamFragment>;
   };
   Project: {
     id: string;
-    project?: ProjectDetailsFragment;
+    project?: FragmentType<typeof ProjectTitle_ProjectFragment>;
   };
   ProjectCreate: {
     id: string;

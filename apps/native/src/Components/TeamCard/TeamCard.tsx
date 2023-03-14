@@ -8,7 +8,7 @@ import { imageUri } from '../../helpers';
 import { FragmentType, graphql, useFragment } from '../../__generated__';
 import { ResponsiveImage } from '../ResponsiveImage';
 
-const TeamCard_TeamFragment = graphql(/* GraphQL */ `
+export const TeamCard_TeamFragment = graphql(/* GraphQL */ `
   fragment TeamCard_TeamFragment on Team {
     id
     private
@@ -18,13 +18,15 @@ const TeamCard_TeamFragment = graphql(/* GraphQL */ `
 `);
 
 interface TeamCardProps {
-  team: FragmentType<typeof TeamCard_TeamFragment>;
+  team?: FragmentType<typeof TeamCard_TeamFragment> | null;
   onPress?(): void;
 }
 
 export const TeamCard: FC<TeamCardProps> = ({ team: pTeam, onPress }) => {
   const theme = useTheme();
   const team = useFragment(TeamCard_TeamFragment, pTeam);
+
+  if (!team) return <></>;
 
   return (
     <SharedElement id={`team.${team.id}.image`}>

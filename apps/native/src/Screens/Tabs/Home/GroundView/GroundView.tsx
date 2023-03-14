@@ -10,7 +10,6 @@ import { StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawMap } from '../../../../Components';
-import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
 import { graphql } from '../../../../__generated__';
 import { Marker } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
@@ -23,11 +22,46 @@ const CREATE_MARKER_MUTATION = graphql(/* GraphQL */ `
   }
 `);
 
+const GROUND_VIEW_QUERY = graphql(/* GraphQL */ `
+  query GroundViewQuery($id: String!) {
+    user {
+      project(id: $id) {
+        id
+        title
+        tasks {
+          id
+          title
+          description
+          type
+        }
+        markers {
+          id
+          longitude
+          latitude
+        }
+        area {
+          x1
+          y1
+          x2
+          y2
+        }
+        users {
+          id
+          name
+          profile {
+            image
+          }
+        }
+      }
+    }
+  }
+`);
+
 export function GroundView({
   route,
 }: NativeStackScreenProps<HomeStackParamList, 'GroundView'>) {
   const client = useApolloClient();
-  const { data } = useQuery(PROJECT_QUERY, {
+  const { data } = useQuery(GROUND_VIEW_QUERY, {
     variables: {
       id: route.params.id,
     },

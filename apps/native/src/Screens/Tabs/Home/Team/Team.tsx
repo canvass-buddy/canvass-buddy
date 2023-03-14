@@ -70,7 +70,7 @@ export function Team({
     <ScreenLayout>
       <ScrollView>
         <Tiles space={4} padding={4} columns={1}>
-          {data?.team && <TeamCard team={data.team} />}
+          <TeamCard team={route.params.team ?? data?.team} />
           <Divider />
           {data?.team?.projects && (
             <ProjectList

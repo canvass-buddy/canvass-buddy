@@ -1,18 +1,10 @@
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button, Card, Divider, Text } from '@ui-kitten/components';
+import { Button, Card, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
-import {
-  DrawMap,
-  ProjectTitle,
-  ScreenLayout,
-  UserList,
-} from '../../../../Components';
-import { PROJECT_QUERY } from '../../../../graphql/Project.graphql';
+import { ProjectTitle, ScreenLayout, UserList } from '../../../../Components';
 import { graphql } from '../../../../__generated__';
-import { User, Project as IProject } from '../../../../__generated__/graphql';
 import { HomeStackParamList } from '../types';
 
 const DELETE_PROJECT_MUTATION = graphql(/* GraphQL */ `
@@ -21,12 +13,18 @@ const DELETE_PROJECT_MUTATION = graphql(/* GraphQL */ `
   }
 `);
 
-const styles = StyleSheet.create({
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-});
+const PROJECT_QUERY = graphql(/* GraphQL */ `
+  query ProjectQuery($id: String!) {
+    user {
+      project(id: $id) {
+        ...ProjectTitle_ProjectFragment
+        users {
+          ...UserList_UserFragment
+        }
+      }
+    }
+  }
+`);
 
 export function Project({
   navigation,
@@ -50,11 +48,10 @@ export function Project({
     },
   });
   const { t } = useTranslation();
-  const project = data?.user?.project ?? route.params.project;
   return (
     <ScreenLayout>
       <Stack padding={4} space={4}>
-        <ProjectTitle project={project as IProject} />
+        <ProjectTitle project={route.params.project ?? data?.user?.project} />
         <Button
           onPress={() =>
             navigation.navigate('GroundView', {
@@ -62,7 +59,7 @@ export function Project({
             })
           }
         >{t`util.start`}</Button>
-        <UserList users={data?.user?.project?.users as User[]} />
+        <UserList users={data?.user?.project?.users} />
         <Card
           status="danger"
           header={(props) => (

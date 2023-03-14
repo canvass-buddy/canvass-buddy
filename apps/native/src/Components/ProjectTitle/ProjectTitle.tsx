@@ -12,7 +12,7 @@ export const ProjectTitle_ProjectFragment = graphql(/* GraphQL */ `
 `);
 
 interface ProjectTitleProps {
-  project?: FragmentType<typeof ProjectTitle_ProjectFragment>;
+  project?: FragmentType<typeof ProjectTitle_ProjectFragment> | null;
 }
 
 export const ProjectTitle: FC<ProjectTitleProps> = (props) => {

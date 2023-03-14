@@ -4,7 +4,12 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native';
 import { imageUri } from '../../helpers';
-import { FragmentType, graphql, useFragment } from '../../__generated__';
+import {
+  FragmentType,
+  graphql,
+  makeFragmentData,
+  useFragment,
+} from '../../__generated__';
 
 const UserList_UserFragment = graphql(/* GraphQL */ `
   fragment UserList_UserFragment on User {
@@ -17,7 +22,7 @@ const UserList_UserFragment = graphql(/* GraphQL */ `
 `);
 
 interface UserListProps {
-  users?: FragmentType<typeof UserList_UserFragment>[];
+  users?: FragmentType<typeof UserList_UserFragment>[] | null;
 }
 
 export const UserList: FC<UserListProps> = ({ users }) => {
