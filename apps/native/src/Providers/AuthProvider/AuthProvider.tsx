@@ -1,4 +1,4 @@
-import { useMutation, MutationFunction } from '@apollo/client';
+import { MutationFunction, useMutation } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,
@@ -19,7 +19,16 @@ interface AuthProviderState {
   >;
   signUp: MutationFunction<
     { auth: { token: string } },
-    { email: string; name: string; password: string; profileImage?: any }
+    {
+      user: {
+        email: string;
+        username: string;
+        firstName: string;
+        lastName: string;
+        password: string;
+        profileImage?: any;
+      };
+    }
   >;
   logout(): void;
 }
@@ -37,7 +46,7 @@ const AuthContext = createContext<AuthProviderState>({
   },
 });
 
-const LOGIN_QUERY = graphql(/* GraphQL */ `
+const LOGIN_MUTATION = graphql(/* GraphQL */ `
   mutation Login($email: String!, $password: String!) {
     auth: login(email: $email, password: $password) {
       token
@@ -45,19 +54,9 @@ const LOGIN_QUERY = graphql(/* GraphQL */ `
   }
 `);
 
-const SIGN_UP_QUERY = graphql(/* GraphQL */ `
-  mutation SignUp(
-    $email: String!
-    $password: String!
-    $name: String!
-    $profileImage: ProfileImage
-  ) {
-    auth: signUp(
-      password: $password
-      name: $name
-      email: $email
-      profileImage: $profileImage
-    ) {
+const SIGN_UP_MUTATION = graphql(/* GraphQL */ `
+  mutation SignUpThing($user: SignUpInput!) {
+    auth: signUp(user: $user) {
       token
     }
   }
@@ -75,14 +74,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     })();
   }, []);
 
-  const [login] = useMutation(LOGIN_QUERY, {
+  const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted: async ({ auth }) => {
       await AsyncStorage.setItem('token', auth.token);
       setToken(auth.token);
     },
   });
 
-  const [signUp] = useMutation(SIGN_UP_QUERY, {
+  const [signUp] = useMutation(SIGN_UP_MUTATION, {
     onCompleted: async ({ auth }) => {
       await AsyncStorage.setItem('token', auth.token);
       setToken(auth.token);

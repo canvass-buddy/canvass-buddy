@@ -30,7 +30,9 @@ export const MarkerResolvers: Resolvers = {
               task: {},
             },
           },
-          user: {},
+          user: {
+            include: { profile: {} },
+          },
         },
       });
 

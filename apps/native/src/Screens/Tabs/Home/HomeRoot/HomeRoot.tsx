@@ -9,6 +9,7 @@ import {
   ProjectTitle,
   ScreenLayout,
   TeamCard,
+  UserProfile,
 } from '../../../../Components';
 import { imageUri } from '../../../../helpers';
 import { graphql } from '../../../../__generated__';
@@ -18,10 +19,7 @@ const HOME_QUERY = graphql(/* GraphQL */ `
   query HomeQuery {
     user {
       id
-      name
-      profile {
-        image
-      }
+      ...UserProfile_UserFragment
       teams {
         id
         ...TeamCard_TeamFragment
@@ -40,7 +38,8 @@ export function HomeRoot({
 }: NativeStackScreenProps<HomeStackParamList, 'HomeRoot'>) {
   const { data } = useQuery(HOME_QUERY);
   const { t } = useTranslation();
-  console.log('data', data?.user?.projects);
+
+  console.log('data???', data);
 
   return (
     <ScreenLayout>
@@ -53,15 +52,7 @@ export function HomeRoot({
             paddingBottom={20}
             columns={1}
           >
-            <Stack horizontal space={4} align="center">
-              {data?.user?.profile?.image && (
-                <Avatar
-                  source={{ uri: imageUri(data?.user?.profile?.image) }}
-                  size="large"
-                />
-              )}
-              <Text category="h1">{data?.user?.name}</Text>
-            </Stack>
+            {data?.user && <UserProfile user={data.user} />}
             <Divider />
             <Text category="h2">{t`util.projects`}</Text>
             {data?.user?.projects?.map((project) => (

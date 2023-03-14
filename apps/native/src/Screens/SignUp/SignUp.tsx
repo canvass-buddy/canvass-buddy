@@ -40,12 +40,12 @@ export function SignUp({
     initialValues: {
       firstName: 'Erik',
       lastName: 'Badger',
+      username: 'GoldfishPi',
       email: 'erikbadger777@gmail.com',
       password: 'abcd1234',
       passwordConfirm: 'abcd1234',
     },
-    async onSubmit({ email, password, firstName, lastName }) {
-      const name = `${firstName} ${lastName}`;
+    async onSubmit({ email, password, firstName, lastName, username }) {
       // const profileImage = imageUri
       //   ? await fetch(imageUri).then((f) => f.blob())
       //   : null;
@@ -57,10 +57,14 @@ export function SignUp({
       });
       await signUp({
         variables: {
-          email,
-          password,
-          name,
-          profileImage,
+          user: {
+            email,
+            password,
+            profileImage,
+            firstName,
+            lastName,
+            username,
+          },
         },
       });
     },
@@ -106,6 +110,14 @@ export function SignUp({
                 />
               </Column>
             </Columns>
+            <Input
+              placeholder={t`auth.username`}
+              value={f.values.username}
+              onChangeText={f.handleChange('username')}
+              onBlur={f.handleBlur('username')}
+              status={f.errors.username ? 'danger' : 'basic'}
+              caption={f.errors.username}
+            />
             <Input
               placeholder={t`auth.email`}
               value={f.values.email}

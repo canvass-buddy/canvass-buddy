@@ -8,8 +8,10 @@ import { FragmentType, graphql, useFragment } from '../../__generated__';
 const UserProfile_UserFragment = graphql(/* GraphQL */ `
   fragment UserProfile_UserFragment on User {
     id
-    name
     profile {
+      firstName
+      lastName
+      username
       image
     }
   }
@@ -40,7 +42,13 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
         <Avatar source={{ uri: imageUri(user.profile?.image) }} />
       </Column>
       <Column width={'3/5'}>
-        <Text category="h4">{user.name}</Text>
+        <Stack>
+          <Stack horizontal space={2}>
+            <Text category="h4">{user.profile?.firstName}</Text>
+            <Text category="h4">{user.profile?.lastName}</Text>
+          </Stack>
+          <Text category="s2">{user.profile?.username}</Text>
+        </Stack>
       </Column>
       <Column width="1/5">{props.accessoryRight?.()}</Column>
     </Columns>

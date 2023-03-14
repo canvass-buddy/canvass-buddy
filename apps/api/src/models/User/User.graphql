@@ -7,8 +7,16 @@ type Query {
 }
 
 type Mutation {
-  signUp(email: String!, password: String!, name:String!, profileImage: ProfileImage): AuthPayload!
+  signUp(user: SignUpInput!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+}
+input SignUpInput {
+  email: String!
+  password: String!
+  username: String!
+  firstName: String!
+  lastName: String!
+  profileImage: ProfileImage
 }
 type AuthPayload {
   token: String!
@@ -17,11 +25,12 @@ type AuthPayload {
 
 type Profile {
   image: String
+  username: String!
+  firstName: String!
+  lastName: String!
 }
 
 type User {
   id: ID!
-  name: String!
-  email: String!
   profile: Profile
 }

@@ -17,16 +17,17 @@ const documents = {
     "\n  fragment ProjectTitle_ProjectFragment on Project {\n    id\n    title\n  }\n": types.ProjectTitle_ProjectFragmentFragmentDoc,
     "\n  query TasksQuery($teamId: String!) {\n    user {\n      team(teamId: $teamId) {\n        tasks {\n          id\n          title\n          description\n          type\n        }\n      }\n    }\n  }\n": types.TasksQueryDocument,
     "\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n    description\n  }\n": types.TeamCard_TeamFragmentFragmentDoc,
-    "\n  fragment UserProfile_UserFragment on User {\n    id\n    name\n    profile {\n      image\n    }\n  }\n": types.UserProfile_UserFragmentFragmentDoc,
+    "\n  fragment UserProfile_UserFragment on User {\n    id\n    profile {\n      firstName\n      lastName\n      username\n      image\n    }\n  }\n": types.UserProfile_UserFragmentFragmentDoc,
     "\n  mutation Login($email: String!, $password: String!) {\n    auth: login(email: $email, password: $password) {\n      token\n    }\n  }\n": types.LoginDocument,
-    "\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n": types.SignUpDocument,
+    "\n  mutation SignUpThing($user: SignUpInput!) {\n    auth: signUp(user: $user) {\n      token\n    }\n  }\n": types.SignUpThingDocument,
+    "\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n": types.ScreensQueryDocument,
     "\n  mutation CreateMarker($marker: CreateMarker!, $projectId: String!) {\n    createMarker(marker: $marker, projectId: $projectId) {\n      id\n    }\n  }\n": types.CreateMarkerDocument,
-    "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n        users {\n          id\n          name\n          profile {\n            image\n          }\n        }\n      }\n    }\n  }\n": types.GroundViewQueryDocument,
-    "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.HomeQueryDocument,
+    "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n      }\n    }\n  }\n": types.GroundViewQueryDocument,
+    "\n  query HomeQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.HomeQueryDocument,
     "\n  query InviteUserQuery($id: String!) {\n    team(id: $id) {\n      ...TeamCard_TeamFragment\n      users {\n        id\n      }\n    }\n  }\n": types.InviteUserQueryDocument,
     "\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.InviteUsersUsersQueryDocument,
     "\n  mutation AddUserMutation($teamId: String!, $memberIds: [String!]!) {\n    updateTeamMembers(teamId: $teamId, memberIds: $memberIds) {\n      id\n    }\n  }\n": types.AddUserMutationDocument,
-    "\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n": types.UserQueryDocument,
+    "\n  query UserQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.UserQueryDocument,
     "\n  mutation DeleteProject($projectId: String!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
     "\n  query ProjectQuery($id: String!) {\n    user {\n      project(id: $id) {\n        ...ProjectTitle_ProjectFragment\n        users {\n          id\n          ...UserProfile_UserFragment\n        }\n      }\n    }\n  }\n": types.ProjectQueryDocument,
     "\n  mutation CreateProject(\n    $teamId: String!\n    $project: CreateProject!\n    $tasks: [CreateTask!]!\n  ) {\n    createProject(teamId: $teamId, project: $project, tasks: $tasks) {\n      id\n    }\n  }\n": types.CreateProjectDocument,
@@ -69,7 +70,7 @@ export function graphql(source: "\n  fragment TeamCard_TeamFragment on Team {\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment UserProfile_UserFragment on User {\n    id\n    name\n    profile {\n      image\n    }\n  }\n"): (typeof documents)["\n  fragment UserProfile_UserFragment on User {\n    id\n    name\n    profile {\n      image\n    }\n  }\n"];
+export function graphql(source: "\n  fragment UserProfile_UserFragment on User {\n    id\n    profile {\n      firstName\n      lastName\n      username\n      image\n    }\n  }\n"): (typeof documents)["\n  fragment UserProfile_UserFragment on User {\n    id\n    profile {\n      firstName\n      lastName\n      username\n      image\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -77,7 +78,11 @@ export function graphql(source: "\n  mutation Login($email: String!, $password: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n"): (typeof documents)["\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n"];
+export function graphql(source: "\n  mutation SignUpThing($user: SignUpInput!) {\n    auth: signUp(user: $user) {\n      token\n    }\n  }\n"): (typeof documents)["\n  mutation SignUpThing($user: SignUpInput!) {\n    auth: signUp(user: $user) {\n      token\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n"): (typeof documents)["\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -85,11 +90,11 @@ export function graphql(source: "\n  mutation CreateMarker($marker: CreateMarker
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n        users {\n          id\n          name\n          profile {\n            image\n          }\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n        users {\n          id\n          name\n          profile {\n            image\n          }\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query HomeQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query HomeQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query HomeQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -105,7 +110,7 @@ export function graphql(source: "\n  mutation AddUserMutation($teamId: String!, 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n"): (typeof documents)["\n  query UserQuery {\n    user {\n      id\n      name\n      profile {\n        image\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query UserQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"): (typeof documents)["\n  query UserQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

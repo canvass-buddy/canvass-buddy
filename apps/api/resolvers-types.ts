@@ -129,10 +129,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationSignUpArgs = {
-  email: Scalars['String'];
-  name: Scalars['String'];
-  password: Scalars['String'];
-  profileImage?: InputMaybe<Scalars['ProfileImage']>;
+  user: SignUpInput;
 };
 
 
@@ -163,7 +160,10 @@ export type MutationUpdateTeamMembersArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
+  firstName: Scalars['String'];
   image?: Maybe<Scalars['String']>;
+  lastName: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Project = {
@@ -212,6 +212,15 @@ export type QueryTeamsArgs = {
 
 export type QueryUsersArgs = {
   name?: InputMaybe<Scalars['String']>;
+};
+
+export type SignUpInput = {
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
+  profileImage?: InputMaybe<Scalars['ProfileImage']>;
+  username: Scalars['String'];
 };
 
 export type Task = {
@@ -274,9 +283,7 @@ export type UpdateTeam = {
 
 export type User = {
   __typename?: 'User';
-  email: Scalars['String'];
   id: Scalars['ID'];
-  name: Scalars['String'];
   profile?: Maybe<Profile>;
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
@@ -379,6 +386,7 @@ export type ResolversTypes = {
   ProjectArea: ResolverTypeWrapper<ProjectArea>;
   ProjectAreaInput: ProjectAreaInput;
   Query: ResolverTypeWrapper<{}>;
+  SignUpInput: SignUpInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Task: ResolverTypeWrapper<Task>;
   Team: ResolverTypeWrapper<Team>;
@@ -407,6 +415,7 @@ export type ResolversParentTypes = {
   ProjectArea: ProjectArea;
   ProjectAreaInput: ProjectAreaInput;
   Query: {};
+  SignUpInput: SignUpInput;
   String: Scalars['String'];
   Task: Task;
   Team: Team;
@@ -443,7 +452,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   deleteTask?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'taskId'>>;
   deleteTeam?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTeamArgs, 'teamId'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'name' | 'password'>>;
+  signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'user'>>;
   updateMarker?: Resolver<ResolversTypes['Marker'], ParentType, ContextType, RequireFields<MutationUpdateMarkerArgs, 'marker'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'project'>>;
   updateTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskArgs, 'task'>>;
@@ -452,7 +461,10 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -509,9 +521,7 @@ export type TeamResolvers<ContextType = Context, ParentType extends ResolversPar
 };
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<UserProjectArgs, 'id'>>;
   projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;

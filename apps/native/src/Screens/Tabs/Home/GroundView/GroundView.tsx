@@ -45,13 +45,6 @@ const GROUND_VIEW_QUERY = graphql(/* GraphQL */ `
           x2
           y2
         }
-        users {
-          id
-          name
-          profile {
-            image
-          }
-        }
       }
     }
   }
