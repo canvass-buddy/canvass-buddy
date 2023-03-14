@@ -67,6 +67,7 @@ export const UserResolvers: Resolvers = {
   },
   Query: {
     async user(_, _args, context) {
+      if (!context.userId) throw new Error('auth required');
       const user = await client.user.findFirst({
         where: {
           id: context.userId,

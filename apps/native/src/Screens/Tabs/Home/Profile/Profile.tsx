@@ -21,7 +21,6 @@ export function Profile({}: NativeStackScreenProps<
   const { data } = useQuery(USER_QUERY);
   return (
     <ScreenLayout>
-      <TopNavigation title="Profile" alignment="center" />
       {data?.user && <UserProfile user={data.user} />}
     </ScreenLayout>
   );

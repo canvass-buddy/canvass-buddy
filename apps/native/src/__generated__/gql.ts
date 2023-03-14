@@ -34,6 +34,7 @@ const documents = {
     "\n  mutation DeleteTeam($teamId: String!) {\n    deleteTeam(teamId: $teamId)\n  }\n": types.DeleteTeamDocument,
     "\n  query TeamQuery($id: String!) {\n    team(id: $id) {\n      ...TeamCard_TeamFragment\n      users {\n        id\n        ...UserProfile_UserFragment\n      }\n      projects {\n        id\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.TeamQueryDocument,
     "\n  mutation CreateTeam($team: CreateTeam!) {\n    createTeam(team: $team) {\n      id\n    }\n  }\n": types.CreateTeamDocument,
+    "\n  query ProfileScreenQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.ProfileScreenQueryDocument,
     "\n  query TeamsSearch($title: String!) {\n    teams(title: $title) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n": types.TeamsSearchDocument,
 };
 
@@ -135,6 +136,10 @@ export function graphql(source: "\n  query TeamQuery($id: String!) {\n    team(i
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateTeam($team: CreateTeam!) {\n    createTeam(team: $team) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateTeam($team: CreateTeam!) {\n    createTeam(team: $team) {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query ProfileScreenQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"): (typeof documents)["\n  query ProfileScreenQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,4 +1,4 @@
-import { MutationFunction, useMutation } from '@apollo/client';
+import { MutationFunction, useApolloClient, useMutation } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,
@@ -66,6 +66,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [token, setToken] = useState<string | undefined>();
   const [isLoadingToken, setIsLoadingToken] = useState(false);
 
+  const client = useApolloClient();
+
   useEffect(() => {
     (async () => {
       setIsLoadingToken(true);
@@ -88,9 +90,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   });
 
-  const logout = () => {
+  const logout = async () => {
     setToken(undefined);
-    AsyncStorage.clear();
+    await AsyncStorage.removeItem('token');
+    client.resetStore();
+    client.refetchQueries({ include: 'active' });
   };
 
   return (

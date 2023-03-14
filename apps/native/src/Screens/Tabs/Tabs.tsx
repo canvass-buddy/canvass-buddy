@@ -12,6 +12,7 @@ import {
 import { TabParamList } from './types';
 import { Home } from './Home';
 import { Search } from './Search/Search';
+import { Profile } from './Profile/Profile';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -49,9 +50,7 @@ export const TabsScreens = () => {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Profile" component={Search} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };
-
-const HomeComponent = () => <Text>Home</Text>;
