@@ -43,17 +43,9 @@ export function Screens() {
   const { token, isLoadingToken } = useAuth();
   const theme = useTheme();
 
-  const { data, refetch, loading } = useQuery(SCREENS_QUERY, {
-    onCompleted() {
-      console.log('fetch completed');
-    },
-    onError() {
-      console.log('fetch errored');
-    },
-  });
+  const { data, refetch, loading } = useQuery(SCREENS_QUERY, {});
 
   useEffect(() => {
-    console.log('refetching...');
     refetch();
   }, [token]);
 
