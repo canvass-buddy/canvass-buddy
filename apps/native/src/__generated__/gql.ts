@@ -16,7 +16,7 @@ const documents = {
     "\n  fragment ProjectList_ProjectFragment on Project {\n    id\n    ...ProjectTitle_ProjectFragment\n  }\n": types.ProjectList_ProjectFragmentFragmentDoc,
     "\n  fragment ProjectTitle_ProjectFragment on Project {\n    id\n    title\n  }\n": types.ProjectTitle_ProjectFragmentFragmentDoc,
     "\n  query TasksQuery($teamId: String!) {\n    user {\n      team(teamId: $teamId) {\n        tasks {\n          id\n          title\n          description\n          type\n        }\n      }\n    }\n  }\n": types.TasksQueryDocument,
-    "\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n  }\n": types.TeamCard_TeamFragmentFragmentDoc,
+    "\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n    description\n  }\n": types.TeamCard_TeamFragmentFragmentDoc,
     "\n  fragment UserList_UserFragment on User {\n    id\n    name\n    profile {\n      image\n    }\n  }\n": types.UserList_UserFragmentFragmentDoc,
     "\n  mutation Login($email: String!, $password: String!) {\n    auth: login(email: $email, password: $password) {\n      token\n    }\n  }\n": types.LoginDocument,
     "\n  mutation SignUp(\n    $email: String!\n    $password: String!\n    $name: String!\n    $profileImage: ProfileImage\n  ) {\n    auth: signUp(\n      password: $password\n      name: $name\n      email: $email\n      profileImage: $profileImage\n    ) {\n      token\n    }\n  }\n": types.SignUpDocument,
@@ -63,7 +63,7 @@ export function graphql(source: "\n  query TasksQuery($teamId: String!) {\n    u
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n  }\n"): (typeof documents)["\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n  }\n"];
+export function graphql(source: "\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n    description\n  }\n"): (typeof documents)["\n  fragment TeamCard_TeamFragment on Team {\n    id\n    private\n    image\n    title\n    description\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

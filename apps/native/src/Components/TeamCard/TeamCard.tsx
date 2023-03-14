@@ -1,4 +1,5 @@
-import { FillView } from '@mobily/stacks';
+import { AntDesign } from '@expo/vector-icons';
+import { FillView, Stack } from '@mobily/stacks';
 import { Text, useTheme } from '@ui-kitten/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { FC } from 'react';
@@ -14,6 +15,7 @@ export const TeamCard_TeamFragment = graphql(/* GraphQL */ `
     private
     image
     title
+    description
   }
 `);
 
@@ -40,7 +42,15 @@ export const TeamCard: FC<TeamCardProps> = ({ team: pTeam, onPress }) => {
           colors={['transparent', theme['background-basic-color-4']]}
         />
         <FillView style={styles.textContainer} alignY="bottom" padding={4}>
-          <Text category="h1">{team.title}</Text>
+          <Stack horizontal space={2} align="center">
+            <AntDesign
+              name={team.private ? 'lock' : 'unlock'}
+              color="white"
+              size={24}
+            />
+            <Text category="h1">{team.title}</Text>
+          </Stack>
+          <Text category="s2">{team.description}</Text>
         </FillView>
       </View>
     </SharedElement>
@@ -59,9 +69,14 @@ const styles = StyleSheet.create({
   gradient: {
     position: 'absolute',
     width: '100%',
-    height: '50%',
+    height: '75%',
     bottom: 0,
     borderBottomRightRadius: 3,
     borderBottomLeftRadius: 3,
+  },
+  lock: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
 });
