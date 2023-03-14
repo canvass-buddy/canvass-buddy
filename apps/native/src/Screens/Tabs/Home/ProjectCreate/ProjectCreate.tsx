@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { Stack } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
@@ -57,6 +57,8 @@ export function ProjectCreate({
     });
   }, []);
 
+  const client = useApolloClient();
+
   const Schema = z.object({
     title: z.string().min(1, t`errors.required`),
     tasks: z
@@ -107,6 +109,7 @@ export function ProjectCreate({
           })),
         },
       });
+      client.refetchQueries({ include: 'active' });
       if (data) {
         navigation.navigate('Project', {
           id: data?.createProject.id,

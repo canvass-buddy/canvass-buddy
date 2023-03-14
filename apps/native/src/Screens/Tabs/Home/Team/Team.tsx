@@ -77,6 +77,12 @@ export function Team({
               }
             />
           )}
+          <Button
+            appearance="outline"
+            onPress={() =>
+              navigation.navigate('ProjectCreate', { id: route.params.id })
+            }
+          >{t`util.createProject`}</Button>
           <Divider />
           <Stack space={4}>
             <Text category="h2">{t`util.users`}</Text>

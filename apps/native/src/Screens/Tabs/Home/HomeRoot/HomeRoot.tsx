@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { FillView, Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Avatar, Divider, Text } from '@ui-kitten/components';
+import { Avatar, Button, Divider, Text } from '@ui-kitten/components';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {
@@ -39,8 +39,6 @@ export function HomeRoot({
   const { data } = useQuery(HOME_QUERY);
   const { t } = useTranslation();
 
-  console.log('data???', data);
-
   return (
     <ScreenLayout>
       <FillView alignY="between">
@@ -53,24 +51,25 @@ export function HomeRoot({
             columns={1}
           >
             {data?.user && <UserProfile user={data.user} />}
-            <Divider />
-            <Text category="h2">{t`util.projects`}</Text>
-            {data?.user?.projects?.map((project) => (
-              <TouchableOpacity
-                key={project.id}
-                onPress={() =>
-                  navigation.navigate('Project', { id: project.id, project })
-                }
-              >
-                <ProjectTitle project={project} />
-              </TouchableOpacity>
-            ))}
-            {/* {data?.user?.projects && ( */}
-            {/*   <ProjectList */}
-            {/*     projects={data.user.projects} */}
-            {/*     onPressProject={(id) => navigation.navigate('Project', { id,  })} */}
-            {/*   /> */}
-            {/* )} */}
+            {data?.user?.projects && (
+              <Stack space={2}>
+                <Divider />
+                <Text category="h2">{t`util.projects`}</Text>
+                {data.user.projects.map((project) => (
+                  <TouchableOpacity
+                    key={project.id}
+                    onPress={() =>
+                      navigation.navigate('Project', {
+                        id: project.id,
+                        project,
+                      })
+                    }
+                  >
+                    <ProjectTitle project={project} />
+                  </TouchableOpacity>
+                ))}
+              </Stack>
+            )}
             <Divider />
             <Text category="h2">{t`util.teams`}</Text>
             <Stack space={4}>
@@ -88,6 +87,10 @@ export function HomeRoot({
                   )
               )}
             </Stack>
+            <Button
+              onPress={() => navigation.navigate('TeamCreate')}
+              appearance="outline"
+            >{t`util.createTeam`}</Button>
           </Tiles>
         </ScrollView>
       </FillView>

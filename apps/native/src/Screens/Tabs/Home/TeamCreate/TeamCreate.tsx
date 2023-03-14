@@ -53,6 +53,7 @@ export function TeamCreate({
             image,
             longitude: 0,
             latitude: 0,
+            private: false,
           },
         },
       });
