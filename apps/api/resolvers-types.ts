@@ -213,7 +213,8 @@ export type QueryTeamsArgs = {
 
 
 export type QueryUsersArgs = {
-  name?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  size: Scalars['Int'];
 };
 
 
@@ -390,6 +391,7 @@ export type ResolversTypes = {
   CreateTeam: CreateTeam;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Marker: ResolverTypeWrapper<Marker>;
   Mutation: ResolverTypeWrapper<{}>;
   Profile: ResolverTypeWrapper<Profile>;
@@ -419,6 +421,7 @@ export type ResolversParentTypes = {
   CreateTeam: CreateTeam;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
+  Int: Scalars['Int'];
   Marker: Marker;
   Mutation: {};
   Profile: Profile;
@@ -506,7 +509,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType, RequireFields<QueryTeamArgs, 'id'>>;
   teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, RequireFields<QueryUsersArgs, 'name' | 'size'>>;
   validEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryValidEmailArgs, 'email'>>;
   validUsername?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryValidUsernameArgs, 'username'>>;
 };

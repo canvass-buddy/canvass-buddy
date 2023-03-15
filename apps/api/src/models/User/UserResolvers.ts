@@ -72,7 +72,7 @@ export const UserResolvers: Resolvers = {
           username: args.username,
         },
       });
-      return !!profile;
+      return !profile;
     },
     async validEmail(_, args) {
       const user = await client.user.findFirst({
@@ -80,7 +80,7 @@ export const UserResolvers: Resolvers = {
           email: args.email,
         },
       });
-      return !!user;
+      return !user;
     },
     async user(_, _args, context) {
       if (!context.userId) throw new Error('auth required');
@@ -97,6 +97,7 @@ export const UserResolvers: Resolvers = {
     },
     async users(_, args) {
       const users = await client.user.findMany({
+        take: args.size,
         where: {
           profile: {
             OR: [

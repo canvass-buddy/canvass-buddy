@@ -3,7 +3,7 @@ scalar ProfileImage
 
 type Query {
   user: User
-  users(name:String): [User]
+  users(name:String!, size:Int!): [User]
   validUsername(username:String!): Boolean!
   validEmail(email:String!): Boolean!
 }
