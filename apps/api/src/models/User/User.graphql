@@ -4,6 +4,8 @@ scalar ProfileImage
 type Query {
   user: User
   users(name:String): [User]
+  validUsername(username:String!): Boolean!
+  validEmail(email:String!): Boolean!
 }
 
 type Mutation {

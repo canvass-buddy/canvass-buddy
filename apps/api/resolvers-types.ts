@@ -197,6 +197,8 @@ export type Query = {
   teams: Array<Team>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
+  validEmail: Scalars['Boolean'];
+  validUsername: Scalars['Boolean'];
 };
 
 
@@ -212,6 +214,16 @@ export type QueryTeamsArgs = {
 
 export type QueryUsersArgs = {
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryValidEmailArgs = {
+  email: Scalars['String'];
+};
+
+
+export type QueryValidUsernameArgs = {
+  username: Scalars['String'];
 };
 
 export type SignUpInput = {
@@ -495,6 +507,8 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QueryUsersArgs>>;
+  validEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryValidEmailArgs, 'email'>>;
+  validUsername?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryValidUsernameArgs, 'username'>>;
 };
 
 export type TaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {

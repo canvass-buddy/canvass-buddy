@@ -66,6 +66,22 @@ export const UserResolvers: Resolvers = {
     },
   },
   Query: {
+    async validUsername(_, args) {
+      const profile = await client.profile.findFirst({
+        where: {
+          username: args.username,
+        },
+      });
+      return !!profile;
+    },
+    async validEmail(_, args) {
+      const user = await client.user.findFirst({
+        where: {
+          email: args.email,
+        },
+      });
+      return !!user;
+    },
     async user(_, _args, context) {
       if (!context.userId) throw new Error('auth required');
       const user = await client.user.findFirst({
