@@ -25,7 +25,7 @@ const documents = {
     "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n      }\n    }\n  }\n": types.GroundViewQueryDocument,
     "\n  query HomeQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.HomeQueryDocument,
     "\n  query InviteUserQuery($id: String!) {\n    team(id: $id) {\n      ...TeamCard_TeamFragment\n      users {\n        id\n      }\n    }\n  }\n": types.InviteUserQueryDocument,
-    "\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.InviteUsersUsersQueryDocument,
+    "\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name, size: 10) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.InviteUsersUsersQueryDocument,
     "\n  mutation AddUserMutation($teamId: String!, $memberIds: [String!]!) {\n    updateTeamMembers(teamId: $teamId, memberIds: $memberIds) {\n      id\n    }\n  }\n": types.AddUserMutationDocument,
     "\n  query UserQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.UserQueryDocument,
     "\n  mutation DeleteProject($projectId: String!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
@@ -35,7 +35,7 @@ const documents = {
     "\n  query TeamQuery($id: String!) {\n    team(id: $id) {\n      ...TeamCard_TeamFragment\n      users {\n        id\n        ...UserProfile_UserFragment\n      }\n      projects {\n        id\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.TeamQueryDocument,
     "\n  mutation CreateTeam($team: CreateTeam!) {\n    createTeam(team: $team) {\n      id\n    }\n  }\n": types.CreateTeamDocument,
     "\n  query ProfileScreenQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n": types.ProfileScreenQueryDocument,
-    "\n  query TeamsSearch($title: String!) {\n    teams(title: $title) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n": types.TeamsSearchDocument,
+    "\n  query TeamsSearch($title: String!) {\n    teams(title: $title, size: 10) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n": types.TeamsSearchDocument,
 };
 
 /**
@@ -103,7 +103,7 @@ export function graphql(source: "\n  query InviteUserQuery($id: String!) {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"): (typeof documents)["\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"];
+export function graphql(source: "\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name, size: 10) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"): (typeof documents)["\n  query InviteUsersUsersQuery($name: String!) {\n    users(name: $name, size: 10) {\n      id\n      ...UserProfile_UserFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -143,7 +143,7 @@ export function graphql(source: "\n  query ProfileScreenQuery {\n    user {\n   
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query TeamsSearch($title: String!) {\n    teams(title: $title) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n"): (typeof documents)["\n  query TeamsSearch($title: String!) {\n    teams(title: $title) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n"];
+export function graphql(source: "\n  query TeamsSearch($title: String!) {\n    teams(title: $title, size: 10) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n"): (typeof documents)["\n  query TeamsSearch($title: String!) {\n    teams(title: $title, size: 10) {\n      id\n      ...TeamCard_TeamFragment\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

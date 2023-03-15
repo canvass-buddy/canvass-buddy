@@ -128,6 +128,7 @@ export const TeamResolvers: Resolvers = {
   Query: {
     async teams(_, args) {
       const teams = await prismaClient.team.findMany({
+        take: args.size,
         where: {
           private: false,
           title: {

@@ -32,7 +32,7 @@ const INVITE_USER_QUERY = graphql(/* GraphQL */ `
 
 const USERS_QUERY = graphql(/* GraphQL */ `
   query InviteUsersUsersQuery($name: String!) {
-    users(name: $name) {
+    users(name: $name, size: 10) {
       id
       ...UserProfile_UserFragment
     }

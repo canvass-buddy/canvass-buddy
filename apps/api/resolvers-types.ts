@@ -208,6 +208,7 @@ export type QueryTeamArgs = {
 
 
 export type QueryTeamsArgs = {
+  size: Scalars['Int'];
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -507,7 +508,7 @@ export type ProjectAreaResolvers<ContextType = Context, ParentType extends Resol
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   team?: Resolver<Maybe<ResolversTypes['Team']>, ParentType, ContextType, RequireFields<QueryTeamArgs, 'id'>>;
-  teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, Partial<QueryTeamsArgs>>;
+  teams?: Resolver<Array<ResolversTypes['Team']>, ParentType, ContextType, RequireFields<QueryTeamsArgs, 'size'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, RequireFields<QueryUsersArgs, 'name' | 'size'>>;
   validEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryValidEmailArgs, 'email'>>;
