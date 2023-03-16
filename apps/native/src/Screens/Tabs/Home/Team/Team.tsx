@@ -23,9 +23,12 @@ const TEAM_QUERY = graphql(/* GraphQL */ `
   query TeamQuery($id: String!) {
     team(id: $id) {
       ...TeamCard_TeamFragment
-      users {
+      members {
         id
-        ...UserProfile_UserFragment
+        ...UserProfile_TeamMemberFragment
+        user {
+          ...UserProfile_UserFragment
+        }
       }
       projects {
         id
@@ -86,8 +89,8 @@ export function Team({
           <Divider />
           <Stack space={4}>
             <Text category="h2">{t`util.users`}</Text>
-            {data?.team?.users?.map((user) => (
-              <UserProfile key={user.id} user={user} />
+            {data?.team?.members?.map((member) => (
+              <UserProfile key={member.id} member={member} user={member.user} />
             ))}
           </Stack>
           <Button

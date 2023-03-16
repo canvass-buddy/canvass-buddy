@@ -252,17 +252,25 @@ export type Team = {
   image: Scalars['String'];
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+  members?: Maybe<Array<TeamMember>>;
   private: Scalars['Boolean'];
   project?: Maybe<Project>;
   projects?: Maybe<Array<Project>>;
   tasks?: Maybe<Array<Maybe<Task>>>;
   title: Scalars['String'];
-  users?: Maybe<Array<User>>;
 };
 
 
 export type TeamProjectArgs = {
   id: Scalars['String'];
+};
+
+export type TeamMember = {
+  __typename?: 'TeamMember';
+  id: Scalars['String'];
+  role: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type UpdateMarker = {
@@ -405,6 +413,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Task: ResolverTypeWrapper<Task>;
   Team: ResolverTypeWrapper<Team>;
+  TeamMember: ResolverTypeWrapper<TeamMember>;
   UpdateMarker: UpdateMarker;
   UpdateProject: UpdateProject;
   UpdateTask: UpdateTask;
@@ -435,6 +444,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Task: Task;
   Team: Team;
+  TeamMember: TeamMember;
   UpdateMarker: UpdateMarker;
   UpdateProject: UpdateProject;
   UpdateTask: UpdateTask;
@@ -529,12 +539,20 @@ export type TeamResolvers<ContextType = Context, ParentType extends ResolversPar
   image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  members?: Resolver<Maybe<Array<ResolversTypes['TeamMember']>>, ParentType, ContextType>;
   private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<TeamProjectArgs, 'id'>>;
   projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;
   tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TeamMemberResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TeamMember'] = ResolversParentTypes['TeamMember']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -559,6 +577,7 @@ export type Resolvers<ContextType = Context> = {
   Query?: QueryResolvers<ContextType>;
   Task?: TaskResolvers<ContextType>;
   Team?: TeamResolvers<ContextType>;
+  TeamMember?: TeamMemberResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

@@ -23,8 +23,9 @@ const INVITE_USER_QUERY = graphql(/* GraphQL */ `
   query InviteUserQuery($id: String!) {
     team(id: $id) {
       ...TeamCard_TeamFragment
-      users {
+      members {
         id
+        userId
       }
     }
   }
@@ -83,8 +84,9 @@ export function InviteUser({
                     variables: {
                       teamId: route.params.teamId,
                       memberIds: [
-                        ...(teamData?.team?.users?.map((user) => user?.id) ??
-                          []),
+                        ...(teamData?.team?.members?.map(
+                          (member) => member?.userId
+                        ) ?? []),
                         user?.id ?? '',
                       ],
                     },
@@ -94,7 +96,9 @@ export function InviteUser({
                 <UserProfile
                   user={user}
                   accessoryRight={() =>
-                    teamData?.team?.users?.find((u) => u.id === user?.id) ? (
+                    teamData?.team?.members?.find(
+                      (member) => member.userId === user?.id
+                    ) ? (
                       <AntDesign
                         name="check"
                         size={24}

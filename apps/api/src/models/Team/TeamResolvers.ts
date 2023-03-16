@@ -1,6 +1,6 @@
 import { Resolvers } from '@resolvers-types';
 import { prismaClient } from 'src/clients';
-import { uploadFile } from 'src/helpers';
+import { uploadFile, UserRoles } from 'src/helpers';
 
 export const TeamResolvers: Resolvers = {
   Mutation: {
@@ -18,6 +18,7 @@ export const TeamResolvers: Resolvers = {
           members: {
             create: {
               userId: context.userId ?? 'abcd',
+              role: UserRoles.ADMIN,
             },
           },
         },
@@ -113,17 +114,29 @@ export const TeamResolvers: Resolvers = {
     },
   },
   Team: {
-    async users(parent) {
+    async members(parent) {
       const members = await prismaClient.teamMember.findMany({
         where: {
           teamId: parent.id,
         },
         include: {
-          user: true,
+          user: {},
         },
       });
-      return members.map((member) => member.user);
+
+      return members;
     },
+    // async users(parent) {
+    //   const members = await prismaClient.teamMember.findMany({
+    //     where: {
+    //       teamId: parent.id,
+    //     },
+    //     include: {
+    //       user: true,
+    //     },
+    //   });
+    //   return members.map((member) => member.user);
+    // },
   },
   Query: {
     async teams(_, args) {
