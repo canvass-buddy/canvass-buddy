@@ -11,6 +11,20 @@ import { useAuth } from '../../Providers';
 import { RootStackParamList } from '../types';
 import * as ImagePicker from 'expo-image-picker';
 import { ReactNativeFile } from 'apollo-upload-client';
+import { graphql } from '../../__generated__';
+import { useQuery } from '@apollo/client';
+
+const USERNAME_VALIDATION_QUERY = graphql(/* GraphQL */ `
+  query UsernameValidation($username: String!) {
+    isValid: validUsername(username: $username)
+  }
+`);
+
+const EMAIL_VALIDATION_QUERY = graphql(/* GraphQL */ `
+  query EmailValidation($email: String!) {
+    isValid: validEmail(email: $email)
+  }
+`);
 
 export function SignUp({
   navigation,
@@ -36,7 +50,10 @@ export function SignUp({
     });
 
   const f = useFormik({
-    validate: toFormikValidate(Schema),
+    // validate: toFormikValidate(Schema),
+    validate(values) {
+      return toFormikValidate(Schema)(values);
+    },
     initialValues: {
       firstName: 'Erik',
       lastName: 'Badger',
@@ -45,6 +62,7 @@ export function SignUp({
       password: 'abcd1234',
       passwordConfirm: 'abcd1234',
     },
+
     async onSubmit({ email, password, firstName, lastName, username }) {
       // const profileImage = imageUri
       //   ? await fetch(imageUri).then((f) => f.blob())
@@ -70,6 +88,22 @@ export function SignUp({
     },
   });
 
+  const { data: usernameValidation, loading: loadingUsernameValidation } =
+    useQuery(USERNAME_VALIDATION_QUERY, {
+      variables: {
+        username: f.values.username,
+      },
+    });
+
+  const { data: emailValidation, loading: loadingEmailValidation } = useQuery(
+    EMAIL_VALIDATION_QUERY,
+    {
+      variables: {
+        email: f.values.email,
+      },
+    }
+  );
+
   const onPickImage = async () => {
     const res = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -79,6 +113,11 @@ export function SignUp({
     });
     setImageUri(res.assets?.[0].uri);
   };
+
+  const isValidUsermame = loadingUsernameValidation
+    ? true
+    : usernameValidation?.isValid;
+  const isValidEmail = loadingEmailValidation ? true : emailValidation?.isValid;
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -115,16 +154,30 @@ export function SignUp({
               value={f.values.username}
               onChangeText={f.handleChange('username')}
               onBlur={f.handleBlur('username')}
-              status={f.errors.username ? 'danger' : 'basic'}
-              caption={f.errors.username}
+              status={
+                f.errors.username
+                  ? 'danger'
+                  : !isValidUsermame
+                  ? 'danger'
+                  : 'basic'
+              }
+              caption={
+                f.errors.username ?? !isValidUsermame
+                  ? t`errors.usernameTaken`
+                  : ''
+              }
             />
             <Input
               placeholder={t`auth.email`}
               value={f.values.email}
               onChangeText={f.handleChange('email')}
               onBlur={f.handleBlur('email')}
-              status={f.errors.email ? 'danger' : 'basic'}
-              caption={f.errors.email}
+              status={
+                f.errors.email ? 'danger' : !isValidEmail ? 'danger' : 'basic'
+              }
+              caption={
+                f.errors.email ?? !isValidEmail ? t`errors.emailTaken` : ''
+              }
             />
             <Input
               secureTextEntry
@@ -151,7 +204,10 @@ export function SignUp({
                 </Button>
               </Column>
               <Column>
-                <Button onPress={() => f.handleSubmit()}>
+                <Button
+                  onPress={() => f.handleSubmit()}
+                  disabled={!(f.isValid && isValidUsermame && isValidEmail)}
+                >
                   {t`auth.signUp`}
                 </Button>
               </Column>

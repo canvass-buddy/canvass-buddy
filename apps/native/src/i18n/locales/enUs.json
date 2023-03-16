@@ -44,6 +44,8 @@
     "noTeams":"You Don't have any teams"
   },
   "errors":{
-    "required":"Required"
+    "required":"Required",
+    "emailTaken":"This email is already being used",
+    "usernameTaken":"This Username is already in use",
   }
 }

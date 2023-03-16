@@ -21,6 +21,8 @@ const documents = {
     "\n  mutation Login($email: String!, $password: String!) {\n    auth: login(email: $email, password: $password) {\n      token\n    }\n  }\n": types.LoginDocument,
     "\n  mutation SignUpThing($user: SignUpInput!) {\n    auth: signUp(user: $user) {\n      token\n    }\n  }\n": types.SignUpThingDocument,
     "\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n": types.ScreensQueryDocument,
+    "\n  query UsernameValidation($username: String!) {\n    isValid: validUsername(username: $username)\n  }\n": types.UsernameValidationDocument,
+    "\n  query EmailValidation($email: String!) {\n    isValid: validEmail(email: $email)\n  }\n": types.EmailValidationDocument,
     "\n  mutation CreateMarker($marker: CreateMarker!, $projectId: String!) {\n    createMarker(marker: $marker, projectId: $projectId) {\n      id\n    }\n  }\n": types.CreateMarkerDocument,
     "\n  query GroundViewQuery($id: String!) {\n    user {\n      project(id: $id) {\n        id\n        title\n        tasks {\n          id\n          title\n          description\n          type\n        }\n        markers {\n          id\n          longitude\n          latitude\n        }\n        area {\n          x1\n          y1\n          x2\n          y2\n        }\n      }\n    }\n  }\n": types.GroundViewQueryDocument,
     "\n  query HomeQuery {\n    user {\n      id\n      ...UserProfile_UserFragment\n      teams {\n        id\n        ...TeamCard_TeamFragment\n      }\n      projects {\n        id\n        ...ProjectTitle_ProjectFragment\n        ...ProjectList_ProjectFragment\n      }\n    }\n  }\n": types.HomeQueryDocument,
@@ -84,6 +86,14 @@ export function graphql(source: "\n  mutation SignUpThing($user: SignUpInput!) {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n"): (typeof documents)["\n  query ScreensQuery {\n    user {\n      id\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query UsernameValidation($username: String!) {\n    isValid: validUsername(username: $username)\n  }\n"): (typeof documents)["\n  query UsernameValidation($username: String!) {\n    isValid: validUsername(username: $username)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query EmailValidation($email: String!) {\n    isValid: validEmail(email: $email)\n  }\n"): (typeof documents)["\n  query EmailValidation($email: String!) {\n    isValid: validEmail(email: $email)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
