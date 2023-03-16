@@ -33,7 +33,7 @@ type Team {
   longitude: Float!
   latitude: Float!
   image: String!
-  members: [TeamMember!]
+  members(role: String): [TeamMember!]
   private: Boolean!
 }
 

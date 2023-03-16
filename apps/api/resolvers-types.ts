@@ -261,6 +261,11 @@ export type Team = {
 };
 
 
+export type TeamMembersArgs = {
+  role?: InputMaybe<Scalars['String']>;
+};
+
+
 export type TeamProjectArgs = {
   id: Scalars['String'];
 };
@@ -539,7 +544,7 @@ export type TeamResolvers<ContextType = Context, ParentType extends ResolversPar
   image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  members?: Resolver<Maybe<Array<ResolversTypes['TeamMember']>>, ParentType, ContextType>;
+  members?: Resolver<Maybe<Array<ResolversTypes['TeamMember']>>, ParentType, ContextType, Partial<TeamMembersArgs>>;
   private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<TeamProjectArgs, 'id'>>;
   projects?: Resolver<Maybe<Array<ResolversTypes['Project']>>, ParentType, ContextType>;

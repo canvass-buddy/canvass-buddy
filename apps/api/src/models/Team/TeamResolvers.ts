@@ -114,10 +114,18 @@ export const TeamResolvers: Resolvers = {
     },
   },
   Team: {
-    async members(parent) {
+    async members(parent, args, context) {
       const members = await prismaClient.teamMember.findMany({
         where: {
           teamId: parent.id,
+          role: args.role ?? undefined,
+          team: {
+            members: {
+              some: {
+                userId: context.userId,
+              },
+            },
+          },
         },
         include: {
           user: {},

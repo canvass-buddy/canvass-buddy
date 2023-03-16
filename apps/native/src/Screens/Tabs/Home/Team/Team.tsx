@@ -2,6 +2,7 @@ import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import { Stack, Tiles } from '@mobily/stacks';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, Card, Divider, Text } from '@ui-kitten/components';
+import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native';
 import {
@@ -21,9 +22,20 @@ const DELETE_TEAM_MUTATION = graphql(/* GraphQL */ `
 
 const TEAM_QUERY = graphql(/* GraphQL */ `
   query TeamQuery($id: String!) {
+    user {
+      id
+    }
     team(id: $id) {
       ...TeamCard_TeamFragment
-      members {
+      admins: members(role: "ADMIN") {
+        id
+        userId
+        ...UserProfile_TeamMemberFragment
+        user {
+          ...UserProfile_UserFragment
+        }
+      }
+      users: members(role: "USER") {
         id
         ...UserProfile_TeamMemberFragment
         user {
@@ -64,6 +76,10 @@ export function Team({
 
   const { t } = useTranslation();
 
+  const isAdmin = some(
+    data?.team?.admins?.find((f) => f.userId === data?.user?.id)
+  );
+
   return (
     <ScreenLayout>
       <ScrollView>
@@ -80,39 +96,48 @@ export function Team({
               }
             />
           )}
-          <Button
-            appearance="outline"
-            onPress={() =>
-              navigation.navigate('ProjectCreate', { id: route.params.id })
-            }
-          >{t`util.createProject`}</Button>
+          {isAdmin && (
+            <Button
+              appearance="outline"
+              onPress={() =>
+                navigation.navigate('ProjectCreate', { id: route.params.id })
+              }
+            >{t`util.createProject`}</Button>
+          )}
           <Divider />
           <Stack space={4}>
             <Text category="h2">{t`util.users`}</Text>
-            {data?.team?.members?.map((member) => (
+            {data?.team?.admins?.map((member) => (
+              <UserProfile key={member.id} member={member} user={member.user} />
+            ))}
+            {data?.team?.users?.map((member) => (
               <UserProfile key={member.id} member={member} user={member.user} />
             ))}
           </Stack>
-          <Button
-            appearance="outline"
-            onPress={() =>
-              navigation.navigate('InviteUser', {
-                teamId: route.params.id,
-              })
-            }
-          >{t`util.inviteUser`}</Button>
-          <Divider />
-          <Card
-            header={(props) => (
-              <Text {...props} category="h6">{t`util.settings`}</Text>
-            )}
-            status="danger"
-          >
+          {isAdmin && (
             <Button
+              appearance="outline"
+              onPress={() =>
+                navigation.navigate('InviteUser', {
+                  teamId: route.params.id,
+                })
+              }
+            >{t`util.inviteUser`}</Button>
+          )}
+          <Divider />
+          {isAdmin && (
+            <Card
+              header={(props) => (
+                <Text {...props} category="h6">{t`util.settings`}</Text>
+              )}
               status="danger"
-              onPress={() => deleteTeam()}
-            >{t`util.delete`}</Button>
-          </Card>
+            >
+              <Button
+                status="danger"
+                onPress={() => deleteTeam()}
+              >{t`util.delete`}</Button>
+            </Card>
+          )}
         </Tiles>
       </ScrollView>
     </ScreenLayout>
