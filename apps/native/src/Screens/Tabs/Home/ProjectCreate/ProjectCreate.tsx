@@ -135,6 +135,7 @@ export function ProjectCreate({
           style={{ height: '100%' }}
           onChangeArea={onChangeArea}
           drawerButtonDisabled={drawerButtonDisabled}
+          drawerButtonAppearance="filled"
         >
           <Stack space={4}>
             <Input

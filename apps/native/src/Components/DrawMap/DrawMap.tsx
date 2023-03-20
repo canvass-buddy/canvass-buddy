@@ -37,6 +37,7 @@ interface DrawMapProps {
   drawerButtonDisabled?: boolean;
   markers?: Marker[];
   isOpen?: boolean;
+  drawerButtonAppearance?: string;
 }
 const themedStyles = StyleService.create({
   pannel: {
@@ -63,6 +64,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
     children,
     markers,
     isOpen,
+    drawerButtonAppearance,
   }) => {
     const [area, setArea] = useState<ProjectArea>(
       initialArea ?? {
@@ -203,7 +205,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
                 {onChangeArea && (
                   <Button
                     onPress={toggleEditting}
-                    appearance={isEditing ? 'outline' : 'filled'}
+                    appearance={isEditing ? 'ghost' : 'filled'}
                   >
                     <AntDesign name="edit" />
                   </Button>
@@ -211,7 +213,7 @@ export const DrawMap: FC<PropsWithChildren<DrawMapProps>> = memo(
                 <Button
                   onPress={togglePannel}
                   disabled={drawerButtonDisabled}
-                  appearance="ghost"
+                  appearance={drawerButtonAppearance ?? 'ghost'}
                 >
                   <AntDesign name={isPanelOpen ? 'down' : 'up'} />
                 </Button>
