@@ -19,16 +19,20 @@ const createEnv = async ({
 }) => {
   await query<{ signUp: { token: string } }>({
     query: /* GraphQL */ `
-      mutation SignUp($email: String!, $password: String!, $name: String!) {
-        signUp(email: $email, password: $password, name: $name) {
+      mutation SignUp($user: SignUpInput!) {
+        signUp(user: $user) {
           token
         }
       }
     `,
     variables: {
-      email,
-      password,
-      name,
+      user: {
+        email,
+        password,
+        username: name,
+        firstName: 'TEST_First Name',
+        lastName: 'TEST_Last Name',
+      },
     },
     user,
   });
@@ -46,6 +50,7 @@ const createEnv = async ({
         description: 'A_TEST_TEAM',
         longitude: 0,
         latitude: 0,
+        private: false,
       },
     },
     user,

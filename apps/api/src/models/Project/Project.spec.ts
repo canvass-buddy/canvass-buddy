@@ -42,7 +42,7 @@ const createProject = async (teamId: string): Promise<Project> => {
   const res = await authedQuery<{ project: Project }>({
     query: /* GraphQL */ `
       mutation CreateProject($teamId: String!, $project: CreateProject!) {
-        project: createProject(teamId: $teamId, project: $project) {
+        project: createProject(teamId: $teamId, project: $project, tasks: []) {
           title
           id
         }
@@ -146,7 +146,7 @@ test('delete project', async () => {
 
 test('update project', async () => {
   const { teams } = await fetchUserData('USER_1');
-  const project = await createProject(teams?.[0].id ?? '');
+  const project = await createProject(teams?.[0]?.id ?? '');
   const title = genTestName();
   await authedQuery<{ project: Project }>({
     query: /* GraphQL */ `

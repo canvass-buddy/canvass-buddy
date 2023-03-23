@@ -22,8 +22,6 @@ export const fetchUserData = async (user: TestUserKey) => {
       query {
         user {
           id
-          name
-          email
           projects {
             id
             title

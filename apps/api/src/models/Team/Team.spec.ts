@@ -14,7 +14,7 @@ const fetchTeams = async (): Promise<Team[]> => {
             description
             longitude
             latitude
-            users {
+            members {
               id
             }
           }
@@ -36,7 +36,7 @@ const createTeam = async (): Promise<Team> => {
           description
           longitude
           latitude
-          users {
+          members {
             id
           }
         }
@@ -48,6 +48,7 @@ const createTeam = async (): Promise<Team> => {
         description: 'MY_DESC',
         longitude: 0,
         latitude: 0,
+        private: false,
       },
     },
   });
@@ -94,7 +95,7 @@ const addTeamMember = async (
           description
           longitude
           latitude
-          users {
+          members {
             id
           }
         }
@@ -129,11 +130,12 @@ test('Create Teams', async () => {
 test('Update Team', async () => {
   const team = await createTeam();
   const title = genTestName();
-  delete team.users;
+  delete team.members;
   await expect(
     updateTeam({
       ...team,
       title,
+      private: false,
     })
   ).resolves.toBeTruthy();
   const teams = await fetchTeams();
@@ -149,7 +151,7 @@ test('Delete Team', async () => {
 
 test('Add member to team', async () => {
   const team = await createTeam();
-  expect(team.users).toHaveLength(1);
+  expect(team.members).toHaveLength(1);
   const user1 = await fetchUserData('USER_1');
   const user2 = await fetchUserData('USER_2');
 
@@ -159,5 +161,5 @@ test('Add member to team', async () => {
 
   const teams = await fetchTeams();
 
-  expect(teams.find((t) => t.id === team.id)?.users).toHaveLength(2);
+  expect(teams.find((t) => t.id === team.id)?.members).toHaveLength(2);
 });

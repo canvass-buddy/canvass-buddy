@@ -23,16 +23,20 @@ beforeEach(async () => {
 test('Sign Up', async () => {
   const res = await query<{ signUp: { token: string } }>({
     query: /* GraphQL */ `
-      mutation SignUp($email: String!, $password: String!, $name: String!) {
-        signUp(email: $email, password: $password, name: $name) {
+      mutation SignUp($user: SignUpInput!) {
+        signUp(user: $user) {
           token
         }
       }
     `,
     variables: {
-      email,
-      password: 'MY_PASSWORD',
-      name: 'Hello',
+      user: {
+        email,
+        username: 'TEST_USER',
+        password: 'MY_PASSWORD',
+        firstName: 'First Name',
+        lastName: 'Last Name',
+      },
     },
   });
   expect(res.signUp.token).toBeTruthy();
@@ -68,14 +72,18 @@ test('User', async () => {
       query User {
         user {
           id
-          name
-          email
+          profile {
+            firstName
+            lastName
+            username
+          }
         }
       }
     `,
   });
 
   expect(user.id).toBeTruthy();
-  expect(user.name).toBeTruthy();
-  expect(user.email).toBeTruthy();
+  expect(user.profile?.firstName).toBeTruthy();
+  expect(user.profile?.lastName).toBeTruthy();
+  expect(user.profile?.username).toBeTruthy();
 });
